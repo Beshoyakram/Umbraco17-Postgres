@@ -1,11 +1,18 @@
-﻿@using Umbraco.Cms.Web.Common.PublishedModels;
+﻿@using Umbraco.Cms.Web.Common.PublishedModels
 @inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<ContentModels.ContentTreeRoot>
-@using ContentModels = Umbraco.Cms.Web.Common.PublishedModels;
+@using ContentModels = Umbraco.Cms.Web.Common.PublishedModels
 @{
-	Layout = "Layout.cshtml";
-}
+	Layout = null;
 
-<section class="page-hero">
-	<h1>@(Model.Name ?? "Content")</h1>
-	<p>Content tree root. Prefer linking visitors to the Home page.</p>
-</section>
+	var home = Model.Children()
+		.FirstOrDefault(x => x.ContentType.Alias == HomePage.ModelTypeAlias)
+		?? Model.DescendantsOrSelfOfType(HomePage.ModelTypeAlias).FirstOrDefault();
+
+	var targetUrl = home?.Url();
+	if (string.IsNullOrWhiteSpace(targetUrl) || targetUrl == "#")
+	{
+		targetUrl = "/home";
+	}
+
+	Context.Response.Redirect(targetUrl, permanent: false);
+}

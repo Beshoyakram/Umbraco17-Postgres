@@ -1,14 +1,417 @@
-﻿@using Umbraco.Cms.Web.Common.PublishedModels;
+﻿@using Umbraco.Cms.Core.Models.Blocks
+@using Umbraco.Cms.Core.Models.PublishedContent
+@using Umbraco.Cms.Web.Common.PublishedModels
+@using Centrocdx.Services
 @inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<ContentModels.HomePage>
-@using ContentModels = Umbraco.Cms.Web.Common.PublishedModels;
+@using ContentModels = Umbraco.Cms.Web.Common.PublishedModels
+@inject ISiteInfoService SiteInfo
 @{
 	Layout = "Layout.cshtml";
+	var theme = Url.Content("~/theme/centrotheme");
+
+	string? MediaUrl(string alias)
+	{
+		if (!Model.HasProperty(alias) || !Model.HasValue(alias)) return null;
+		return SiteInfo.GetMediaUrl(Model.Value<IPublishedContent>(alias));
+	}
+
+	string TextOr(string alias, string fallback)
+		=> Model.HasValue(alias) ? (Model.Value<string>(alias) ?? fallback) : fallback;
+
+	var heroTitle = TextOr("heroTitle", "Redefining\nExcellence");
+	var heroLead = TextOr("heroLead", "A Global BPO Leader");
+	var heroSubtext = TextOr("heroSubtext", "Helping businesses drive meaningful change for growth.");
+	var heroCtaLabel = TextOr("heroCtaLabel", "Read More");
+	var heroCtaLink = TextOr("heroCtaLink", "#about");
+	var heroVideoUrl = MediaUrl("heroVideo") ?? $"{theme}/Sequence 01.mp4";
+	var heroFallbackUrl = MediaUrl("heroFallbackImage") ?? $"{theme}/img/homebg.jpeg";
+
+	var aboutTitle = TextOr("aboutTitle", "About Centro");
+	var aboutText = TextOr("aboutText", "At Centro, we revolutionize business operations through world-class BPO services and cutting-edge technology solutions. Focused on efficiency, scalability, and innovation, we help organizations streamline processes, enhance performance, and drive sustainable growth. With deep industry expertise, advanced technology, and an unwavering commitment to operational excellence, we deliver customized outsourcing solutions that elevate customer experiences, optimize workflows, and unlock business potential. Our approach is rooted in precision, accountability, and innovation, ensuring seamless integration with our clients' operations. More than just an outsourcing provider, we are a strategic partner—empowering businesses to adapt, grow, and lead in an ever-evolving market.");
+	var aboutImageUrl = MediaUrl("aboutImage") ?? $"{theme}/bb.png";
+	var aboutCtaLabel = TextOr("aboutCtaLabel", "Read More");
+	var aboutCtaLink = TextOr("aboutCtaLink", "#solutions");
+
+	var stats = Model.HasValue("stats") ? Model.Value<BlockListModel>("stats") : null;
+	var aiTitle = TextOr("aiTitle", "Explore the power of AI");
+	var aiBackgroundUrl = MediaUrl("aiBackground") ?? $"{theme}/img/banner/WB-BG-ai.png";
+
+	var partnersEyebrow = TextOr("partnersEyebrow", "our Partners");
+	var partnersTitle = TextOr("partnersTitle", "We are proud to collaborate with industry-leading technology innovators, delivering transformative solutions that drive success for our clients.");
+	var partnerLogos = Model.HasValue("partnerLogos") ? Model.Value<IEnumerable<IPublishedContent>>("partnerLogos")?.ToList() : null;
+
+	var solutionsEyebrow = TextOr("solutionsEyebrow", "Explore our solutions");
+	var solutionsTitle = TextOr("solutionsTitle", "At Centro, we harness innovation and tailored technology to deliver cutting-edge solutions that empower businesses to stay ahead and thrive in a competitive market.");
+	var solutions = Model.HasValue("solutions") ? Model.Value<BlockListModel>("solutions") : null;
+
+	var testimonials = Model.HasValue("testimonials") ? Model.Value<BlockListModel>("testimonials") : null;
+
+	var contactEyebrow = TextOr("contactEyebrow", "Contact Us");
+	var contactTitle = TextOr("contactTitle", "Send us a message");
+	var contactImageUrl = MediaUrl("contactImage") ?? $"{theme}/img/image 70.png";
+	var footer = SiteInfo.GetFooter();
+	var contactEmail = footer?.Value<string>("email") ?? "contact@centrocdx.com";
+
+	var defaultSolutions = new[]
+	{
+		new { Index = "01", Title = "Business Process Outsourcing", Text = "Optimize operations and enhance efficiency with our tailored Business Process Outsourcing (BPO) solutions.", Image = $"{theme}/img/project/11.png", Link = "#contact", Reverse = false },
+		new { Index = "02", Title = "Healthcare Solutions", Text = "Simplify your practice’s operations with our expert healthcare solutions.", Image = $"{theme}/img/project/12.png", Link = "#contact", Reverse = true },
+		new { Index = "03", Title = "Digital Transformation", Text = "Stay ahead with our customized digital solutions. We help you modernize operations.", Image = $"{theme}/img/project/2.png", Link = "#contact", Reverse = false }
+	};
 }
 
-<section class="page-hero">
-	<h1>@(Model.Name ?? "Centro")</h1>
-	<p>
-		Welcome to Centro. This page is server-rendered for search engines and AI crawlers.
-		Add SEO Title and SEO Description on the SEO Settings tab in the backoffice.
-	</p>
+<style>
+	.fallbackImage { background-image: url('@heroFallbackUrl') !important; }
+	.Ai { background-image: url('@aiBackgroundUrl') !important; }
+</style>
+
+<div class="slider_area">
+	<div class="fallbackImage d-block d-lg-none"></div>
+	<video autoplay muted loop id="myVideo" class="d-none d-lg-block" playsinline>
+		<source src="@heroVideoUrl" type="video/mp4">
+	</video>
+	<div class="content" data-aos="fade-up" data-aos-delay="100">
+		<div class="container-fluid">
+			<h2 data-aos="fade-up" data-aos-duration="1000">@Html.Raw(heroTitle.Replace("\r\n", "<br>").Replace("\n", "<br>"))</h2>
+			<p data-aos="fade-up" data-aos-duration="2000">
+				<span style="font-weight: bold; font-size: 45px">@heroLead</span><br>
+				@Html.Raw(heroSubtext.Replace("\r\n", "<br>").Replace("\n", "<br>"))
+			</p>
+			<a data-aos="fade-up" data-aos-duration="3000" href="@heroCtaLink" class="boxed-btn mt-4">@heroCtaLabel</a>
+		</div>
+	</div>
+</div>
+
+<div id="about" class="about_area">
+	<div class="container">
+		<div class="row align-items-center">
+			<div class="col-xl-6 col-md-6">
+				<div data-aos="fade-up" data-aos-duration="2000" class="about_thumb">
+					<img src="@aboutImageUrl" alt="@aboutTitle">
+				</div>
+			</div>
+			<div class="col-xl-5 offset-xl-1 col-md-6 bottom-left">
+				<div class="about_info">
+					<div class="section_title">
+						<h3 data-aos="fade-up" data-aos-duration="800">@aboutTitle</h3>
+						<div data-aos="fade-up" data-aos-duration="800" class="seperator"></div>
+					</div>
+					<p data-aos="fade-up" data-aos-duration="1200">@aboutText</p>
+					<a data-aos="fade-up" data-aos-duration="2000" href="@aboutCtaLink" class="boxed-btn mt-30">@aboutCtaLabel</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<section data-aos="fade-up" data-aos-duration="2000" class="counters">
+	<div class="container">
+		<div class="row">
+			@if (stats != null && stats.Any())
+			{
+				foreach (var item in stats)
+				{
+					var content = item.Content;
+					<div class="col-lg-3 text-center">
+						<h1>@(content.Value<string>("value"))</h1>
+						<h3>@(content.Value<string>("label"))</h3>
+					</div>
+				}
+			}
+			else
+			{
+				<div class="col-lg-3 text-center"><h1>1500</h1><h3>Centroees</h3></div>
+				<div class="col-lg-3 text-center"><h1>91</h1><h3>CSAT %</h3></div>
+				<div class="col-lg-3 text-center"><h1>6</h1><h3>Locations</h3></div>
+				<div class="col-lg-3 text-center"><h1>50</h1><h3>$50M+ Saved</h3></div>
+			}
+		</div>
+	</div>
 </section>
+
+<div class="Ai">
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-xl-12">
+				<div class="cont text-center">
+					<h3 data-aos="fade-up" data-aos-duration="2000" class="mb-4">@aiTitle</h3>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="logo-slid">
+	<div class="container">
+		<div class="row">
+			<div class="col-xl-12">
+				<div class="section_title mb-60">
+					<span data-aos="fade-up" data-aos-duration="1000" class="sub_heading">@partnersEyebrow</span>
+					<h3 data-aos="fade-up" data-aos-duration="2000">@partnersTitle</h3>
+					<div data-aos="fade-up" data-aos-duration="2000" class="seperator"></div>
+				</div>
+			</div>
+		</div>
+		<div data-aos="fade-up" data-aos-duration="2000" class="slider">
+			<div class="slide-track">
+				@if (partnerLogos != null && partnerLogos.Any())
+				{
+					for (var loop = 0; loop < 2; loop++)
+					{
+						foreach (var logo in partnerLogos)
+						{
+							var url = SiteInfo.GetMediaUrl(logo);
+							if (string.IsNullOrWhiteSpace(url)) { continue; }
+							<div class="slide"><img src="@url" alt="@(logo.Name)"></div>
+						}
+					}
+				}
+				else
+				{
+					for (var loop = 0; loop < 2; loop++)
+					{
+						foreach (var partner in new[] { 1, 2, 3, 4, 6, 7, 8, 9, 10 })
+						{
+							<div class="slide"><img src="@theme/img/partners/@(partner).png" alt=""></div>
+						}
+					}
+				}
+			</div>
+		</div>
+	</div>
+</div>
+
+<div id="solutions" class="lastest_project">
+	<div class="container">
+		<div class="row">
+			<div class="col-xl-12">
+				<div class="section_title mb-60">
+					<span data-aos="fade-up" data-aos-duration="1000" class="sub_heading">@solutionsEyebrow</span>
+					<h3 data-aos="fade-up" data-aos-duration="2000">@solutionsTitle</h3>
+					<div data-aos="fade-up" data-aos-duration="2000" class="seperator"></div>
+				</div>
+			</div>
+		</div>
+
+		@if (solutions != null && solutions.Any())
+		{
+			var i = 0;
+			foreach (var item in solutions)
+			{
+				var content = item.Content;
+				var image = SiteInfo.GetMediaUrl(content.Value<IPublishedContent>("image")) ?? defaultSolutions[Math.Min(i, 2)].Image;
+				var reverse = i % 2 == 1;
+				var title = content.Value<string>("title");
+				var text = content.Value<string>("text");
+				var index = content.Value<string>("index");
+				var link = content.Value<string>("linkUrl") ?? "#contact";
+				var linkLabel = content.Value<string>("linkLabel") ?? "Learn More";
+				<div class="row align-items-center mb-80">
+					@if (reverse)
+					{
+						<div class="col-xl-6 col-md-6">
+							<div data-aos="fade-up" data-aos-duration="3000" class="single_project_thumb">
+								<img src="@image" alt="@title">
+							</div>
+						</div>
+						<div class="col-xl-5 offset-xl-1 col-md-6">
+							<div class="section_title">
+								<span data-aos="fade-up" data-aos-duration="1000" class="sub_heading2">@index</span>
+								<h4 data-aos="fade-up" data-aos-duration="2000">@title</h4>
+								<p data-aos="fade-up" data-aos-duration="3000">@text</p>
+								<a data-aos="fade-up" data-aos-duration="3000" href="@link" class="boxed-btn">@linkLabel</a>
+							</div>
+						</div>
+					}
+					else
+					{
+						<div class="col-xl-6 col-md-6">
+							<div class="section_title">
+								<span data-aos="fade-up" data-aos-duration="1000" class="sub_heading2">@index</span>
+								<h4 data-aos="fade-up" data-aos-duration="2000">@title</h4>
+								<p data-aos="fade-up" data-aos-duration="3000">@text</p>
+								<a data-aos="fade-up" data-aos-duration="3000" href="@link" class="boxed-btn">@linkLabel</a>
+							</div>
+						</div>
+						<div class="col-xl-5 offset-xl-1 col-md-6">
+							<div data-aos="fade-up" data-aos-duration="3000" class="single_project_thumb">
+								<img src="@image" alt="@title">
+							</div>
+						</div>
+					}
+				</div>
+				i++;
+			}
+		}
+		else
+		{
+			foreach (var sol in defaultSolutions)
+			{
+				<div class="row align-items-center mb-80">
+					@if (sol.Reverse)
+					{
+						<div class="col-xl-6 col-md-6">
+							<div data-aos="fade-up" data-aos-duration="3000" class="single_project_thumb">
+								<img src="@sol.Image" alt="@sol.Title">
+							</div>
+						</div>
+						<div class="col-xl-5 offset-xl-1 col-md-6">
+							<div class="section_title">
+								<span data-aos="fade-up" data-aos-duration="1000" class="sub_heading2">@sol.Index</span>
+								<h4 data-aos="fade-up" data-aos-duration="2000">@sol.Title</h4>
+								<p data-aos="fade-up" data-aos-duration="3000">@sol.Text</p>
+								<a data-aos="fade-up" data-aos-duration="3000" href="@sol.Link" class="boxed-btn">Learn More</a>
+							</div>
+						</div>
+					}
+					else
+					{
+						<div class="col-xl-6 col-md-6">
+							<div class="section_title">
+								<span data-aos="fade-up" data-aos-duration="1000" class="sub_heading2">@sol.Index</span>
+								<h4 data-aos="fade-up" data-aos-duration="2000">@sol.Title</h4>
+								<p data-aos="fade-up" data-aos-duration="3000">@sol.Text</p>
+								<a data-aos="fade-up" data-aos-duration="3000" href="@sol.Link" class="boxed-btn">Learn More</a>
+							</div>
+						</div>
+						<div class="col-xl-5 offset-xl-1 col-md-6">
+							<div data-aos="fade-up" data-aos-duration="3000" class="single_project_thumb">
+								<img src="@sol.Image" alt="@sol.Title">
+							</div>
+						</div>
+					}
+				</div>
+			}
+		}
+	</div>
+</div>
+
+<div class="testmonial_area testimonial_bg overlay2">
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-xl-12">
+				<div class="testmonial_active owl-carousel">
+					@if (testimonials != null && testimonials.Any())
+					{
+						foreach (var item in testimonials)
+						{
+							var content = item.Content;
+							<div class="single_testmonial">
+								<div class="testmonial_info text-center">
+									<p>“@(content.Value<string>("quote"))”</p>
+									<div class="author_name">
+										<h4>@(content.Value<string>("authorName"))</h4>
+										<p style="margin-top: 10px;">@(content.Value<string>("authorRole"))</p>
+									</div>
+								</div>
+							</div>
+						}
+					}
+					else
+					{
+						<div class="single_testmonial">
+							<div class="testmonial_info text-center">
+								<div class="author"><img src="@theme/img/image 59.png" alt=""></div>
+								<p>“I just wanted to say thank you so much for making this such a seamless transition. Centro made it so easy to get everyone up and going first thing without any questions.”</p>
+								<div class="author_name">
+									<h4>Sara Cruz</h4>
+									<h5>Nationwide Medical, Inc.</h5>
+									<p style="margin-top: 10px;">Director of Operation</p>
+								</div>
+							</div>
+						</div>
+						<div class="single_testmonial">
+							<div class="testmonial_info text-center">
+								<div class="author"><img src="@theme/img/image 62.png" alt=""></div>
+								<p>“Service Desk support has exceeded expectations. Their ability to both problems solve and offer solutions while supporting customers and FIT staff has been extremely valuable and appreciated”</p>
+								<div class="author_name">
+									<h4>Matthew Antonishak</h4>
+									<h5>Fluence</h5>
+									<p style="margin-top: 10px;">IT Service Desk Manager</p>
+								</div>
+							</div>
+						</div>
+						<div class="single_testmonial">
+							<div class="testmonial_info text-center">
+								<div class="author"><img src="@theme/img/image 60.png" alt=""></div>
+								<p>“Centro has been a critical partner in our international expansion efforts, especially as it pertains to our learning as we’ve opened up new markets in Europe.”</p>
+								<div class="author_name">
+									<h4>Nevena Trainor</h4>
+									<h5>Pampered Chef</h5>
+									<p style="margin-top: 10px;">Chief Executive Officer</p>
+								</div>
+							</div>
+						</div>
+						<div class="single_testmonial">
+							<div class="testmonial_info text-center">
+								<div class="author"><img src="@theme/img/image 61.png" alt=""></div>
+								<p>“Centro has taken most of our global support and they’ve done an amazing job, been able to support our customers through some very difficult time, through the pandemic.”</p>
+								<div class="author_name">
+									<h4>Andrew Treanor</h4>
+									<h5>Pampered Chef</h5>
+									<p style="margin-top: 10px;">Former Chief Executive Officer</p>
+								</div>
+							</div>
+						</div>
+					}
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div id="contact" class="messege_area">
+	<div class="container">
+		<div class="row align-items-center">
+			<div class="col-xl-6 col-md-6">
+				<div class="messege_thumb">
+					<img src="@contactImageUrl" alt="Contact Image">
+				</div>
+			</div>
+			<div class="col-xl-5 offset-xl-1 col-md-6">
+				<div class="section_title mb-20">
+					<span class="sub_heading">@contactEyebrow</span>
+					<h3>@contactTitle</h3>
+					<div class="seperator"></div>
+				</div>
+
+				<iframe name="zoho_hidden_iframe" id="zoho_hidden_iframe" style="display:none;" onload="if(window.formSubmitted){onZohoFormSubmit();}"></iframe>
+				<form class="messege" action="https://forms.zohopublic.com/centrocdx/form/HomeForm/formperma/TXkaX_FSlwlviooT56HiL5dLyfnZ0NgSKkcv8DWfSIQ/htmlRecords/submit" method="POST" target="zoho_hidden_iframe" id="zoho-custom-form" onsubmit="window.formSubmitted=true;">
+					<input type="hidden" name="zf_referrer_name" value="">
+					<input type="hidden" name="zf_redirect_url" value="">
+					<input type="hidden" name="zc_gad" value="">
+					<input type="text" maxlength="255" name="SingleLine" placeholder="Your Name" required />
+					<input type="text" maxlength="255" name="Email" placeholder="Your Email" required />
+					<input type="text" maxlength="20" name="PhoneNumber_countrycode" placeholder="Phone Number" required />
+					<textarea name="SingleLine1" maxlength="255" placeholder="Your Message" required></textarea>
+					<button type="submit" id="zoho-submit-btn" class="boxed-btn">SEND</button>
+					<div id="form-response-message" style="margin-top: 15px; font-weight: bold; display: none;"></div>
+				</form>
+				<p class="mt-3">Or email <a href="mailto:@contactEmail">@contactEmail</a></p>
+			</div>
+		</div>
+	</div>
+</div>
+
+@section Scripts {
+	<script>
+		window.formSubmitted = false;
+		function onZohoFormSubmit() {
+			var form = document.getElementById('zoho-custom-form');
+			var submitBtn = document.getElementById('zoho-submit-btn');
+			var responseMsg = document.getElementById('form-response-message');
+			responseMsg.style.color = '#28a745';
+			responseMsg.innerText = 'Thank you! Your message has been sent successfully.';
+			responseMsg.style.display = 'block';
+			form.reset();
+			submitBtn.innerText = 'SEND';
+			submitBtn.disabled = false;
+			window.formSubmitted = false;
+		}
+		document.getElementById('zoho-custom-form')?.addEventListener('submit', function () {
+			var submitBtn = document.getElementById('zoho-submit-btn');
+			submitBtn.innerText = 'Sending...';
+			submitBtn.disabled = true;
+		});
+	</script>
+}

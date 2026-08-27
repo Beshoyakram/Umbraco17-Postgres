@@ -1,21 +1,57 @@
+@using Centrocdx.Services
 @inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
+@inject ISiteInfoService SiteInfo
 @{
-    var home = Model.Root()?
-        .DescendantsOrSelfOfType("homePage")
-        .FirstOrDefault()
-        ?? Model.AncestorOrSelf(1);
+    var home = SiteInfo.GetHomePage() ?? Model.Root()?.DescendantsOrSelfOfType("homePage").FirstOrDefault() ?? Model;
     var homeUrl = home?.Url() ?? "/";
-    var homeName = home?.Name ?? "Centro";
+    var site = SiteInfo.GetSiteMainInformation();
+    var logoUrl = SiteInfo.GetMediaUrl(site?.Value<Umbraco.Cms.Core.Models.PublishedContent.IPublishedContent>("siteLogo"))
+        ?? Url.Content("~/theme/centrotheme/img/logo.png");
+    var ctaLabel = site?.Value<string>("headerCtaLabel") ?? "Free Consultation";
+    var ctaLink = site?.Value<string>("headerCtaLink") ?? "#contact";
 }
-<header class="site-header">
-    <div class="site-header__inner">
-        <a class="site-brand" href="@homeUrl" aria-label="@homeName home">@homeName</a>
-        <nav class="site-nav" aria-label="Primary">
-            <ul class="site-nav__list">
-                <li>
-                    <a href="@homeUrl" class="@(Model.Id == home?.Id ? "is-active" : null)">Home</a>
-                </li>
-            </ul>
-        </nav>
+<header>
+    <div class="header-area">
+        <div id="sticky-header" class="main-header-area">
+            <div class="container-fluid p-0">
+                <div class="row align-items-center justify-content-between no-gutters">
+                    <div class="col-xl-2 col-lg-2">
+                        <div class="logo-img">
+                            <a href="@homeUrl">
+                                <img src="@logoUrl" alt="Logo">
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-xl-7 col-lg-7">
+                        <div class="main-menu d-none d-lg-block">
+                            <nav>
+                                <ul id="navigation">
+                                    <li><a class="active" href="@homeUrl">home</a></li>
+                                    <li><a href="#about">About</a></li>
+                                    <li>
+                                        <a href="#solutions">solutions <i class="ti-angle-down"></i></a>
+                                        <ul class="submenu">
+                                            <li><a href="#solutions">Business outsourcing</a></li>
+                                            <li><a href="#solutions">Healthcare solutions</a></li>
+                                            <li><a href="#solutions">Digital Transformation</a></li>
+                                        </ul>
+                                    </li>
+                                    <li><a href="#contact">careers</a></li>
+                                    <li><a href="#contact">Blog</a></li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-lg-3 d-none d-lg-block">
+                        <div class="get_in_tauch">
+                            <a href="@ctaLink" class="boxed-btn">@ctaLabel</a>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="mobile_menu d-block d-lg-none"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </header>

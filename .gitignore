@@ -480,3 +480,7 @@ umbraco-package-schema.json
 
 # Media files
 /wwwroot/media/
+
+# Local WordPress reference dump (do not commit)
+_wp-reference/
+

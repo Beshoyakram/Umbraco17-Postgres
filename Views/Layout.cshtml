@@ -1,7 +1,9 @@
 ﻿@using System.Globalization
 @using System.Text.Json
 @using Umbraco.Cms.Core.Models.PublishedContent
+@using Centrocdx.Services
 @inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
+@inject ISiteInfoService SiteInfo
 @{
     Layout = null;
 
@@ -9,14 +11,19 @@
     var direction = culture.StartsWith("ar", StringComparison.OrdinalIgnoreCase) ? "rtl" : "ltr";
     var langAttr = culture.Length >= 2 ? culture[..2] : "en";
 
-    var siteName = "Centro";
+    var siteMain = SiteInfo.GetSiteMainInformation();
+    var siteName = FirstNonEmpty(siteMain?.Value<string>("siteTitle"), "Centro");
     var pageName = Model.Name ?? siteName;
+    var favIconUrl = SiteInfo.GetMediaUrl(siteMain?.Value<IPublishedContent>("favIcon"))
+        ?? Url.Content("~/theme/centrotheme/img/favicon.png");
 
     var pageTitle = FirstNonEmpty(
         Model.Value<string>("sEOTitle"),
         Model.Value<string>("title"),
         Model.Value<string>("bannerTitle"),
-        pageName);
+        Model.ContentType.Alias.Equals("homePage", StringComparison.OrdinalIgnoreCase)
+            ? "Centro | Redefining Excellence"
+            : pageName);
 
     var seoTitle = pageTitle.Contains(siteName, StringComparison.OrdinalIgnoreCase)
         ? pageTitle
@@ -26,7 +33,7 @@
         Model.Value<string>("sEODescription"),
         Model.Value<string>("brief"),
         Model.Value<string>("sectionDescription"),
-        pageTitle);
+        "A Global BPO Leader helping businesses drive meaningful change for growth through outsourcing, healthcare solutions, and digital transformation.");
 
     var seoKeywords = FirstNonEmpty(
         Model.Value<string>("sEOKeywords"),
@@ -43,7 +50,8 @@
     var ogImage = ResolveImageUrl("ogImage")
         ?? ResolveImageUrl("mainImage")
         ?? ResolveImageUrl("coverImage")
-        ?? $"{Context.Request.Scheme}://{Context.Request.Host}/favicon.ico";
+        ?? SiteInfo.GetMediaUrl(siteMain?.Value<IPublishedContent>("siteLogo"))
+        ?? $"{Context.Request.Scheme}://{Context.Request.Host}{Url.Content("~/theme/centrotheme/img/logo.png")}";
 
     var jsonLd = JsonSerializer.Serialize(new Dictionary<string, object?>
     {
@@ -62,6 +70,8 @@
             ["url"] = $"{Context.Request.Scheme}://{Context.Request.Host}/"
         }
     });
+
+    var theme = Url.Content("~/theme/centrotheme");
 }
 
 @functions {
@@ -96,9 +106,10 @@
     }
 }
 <!DOCTYPE html>
-<html lang="@langAttr" dir="@direction">
+<html lang="@langAttr" dir="@direction" class="no-js">
 <head>
     <meta charset="utf-8" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>@seoTitle</title>
 
@@ -123,23 +134,49 @@
     <meta name="twitter:description" content="@seoDescription" />
     <meta name="twitter:image" content="@ogImage" />
 
-    <link rel="icon" href="~/favicon.ico" type="image/x-icon" />
+    <link rel="shortcut icon" type="image/x-icon" href="@favIconUrl" />
+
+    <link rel="stylesheet" href="@theme/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="@theme/css/owl.carousel.min.css" />
+    <link rel="stylesheet" href="@theme/css/magnific-popup.css" />
+    <link rel="stylesheet" href="@theme/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="@theme/css/themify-icons.css" />
+    <link rel="stylesheet" href="@theme/css/nice-select.css" />
+    <link rel="stylesheet" href="@theme/css/flaticon.css" />
+    <link rel="stylesheet" href="@theme/css/animate.css" />
+    <link rel="stylesheet" href="@theme/css/slicknav.css" />
+    <link rel="stylesheet" href="@theme/css/style.css" asp-append-version="true" />
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 
     <script type="application/ld+json">@Html.Raw(jsonLd)</script>
     @RenderSection("Head", required: false)
 </head>
-<body class="site-body">
+<body>
     <a class="skip-link" href="#main-content">Skip to content</a>
 
     <partial name="~/Views/Partials/Layout/_Header.cshtml" />
 
-    <main id="main-content" class="site-main" role="main">
+    <main id="main-content" role="main">
         @RenderBody()
     </main>
 
     <partial name="~/Views/Partials/Layout/_Footer.cshtml" />
 
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="@theme/js/popper.min.js"></script>
+    <script src="@theme/js/bootstrap.min.js"></script>
+    <script src="@theme/js/owl.carousel.min.js"></script>
+    <script src="@theme/js/jquery.slicknav.min.js"></script>
+    <script src="@theme/js/jquery.scrollUp.min.js"></script>
+    <script src="@theme/js/waypoints.min.js"></script>
+    <script src="@theme/js/jquery.counterup.min.js"></script>
+    <script src="@theme/js/wow.min.js"></script>
+    <script src="@theme/js/main.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({ once: true, duration: 800 });
+    </script>
     @RenderSection("Scripts", required: false)
 </body>
 </html>

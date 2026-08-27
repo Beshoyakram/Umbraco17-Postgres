@@ -18,9 +18,34 @@ using Umbraco.Extensions;
 
 namespace Umbraco.Cms.Web.Common.PublishedModels
 {
+	// Mixin Content Type with alias "sEOSettings"
+	/// <summary>SEO Settings</summary>
+	public partial interface ISEosettings : IPublishedElement
+	{
+		/// <summary>OG Image</summary>
+		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
+		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
+		global::Umbraco.Cms.Core.Models.MediaWithCrops OgImage { get; }
+
+		/// <summary>SEO Description</summary>
+		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
+		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
+		string SEodescription { get; }
+
+		/// <summary>SEO Keywords</summary>
+		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
+		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
+		string SEokeywords { get; }
+
+		/// <summary>SEO Title</summary>
+		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
+		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
+		string SEotitle { get; }
+	}
+
 	/// <summary>SEO Settings</summary>
 	[PublishedModel("sEOSettings")]
-	public partial class SEosettings : PublishedElementModel
+	public partial class SEosettings : PublishedElementModel, ISEosettings
 	{
 		// helpers
 #pragma warning disable 0109 // new is redundant
@@ -55,7 +80,12 @@ namespace Umbraco.Cms.Web.Common.PublishedModels
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
 		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
 		[ImplementPropertyType("ogImage")]
-		public virtual global::Umbraco.Cms.Core.Models.MediaWithCrops OgImage => this.Value<global::Umbraco.Cms.Core.Models.MediaWithCrops>(_publishedValueFallback, "ogImage");
+		public virtual global::Umbraco.Cms.Core.Models.MediaWithCrops OgImage => GetOgImage(this, _publishedValueFallback);
+
+		/// <summary>Static getter for OG Image</summary>
+		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
+		[return: global::System.Diagnostics.CodeAnalysis.MaybeNull]
+		public static global::Umbraco.Cms.Core.Models.MediaWithCrops GetOgImage(ISEosettings that, IPublishedValueFallback publishedValueFallback) => that.Value<global::Umbraco.Cms.Core.Models.MediaWithCrops>(publishedValueFallback, "ogImage");
 
 		///<summary>
 		/// SEO Description: Short summary used by Google and AI search snippets.
@@ -63,7 +93,12 @@ namespace Umbraco.Cms.Web.Common.PublishedModels
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
 		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
 		[ImplementPropertyType("sEODescription")]
-		public virtual string SEodescription => this.Value<string>(_publishedValueFallback, "sEODescription");
+		public virtual string SEodescription => GetSEodescription(this, _publishedValueFallback);
+
+		/// <summary>Static getter for SEO Description</summary>
+		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
+		[return: global::System.Diagnostics.CodeAnalysis.MaybeNull]
+		public static string GetSEodescription(ISEosettings that, IPublishedValueFallback publishedValueFallback) => that.Value<string>(publishedValueFallback, "sEODescription");
 
 		///<summary>
 		/// SEO Keywords: Optional. Prefer strong titles and descriptions over keyword stuffing.
@@ -71,7 +106,12 @@ namespace Umbraco.Cms.Web.Common.PublishedModels
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
 		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
 		[ImplementPropertyType("sEOKeywords")]
-		public virtual string SEokeywords => this.Value<string>(_publishedValueFallback, "sEOKeywords");
+		public virtual string SEokeywords => GetSEokeywords(this, _publishedValueFallback);
+
+		/// <summary>Static getter for SEO Keywords</summary>
+		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
+		[return: global::System.Diagnostics.CodeAnalysis.MaybeNull]
+		public static string GetSEokeywords(ISEosettings that, IPublishedValueFallback publishedValueFallback) => that.Value<string>(publishedValueFallback, "sEOKeywords");
 
 		///<summary>
 		/// SEO Title: Overrides the browser/search title when set.
@@ -79,6 +119,11 @@ namespace Umbraco.Cms.Web.Common.PublishedModels
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
 		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
 		[ImplementPropertyType("sEOTitle")]
-		public virtual string SEotitle => this.Value<string>(_publishedValueFallback, "sEOTitle");
+		public virtual string SEotitle => GetSEotitle(this, _publishedValueFallback);
+
+		/// <summary>Static getter for SEO Title</summary>
+		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
+		[return: global::System.Diagnostics.CodeAnalysis.MaybeNull]
+		public static string GetSEotitle(ISEosettings that, IPublishedValueFallback publishedValueFallback) => that.Value<string>(publishedValueFallback, "sEOTitle");
 	}
 }

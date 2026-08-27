@@ -20,7 +20,7 @@ namespace Umbraco.Cms.Web.Common.PublishedModels
 {
 	/// <summary>Home-Page</summary>
 	[PublishedModel("homePage")]
-	public partial class HomePage : PublishedContentModel
+	public partial class HomePage : PublishedContentModel, ISEosettings
 	{
 		// helpers
 #pragma warning disable 0109 // new is redundant
@@ -48,5 +48,261 @@ namespace Umbraco.Cms.Web.Common.PublishedModels
 		}
 
 		// properties
+
+		///<summary>
+		/// About CTA Label
+		///</summary>
+		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
+		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
+		[ImplementPropertyType("aboutCtaLabel")]
+		public virtual string AboutCtaLabel => this.Value<string>(_publishedValueFallback, "aboutCtaLabel");
+
+		///<summary>
+		/// About CTA Link
+		///</summary>
+		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
+		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
+		[ImplementPropertyType("aboutCtaLink")]
+		public virtual string AboutCtaLink => this.Value<string>(_publishedValueFallback, "aboutCtaLink");
+
+		///<summary>
+		/// About Image
+		///</summary>
+		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
+		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
+		[ImplementPropertyType("aboutImage")]
+		public virtual global::Umbraco.Cms.Core.Models.MediaWithCrops AboutImage => this.Value<global::Umbraco.Cms.Core.Models.MediaWithCrops>(_publishedValueFallback, "aboutImage");
+
+		///<summary>
+		/// About Text
+		///</summary>
+		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
+		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
+		[ImplementPropertyType("aboutText")]
+		public virtual string AboutText => this.Value<string>(_publishedValueFallback, "aboutText");
+
+		///<summary>
+		/// About Title
+		///</summary>
+		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
+		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
+		[ImplementPropertyType("aboutTitle")]
+		public virtual string AboutTitle => this.Value<string>(_publishedValueFallback, "aboutTitle");
+
+		///<summary>
+		/// AI Background
+		///</summary>
+		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
+		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
+		[ImplementPropertyType("aiBackground")]
+		public virtual global::Umbraco.Cms.Core.Models.MediaWithCrops AiBackground => this.Value<global::Umbraco.Cms.Core.Models.MediaWithCrops>(_publishedValueFallback, "aiBackground");
+
+		///<summary>
+		/// AI Text
+		///</summary>
+		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
+		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
+		[ImplementPropertyType("aiText")]
+		public virtual string AiText => this.Value<string>(_publishedValueFallback, "aiText");
+
+		///<summary>
+		/// AI Title
+		///</summary>
+		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
+		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
+		[ImplementPropertyType("aiTitle")]
+		public virtual string AiTitle => this.Value<string>(_publishedValueFallback, "aiTitle");
+
+		///<summary>
+		/// Contact Eyebrow
+		///</summary>
+		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
+		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
+		[ImplementPropertyType("contactEyebrow")]
+		public virtual string ContactEyebrow => this.Value<string>(_publishedValueFallback, "contactEyebrow");
+
+		///<summary>
+		/// Contact Image
+		///</summary>
+		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
+		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
+		[ImplementPropertyType("contactImage")]
+		public virtual global::Umbraco.Cms.Core.Models.MediaWithCrops ContactImage => this.Value<global::Umbraco.Cms.Core.Models.MediaWithCrops>(_publishedValueFallback, "contactImage");
+
+		///<summary>
+		/// Contact Note: Shown under the form.
+		///</summary>
+		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
+		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
+		[ImplementPropertyType("contactNote")]
+		public virtual string ContactNote => this.Value<string>(_publishedValueFallback, "contactNote");
+
+		///<summary>
+		/// Contact Title
+		///</summary>
+		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
+		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
+		[ImplementPropertyType("contactTitle")]
+		public virtual string ContactTitle => this.Value<string>(_publishedValueFallback, "contactTitle");
+
+		///<summary>
+		/// Hero CTA Label
+		///</summary>
+		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
+		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
+		[ImplementPropertyType("heroCtaLabel")]
+		public virtual string HeroCtaLabel => this.Value<string>(_publishedValueFallback, "heroCtaLabel");
+
+		///<summary>
+		/// Hero CTA Link
+		///</summary>
+		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
+		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
+		[ImplementPropertyType("heroCtaLink")]
+		public virtual string HeroCtaLink => this.Value<string>(_publishedValueFallback, "heroCtaLink");
+
+		///<summary>
+		/// Hero Fallback Image: Shown on mobile instead of video.
+		///</summary>
+		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
+		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
+		[ImplementPropertyType("heroFallbackImage")]
+		public virtual global::Umbraco.Cms.Core.Models.MediaWithCrops HeroFallbackImage => this.Value<global::Umbraco.Cms.Core.Models.MediaWithCrops>(_publishedValueFallback, "heroFallbackImage");
+
+		///<summary>
+		/// Hero Lead
+		///</summary>
+		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
+		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
+		[ImplementPropertyType("heroLead")]
+		public virtual string HeroLead => this.Value<string>(_publishedValueFallback, "heroLead");
+
+		///<summary>
+		/// Hero Subtext
+		///</summary>
+		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
+		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
+		[ImplementPropertyType("heroSubtext")]
+		public virtual string HeroSubtext => this.Value<string>(_publishedValueFallback, "heroSubtext");
+
+		///<summary>
+		/// Hero Title: Use line breaks for stacked headline.
+		///</summary>
+		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
+		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
+		[ImplementPropertyType("heroTitle")]
+		public virtual string HeroTitle => this.Value<string>(_publishedValueFallback, "heroTitle");
+
+		///<summary>
+		/// Hero Video: MP4 from Media (desktop).
+		///</summary>
+		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
+		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
+		[ImplementPropertyType("heroVideo")]
+		public virtual global::Umbraco.Cms.Core.Models.MediaWithCrops HeroVideo => this.Value<global::Umbraco.Cms.Core.Models.MediaWithCrops>(_publishedValueFallback, "heroVideo");
+
+		///<summary>
+		/// Partner Logos: Select multiple images from Media / Centro / Partners.
+		///</summary>
+		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
+		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
+		[ImplementPropertyType("partnerLogos")]
+		public virtual global::System.Collections.Generic.IEnumerable<global::Umbraco.Cms.Core.Models.MediaWithCrops> PartnerLogos => this.Value<global::System.Collections.Generic.IEnumerable<global::Umbraco.Cms.Core.Models.MediaWithCrops>>(_publishedValueFallback, "partnerLogos");
+
+		///<summary>
+		/// Partners Eyebrow
+		///</summary>
+		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
+		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
+		[ImplementPropertyType("partnersEyebrow")]
+		public virtual string PartnersEyebrow => this.Value<string>(_publishedValueFallback, "partnersEyebrow");
+
+		///<summary>
+		/// Partners Title
+		///</summary>
+		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
+		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
+		[ImplementPropertyType("partnersTitle")]
+		public virtual string PartnersTitle => this.Value<string>(_publishedValueFallback, "partnersTitle");
+
+		///<summary>
+		/// Solutions
+		///</summary>
+		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
+		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
+		[ImplementPropertyType("solutions")]
+		public virtual global::Umbraco.Cms.Core.Models.Blocks.BlockListModel Solutions => this.Value<global::Umbraco.Cms.Core.Models.Blocks.BlockListModel>(_publishedValueFallback, "solutions");
+
+		///<summary>
+		/// Solutions Eyebrow
+		///</summary>
+		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
+		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
+		[ImplementPropertyType("solutionsEyebrow")]
+		public virtual string SolutionsEyebrow => this.Value<string>(_publishedValueFallback, "solutionsEyebrow");
+
+		///<summary>
+		/// Solutions Title
+		///</summary>
+		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
+		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
+		[ImplementPropertyType("solutionsTitle")]
+		public virtual string SolutionsTitle => this.Value<string>(_publishedValueFallback, "solutionsTitle");
+
+		///<summary>
+		/// Stats
+		///</summary>
+		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
+		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
+		[ImplementPropertyType("stats")]
+		public virtual global::Umbraco.Cms.Core.Models.Blocks.BlockListModel Stats => this.Value<global::Umbraco.Cms.Core.Models.Blocks.BlockListModel>(_publishedValueFallback, "stats");
+
+		///<summary>
+		/// Testimonials
+		///</summary>
+		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
+		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
+		[ImplementPropertyType("testimonials")]
+		public virtual global::Umbraco.Cms.Core.Models.Blocks.BlockListModel Testimonials => this.Value<global::Umbraco.Cms.Core.Models.Blocks.BlockListModel>(_publishedValueFallback, "testimonials");
+
+		///<summary>
+		/// Testimonials Background
+		///</summary>
+		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
+		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
+		[ImplementPropertyType("testimonialsBackground")]
+		public virtual global::Umbraco.Cms.Core.Models.MediaWithCrops TestimonialsBackground => this.Value<global::Umbraco.Cms.Core.Models.MediaWithCrops>(_publishedValueFallback, "testimonialsBackground");
+
+		///<summary>
+		/// OG Image: Social/share image (Open Graph / Twitter).
+		///</summary>
+		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
+		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
+		[ImplementPropertyType("ogImage")]
+		public virtual global::Umbraco.Cms.Core.Models.MediaWithCrops OgImage => global::Umbraco.Cms.Web.Common.PublishedModels.SEosettings.GetOgImage(this, _publishedValueFallback);
+
+		///<summary>
+		/// SEO Description: Short summary used by Google and AI search snippets.
+		///</summary>
+		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
+		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
+		[ImplementPropertyType("sEODescription")]
+		public virtual string SEodescription => global::Umbraco.Cms.Web.Common.PublishedModels.SEosettings.GetSEodescription(this, _publishedValueFallback);
+
+		///<summary>
+		/// SEO Keywords: Optional. Prefer strong titles and descriptions over keyword stuffing.
+		///</summary>
+		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
+		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
+		[ImplementPropertyType("sEOKeywords")]
+		public virtual string SEokeywords => global::Umbraco.Cms.Web.Common.PublishedModels.SEosettings.GetSEokeywords(this, _publishedValueFallback);
+
+		///<summary>
+		/// SEO Title: Overrides the browser/search title when set.
+		///</summary>
+		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
+		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
+		[ImplementPropertyType("sEOTitle")]
+		public virtual string SEotitle => global::Umbraco.Cms.Web.Common.PublishedModels.SEosettings.GetSEotitle(this, _publishedValueFallback);
 	}
 }
