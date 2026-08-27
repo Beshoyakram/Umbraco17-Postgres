@@ -4,31 +4,31 @@
 @{
     var homeUrl = SiteInfo.GetHomePage()?.Url() ?? "/";
     var footer = SiteInfo.GetFooter();
-    var logoUrl = SiteInfo.GetMediaUrl(footer?.Value<Umbraco.Cms.Core.Models.PublishedContent.IPublishedContent>("footerLogo"))
-        ?? Url.Content("~/theme/centrotheme/img/footer-logo.png");
-    var ctaTitle = footer?.Value<string>("ctaTitle") ?? "Ready to Unlock Efficiency?";
-    var ctaText = footer?.Value<string>("ctaText") ?? "Let Centro take care of your non-core operations so you can focus on what matters most.";
-    var ctaButtonLabel = footer?.Value<string>("ctaButtonLabel") ?? "Get Started Today";
-    var ctaButtonLink = footer?.Value<string>("ctaButtonLink") ?? "#contact";
-    var phone = footer?.Value<string>("phone") ?? "804-220-8745";
-    var email = footer?.Value<string>("email") ?? "contact@centrocdx.com";
+    var logoUrl = SiteInfo.GetMediaUrl(footer?.Value<Umbraco.Cms.Core.Models.PublishedContent.IPublishedContent>("footerLogo"));
+    var ctaTitle = footer?.Value<string>("ctaTitle");
+    var ctaText = footer?.Value<string>("ctaText");
+    var ctaButtonLabel = footer?.Value<string>("ctaButtonLabel");
+    var ctaButtonLink = footer?.Value<string>("ctaButtonLink");
+    var phone = footer?.Value<string>("phone");
+    var email = footer?.Value<string>("email");
     var copyright = footer?.Value<string>("copyright");
-    if (string.IsNullOrWhiteSpace(copyright))
-    {
-        copyright = $"© {DateTime.UtcNow.Year} Centro. All Rights Reserved. Powered by N & L Enterprises.";
-    }
 }
+@if (footer != null)
+{
 <footer class="footer footer_bg">
     <div class="footer_top">
         <div class="container-fluid p-0">
             <div class="row no-gutters">
                 <div class="col-xl-3 col-12 col-md-4">
                     <div class="footer_widget">
-                        <div class="footer_logo" data-aos="fade-up" data-aos-duration="1000">
-                            <a href="@homeUrl">
-                                <img src="@logoUrl" alt="Footer Logo">
-                            </a>
-                        </div>
+                        @if (!string.IsNullOrWhiteSpace(logoUrl))
+                        {
+                            <div class="footer_logo" data-aos="fade-up" data-aos-duration="1000">
+                                <a href="@homeUrl">
+                                    <img src="@logoUrl" alt="Footer Logo">
+                                </a>
+                            </div>
+                        }
                         <ul class="social_links" data-aos="fade-up" data-aos-duration="2000">
                             <li><a href="https://www.facebook.com/lifeatcentrocdx" target="_blank" rel="noopener"><i class="fab fa-facebook"></i></a></li>
                             <li><a href="https://www.linkedin.com/company/centrocdx" target="_blank" rel="noopener"><i class="fab fa-linkedin"></i></a></li>
@@ -39,12 +39,21 @@
                 <div class="col-xl-9 col-12 col-md-8">
                     <div class="footer_header d-flex justify-content-between">
                         <div class="footer_header_left">
-                            <h3 data-aos="fade-up" data-aos-duration="2000">@ctaTitle</h3>
-                            <p data-aos="fade-up" data-aos-duration="3000">@ctaText</p>
+                            @if (!string.IsNullOrWhiteSpace(ctaTitle))
+                            {
+                                <h3 data-aos="fade-up" data-aos-duration="2000">@ctaTitle</h3>
+                            }
+                            @if (!string.IsNullOrWhiteSpace(ctaText))
+                            {
+                                <p data-aos="fade-up" data-aos-duration="3000">@ctaText</p>
+                            }
                         </div>
-                        <div class="footer_btn" data-aos="fade-up" data-aos-duration="3000">
-                            <a href="@ctaButtonLink" class="boxed-btn2">@ctaButtonLabel</a>
-                        </div>
+                        @if (!string.IsNullOrWhiteSpace(ctaButtonLabel) && !string.IsNullOrWhiteSpace(ctaButtonLink))
+                        {
+                            <div class="footer_btn" data-aos="fade-up" data-aos-duration="3000">
+                                <a href="@ctaButtonLink" class="boxed-btn2">@ctaButtonLabel</a>
+                            </div>
+                        }
                     </div>
                     <div class="row">
                         <div class="col-xl-8 col-12 col-md-12">
@@ -75,8 +84,14 @@
                                     <div class="footer_widget">
                                         <h3 class="footer_heading" data-aos="fade-up" data-aos-duration="2000">How To Reach Us</h3>
                                         <ul class="quick_links" data-aos="fade-up" data-aos-duration="3000">
-                                            <li><a href="tel:@phone.Replace("-", "").Replace(" ", "")">@phone</a></li>
-                                            <li><a href="mailto:@email">@email</a></li>
+                                            @if (!string.IsNullOrWhiteSpace(phone))
+                                            {
+                                                <li><a href="tel:@phone.Replace("-", "").Replace(" ", "")">@phone</a></li>
+                                            }
+                                            @if (!string.IsNullOrWhiteSpace(email))
+                                            {
+                                                <li><a href="mailto:@email">@email</a></li>
+                                            }
                                         </ul>
                                     </div>
                                 </div>
@@ -87,7 +102,11 @@
             </div>
         </div>
     </div>
-    <div class="footer_copy_right">
-        <p>@copyright</p>
-    </div>
+    @if (!string.IsNullOrWhiteSpace(copyright))
+    {
+        <div class="footer_copy_right">
+            <p>@copyright</p>
+        </div>
+    }
 </footer>
+}

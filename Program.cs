@@ -14,19 +14,6 @@ await app.BootUmbracoAsync();
 
 app.UseHttpsRedirection();
 
-// Send site root to the Home page (e.g. https://localhost:44387/ -> /home)
-app.Use(async (context, next) =>
-{
-    if (HttpMethods.IsGet(context.Request.Method)
-        && context.Request.Path == "/")
-    {
-        context.Response.Redirect("/home", permanent: false);
-        return;
-    }
-
-    await next();
-});
-
 app.UseUmbraco()
     .WithMiddleware(u =>
     {
@@ -35,6 +22,12 @@ app.UseUmbraco()
     })
     .WithEndpoints(u =>
     {
+        u.EndpointRouteBuilder.MapGet("/", context =>
+        {
+            context.Response.Redirect("/home", permanent: false);
+            return Task.CompletedTask;
+        });
+
         u.UseBackOfficeEndpoints();
         u.UseWebsiteEndpoints();
     });

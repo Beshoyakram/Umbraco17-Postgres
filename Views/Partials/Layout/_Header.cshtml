@@ -5,10 +5,10 @@
     var home = SiteInfo.GetHomePage() ?? Model.Root()?.DescendantsOrSelfOfType("homePage").FirstOrDefault() ?? Model;
     var homeUrl = home?.Url() ?? "/";
     var site = SiteInfo.GetSiteMainInformation();
-    var logoUrl = SiteInfo.GetMediaUrl(site?.Value<Umbraco.Cms.Core.Models.PublishedContent.IPublishedContent>("siteLogo"))
-        ?? Url.Content("~/theme/centrotheme/img/logo.png");
-    var ctaLabel = site?.Value<string>("headerCtaLabel") ?? "Free Consultation";
-    var ctaLink = site?.Value<string>("headerCtaLink") ?? "#contact";
+    var siteTitle = site?.Value<string>("siteTitle");
+    var logoUrl = SiteInfo.GetMediaUrl(site?.Value<Umbraco.Cms.Core.Models.PublishedContent.IPublishedContent>("siteLogo"));
+    var ctaLabel = site?.Value<string>("headerCtaLabel");
+    var ctaLink = site?.Value<string>("headerCtaLink");
 }
 <header>
     <div class="header-area">
@@ -18,7 +18,14 @@
                     <div class="col-xl-2 col-lg-2">
                         <div class="logo-img">
                             <a href="@homeUrl">
-                                <img src="@logoUrl" alt="Logo">
+                                @if (!string.IsNullOrWhiteSpace(logoUrl))
+                                {
+                                    <img src="@logoUrl" alt="@(siteTitle ?? "Centro")">
+                                }
+                                else if (!string.IsNullOrWhiteSpace(siteTitle))
+                                {
+                                    <span>@siteTitle</span>
+                                }
                             </a>
                         </div>
                     </div>
@@ -43,9 +50,12 @@
                         </div>
                     </div>
                     <div class="col-xl-3 col-lg-3 d-none d-lg-block">
-                        <div class="get_in_tauch">
-                            <a href="@ctaLink" class="boxed-btn">@ctaLabel</a>
-                        </div>
+                        @if (!string.IsNullOrWhiteSpace(ctaLabel) && !string.IsNullOrWhiteSpace(ctaLink))
+                        {
+                            <div class="get_in_tauch">
+                                <a href="@ctaLink" class="boxed-btn">@ctaLabel</a>
+                            </div>
+                        }
                     </div>
                     <div class="col-12">
                         <div class="mobile_menu d-block d-lg-none"></div>

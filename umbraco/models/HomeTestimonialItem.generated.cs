@@ -58,12 +58,28 @@ namespace Umbraco.Cms.Web.Common.PublishedModels
 		public virtual string AuthorName => this.Value<string>(_publishedValueFallback, "authorName");
 
 		///<summary>
-		/// Author Role: Company and title
+		/// Author Role: Job title / role (e.g. Former Chief Executive Officer).
 		///</summary>
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
 		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
 		[ImplementPropertyType("authorRole")]
 		public virtual string AuthorRole => this.Value<string>(_publishedValueFallback, "authorRole");
+
+		///<summary>
+		/// Title: Company or organization (e.g. Pampered Chef).
+		///</summary>
+		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
+		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
+		[ImplementPropertyType("authorTitle")]
+		public virtual string AuthorTitle => this.Value<string>(_publishedValueFallback, "authorTitle");
+
+		///<summary>
+		/// Image: Author portrait (hexagon frame on the frontend).
+		///</summary>
+		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
+		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
+		[ImplementPropertyType("image")]
+		public virtual global::Umbraco.Cms.Core.Models.MediaWithCrops Image => this.Value<global::Umbraco.Cms.Core.Models.MediaWithCrops>(_publishedValueFallback, "image");
 
 		///<summary>
 		/// Quote

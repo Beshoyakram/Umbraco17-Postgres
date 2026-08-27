@@ -12,28 +12,25 @@
     var langAttr = culture.Length >= 2 ? culture[..2] : "en";
 
     var siteMain = SiteInfo.GetSiteMainInformation();
-    var siteName = FirstNonEmpty(siteMain?.Value<string>("siteTitle"), "Centro");
+    var siteName = siteMain?.Value<string>("siteTitle") ?? string.Empty;
     var pageName = Model.Name ?? siteName;
-    var favIconUrl = SiteInfo.GetMediaUrl(siteMain?.Value<IPublishedContent>("favIcon"))
-        ?? Url.Content("~/theme/centrotheme/img/favicon.png");
+    var favIconUrl = SiteInfo.GetMediaUrl(siteMain?.Value<IPublishedContent>("favIcon"));
 
     var pageTitle = FirstNonEmpty(
         Model.Value<string>("sEOTitle"),
         Model.Value<string>("title"),
         Model.Value<string>("bannerTitle"),
-        Model.ContentType.Alias.Equals("homePage", StringComparison.OrdinalIgnoreCase)
-            ? "Centro | Redefining Excellence"
-            : pageName);
+        pageName);
 
-    var seoTitle = pageTitle.Contains(siteName, StringComparison.OrdinalIgnoreCase)
+    var seoTitle = pageTitle.Contains(siteName ?? string.Empty, StringComparison.OrdinalIgnoreCase)
         ? pageTitle
-        : $"{pageTitle} | {siteName}";
+        : string.IsNullOrWhiteSpace(siteName) ? pageTitle : $"{pageTitle} | {siteName}";
 
     var seoDescription = FirstNonEmpty(
         Model.Value<string>("sEODescription"),
         Model.Value<string>("brief"),
         Model.Value<string>("sectionDescription"),
-        "A Global BPO Leader helping businesses drive meaningful change for growth through outsourcing, healthcare solutions, and digital transformation.");
+        string.Empty);
 
     var seoKeywords = FirstNonEmpty(
         Model.Value<string>("sEOKeywords"),
@@ -50,8 +47,7 @@
     var ogImage = ResolveImageUrl("ogImage")
         ?? ResolveImageUrl("mainImage")
         ?? ResolveImageUrl("coverImage")
-        ?? SiteInfo.GetMediaUrl(siteMain?.Value<IPublishedContent>("siteLogo"))
-        ?? $"{Context.Request.Scheme}://{Context.Request.Host}{Url.Content("~/theme/centrotheme/img/logo.png")}";
+        ?? SiteInfo.GetMediaUrl(siteMain?.Value<IPublishedContent>("siteLogo"));
 
     var jsonLd = JsonSerializer.Serialize(new Dictionary<string, object?>
     {
@@ -113,7 +109,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>@seoTitle</title>
 
-    <meta name="description" content="@seoDescription" />
+    @if (!string.IsNullOrWhiteSpace(seoDescription))
+    {
+        <meta name="description" content="@seoDescription" />
+    }
     @if (!string.IsNullOrWhiteSpace(seoKeywords))
     {
         <meta name="keywords" content="@seoKeywords" />
@@ -121,20 +120,35 @@
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
     <link rel="canonical" href="@canonicalUrl" />
 
-    <meta property="og:site_name" content="@siteName" />
+    <meta property="og:site_name" content="@(string.IsNullOrWhiteSpace(siteName) ? seoTitle : siteName)" />
     <meta property="og:title" content="@seoTitle" />
-    <meta property="og:description" content="@seoDescription" />
+    @if (!string.IsNullOrWhiteSpace(seoDescription))
+    {
+        <meta property="og:description" content="@seoDescription" />
+    }
     <meta property="og:url" content="@canonicalUrl" />
     <meta property="og:type" content="website" />
-    <meta property="og:image" content="@ogImage" />
+    @if (!string.IsNullOrWhiteSpace(ogImage))
+    {
+        <meta property="og:image" content="@ogImage" />
+    }
     <meta property="og:locale" content="@culture.Replace('-', '_')" />
 
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="@seoTitle" />
-    <meta name="twitter:description" content="@seoDescription" />
-    <meta name="twitter:image" content="@ogImage" />
+    @if (!string.IsNullOrWhiteSpace(seoDescription))
+    {
+        <meta name="twitter:description" content="@seoDescription" />
+    }
+    @if (!string.IsNullOrWhiteSpace(ogImage))
+    {
+        <meta name="twitter:image" content="@ogImage" />
+    }
 
-    <link rel="shortcut icon" type="image/x-icon" href="@favIconUrl" />
+    @if (!string.IsNullOrWhiteSpace(favIconUrl))
+    {
+        <link rel="shortcut icon" type="image/x-icon" href="@favIconUrl" />
+    }
 
     <link rel="stylesheet" href="@theme/css/bootstrap.min.css" />
     <link rel="stylesheet" href="@theme/css/owl.carousel.min.css" />
