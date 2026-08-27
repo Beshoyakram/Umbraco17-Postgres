@@ -1,3 +1,5 @@
+using System.Text.Json;
+using Umbraco.Cms.Core;
 using Umbraco.Cms.Core.Models.PublishedContent;
 using Umbraco.Cms.Web.Common;
 using Umbraco.Extensions;
@@ -54,7 +56,74 @@ public class SiteInfoService : ISiteInfoService
             return null;
         }
 
-        var url = media.Url();
-        return string.IsNullOrWhiteSpace(url) || url == "#" ? null : url;
+        try
+        {
+            var url = media.Url();
+            if (!string.IsNullOrWhiteSpace(url) && url != "#")
+            {
+                return NormalizePath(url);
+            }
+        }
+        catch (ArgumentException)
+        {
+            // Fall through to raw umbracoFile parsing
+        }
+
+        return NormalizePath(ExtractPathFromUmbracoFile(media.Value<string>(Constants.Conventions.Media.File)));
+    }
+
+    private static string? ExtractPathFromUmbracoFile(string? raw)
+    {
+        if (string.IsNullOrWhiteSpace(raw))
+        {
+            return null;
+        }
+
+        raw = raw.Trim();
+        if (raw.StartsWith('/'))
+        {
+            return raw;
+        }
+
+        if (raw.StartsWith('{'))
+        {
+            try
+            {
+                using var doc = JsonDocument.Parse(raw);
+                if (doc.RootElement.TryGetProperty("src", out var src))
+                {
+                    return src.GetString();
+                }
+            }
+            catch (JsonException)
+            {
+                var start = raw.IndexOf("/media", StringComparison.OrdinalIgnoreCase);
+                if (start >= 0)
+                {
+                    var end = raw.IndexOf('"', start);
+                    if (end > start)
+                    {
+                        return raw[start..end];
+                    }
+                }
+            }
+        }
+
+        return null;
+    }
+
+    private static string? NormalizePath(string? path)
+    {
+        if (string.IsNullOrWhiteSpace(path) || path == "#")
+        {
+            return null;
+        }
+
+        if (path.StartsWith("http", StringComparison.OrdinalIgnoreCase))
+        {
+            return path;
+        }
+
+        return path.StartsWith('/') ? path : "/" + path.TrimStart('/');
     }
 }

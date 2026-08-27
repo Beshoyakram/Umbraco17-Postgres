@@ -112,5 +112,13 @@ namespace Umbraco.Cms.Web.Common.PublishedModels
 		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
 		[ImplementPropertyType("phone")]
 		public virtual string Phone => this.Value<string>(_publishedValueFallback, "phone");
+
+		///<summary>
+		/// Social Links: Add social networks — each item has an icon and a link.
+		///</summary>
+		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
+		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
+		[ImplementPropertyType("socialLinks")]
+		public virtual global::Umbraco.Cms.Core.Models.Blocks.BlockListModel SocialLinks => this.Value<global::Umbraco.Cms.Core.Models.Blocks.BlockListModel>(_publishedValueFallback, "socialLinks");
 	}
 }

@@ -40,3 +40,11 @@
     display: none !important;
   }
 }
+
+/* Footer social icons from Media */
+.footer .social_links__icon {
+  display: block;
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+}

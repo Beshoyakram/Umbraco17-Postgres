@@ -189,7 +189,10 @@
     <script src="@theme/js/main.js"></script>
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
-        AOS.init({ once: true, duration: 800 });
+        AOS.init({ once: true, duration: 800, offset: 80 });
+        window.addEventListener('load', function () {
+            AOS.refresh();
+        });
     </script>
     @RenderSection("Scripts", required: false)
 </body>

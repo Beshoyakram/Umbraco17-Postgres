@@ -11,7 +11,15 @@
 	string? MediaUrl(string alias)
 	{
 		if (!Model.HasProperty(alias) || !Model.HasValue(alias)) return null;
-		return SiteInfo.GetMediaUrl(Model.Value<IPublishedContent>(alias));
+		try
+		{
+			return SiteInfo.GetMediaUrl(Model.Value<IPublishedContent>(alias));
+		}
+		catch (Exception)
+		{
+			// Bad media path / HybridCache issue — don't take down the page
+			return null;
+		}
 	}
 
 	string? Text(string alias)
