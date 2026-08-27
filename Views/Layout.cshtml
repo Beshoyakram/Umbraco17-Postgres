@@ -1,0 +1,145 @@
+﻿@using System.Globalization
+@using System.Text.Json
+@using Umbraco.Cms.Core.Models.PublishedContent
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
+@{
+    Layout = null;
+
+    var culture = CultureInfo.CurrentCulture.Name;
+    var direction = culture.StartsWith("ar", StringComparison.OrdinalIgnoreCase) ? "rtl" : "ltr";
+    var langAttr = culture.Length >= 2 ? culture[..2] : "en";
+
+    var siteName = "Centro";
+    var pageName = Model.Name ?? siteName;
+
+    var pageTitle = FirstNonEmpty(
+        Model.Value<string>("sEOTitle"),
+        Model.Value<string>("title"),
+        Model.Value<string>("bannerTitle"),
+        pageName);
+
+    var seoTitle = pageTitle.Contains(siteName, StringComparison.OrdinalIgnoreCase)
+        ? pageTitle
+        : $"{pageTitle} | {siteName}";
+
+    var seoDescription = FirstNonEmpty(
+        Model.Value<string>("sEODescription"),
+        Model.Value<string>("brief"),
+        Model.Value<string>("sectionDescription"),
+        pageTitle);
+
+    var seoKeywords = FirstNonEmpty(
+        Model.Value<string>("sEOKeywords"),
+        Model.Value<string>("keyWords"),
+        string.Empty);
+
+    var canonicalUrl = Model.Url(mode: UrlMode.Absolute);
+    if (string.IsNullOrWhiteSpace(canonicalUrl))
+    {
+        var request = Context.Request;
+        canonicalUrl = $"{request.Scheme}://{request.Host}{request.Path}";
+    }
+
+    var ogImage = ResolveImageUrl("ogImage")
+        ?? ResolveImageUrl("mainImage")
+        ?? ResolveImageUrl("coverImage")
+        ?? $"{Context.Request.Scheme}://{Context.Request.Host}/favicon.ico";
+
+    var jsonLd = JsonSerializer.Serialize(new Dictionary<string, object?>
+    {
+        ["@context"] = "https://schema.org",
+        ["@type"] = Model.ContentType.Alias.Equals("homePage", StringComparison.OrdinalIgnoreCase)
+            ? "WebSite"
+            : "WebPage",
+        ["name"] = seoTitle,
+        ["description"] = seoDescription,
+        ["url"] = canonicalUrl,
+        ["inLanguage"] = culture,
+        ["isPartOf"] = new Dictionary<string, object?>
+        {
+            ["@type"] = "WebSite",
+            ["name"] = siteName,
+            ["url"] = $"{Context.Request.Scheme}://{Context.Request.Host}/"
+        }
+    });
+}
+
+@functions {
+    private static string FirstNonEmpty(params string?[] values)
+    {
+        foreach (var value in values)
+        {
+            if (!string.IsNullOrWhiteSpace(value))
+            {
+                return value.Trim();
+            }
+        }
+
+        return string.Empty;
+    }
+
+    private string? ResolveImageUrl(string alias)
+    {
+        if (!Model.HasProperty(alias) || !Model.HasValue(alias))
+        {
+            return null;
+        }
+
+        var media = Model.Value<IPublishedContent>(alias);
+        if (media == null)
+        {
+            return null;
+        }
+
+        var url = media.Url(mode: UrlMode.Absolute);
+        return string.IsNullOrWhiteSpace(url) ? null : url;
+    }
+}
+<!DOCTYPE html>
+<html lang="@langAttr" dir="@direction">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>@seoTitle</title>
+
+    <meta name="description" content="@seoDescription" />
+    @if (!string.IsNullOrWhiteSpace(seoKeywords))
+    {
+        <meta name="keywords" content="@seoKeywords" />
+    }
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+    <link rel="canonical" href="@canonicalUrl" />
+
+    <meta property="og:site_name" content="@siteName" />
+    <meta property="og:title" content="@seoTitle" />
+    <meta property="og:description" content="@seoDescription" />
+    <meta property="og:url" content="@canonicalUrl" />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="@ogImage" />
+    <meta property="og:locale" content="@culture.Replace('-', '_')" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="@seoTitle" />
+    <meta name="twitter:description" content="@seoDescription" />
+    <meta name="twitter:image" content="@ogImage" />
+
+    <link rel="icon" href="~/favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+
+    <script type="application/ld+json">@Html.Raw(jsonLd)</script>
+    @RenderSection("Head", required: false)
+</head>
+<body class="site-body">
+    <a class="skip-link" href="#main-content">Skip to content</a>
+
+    <partial name="~/Views/Partials/Layout/_Header.cshtml" />
+
+    <main id="main-content" class="site-main" role="main">
+        @RenderBody()
+    </main>
+
+    <partial name="~/Views/Partials/Layout/_Footer.cshtml" />
+
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

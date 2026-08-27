@@ -2,8 +2,10 @@
 @inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<ContentModels.ContentTreeRoot>
 @using ContentModels = Umbraco.Cms.Web.Common.PublishedModels;
 @{
-	Layout = null;
+	Layout = "Layout.cshtml";
 }
 
-<h1>hii</h1>
-<h2>hii</h2>
+<section class="page-hero">
+	<h1>@(Model.Name ?? "Content")</h1>
+	<p>Content tree root. Prefer linking visitors to the Home page.</p>
+</section>

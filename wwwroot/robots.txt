@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+
+# Keep backoffice and private paths out of search indexes
+Disallow: /umbraco/
+Disallow: /App_Plugins/
+Disallow: /install/
+
+Sitemap: /sitemap.xml

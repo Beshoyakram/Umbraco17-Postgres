@@ -1,0 +1,21 @@
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
+@{
+    var home = Model.Root()?
+        .DescendantsOrSelfOfType("homePage")
+        .FirstOrDefault()
+        ?? Model.AncestorOrSelf(1);
+    var homeUrl = home?.Url() ?? "/";
+    var homeName = home?.Name ?? "Centro";
+}
+<header class="site-header">
+    <div class="site-header__inner">
+        <a class="site-brand" href="@homeUrl" aria-label="@homeName home">@homeName</a>
+        <nav class="site-nav" aria-label="Primary">
+            <ul class="site-nav__list">
+                <li>
+                    <a href="@homeUrl" class="@(Model.Id == home?.Id ? "is-active" : null)">Home</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</header>

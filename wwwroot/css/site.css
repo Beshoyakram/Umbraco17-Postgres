@@ -1,0 +1,138 @@
+:root {
+  --bg: #f6f4ef;
+  --ink: #15202b;
+  --muted: #5b6773;
+  --line: #d9d3c7;
+  --brand: #0f5c4c;
+  --surface: #fffdf8;
+  --max: 72rem;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body.site-body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  color: var(--ink);
+  background:
+    radial-gradient(circle at top left, rgba(15, 92, 76, 0.08), transparent 40%),
+    linear-gradient(180deg, #fbf8f2 0%, var(--bg) 100%);
+  font-family: "Segoe UI", "Iowan Old Style", Georgia, serif;
+  line-height: 1.6;
+}
+
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  background: var(--brand);
+  color: #fff;
+  padding: 0.75rem 1rem;
+  z-index: 1000;
+}
+
+.skip-link:focus {
+  left: 1rem;
+  top: 1rem;
+}
+
+.site-header,
+.site-footer,
+.site-main {
+  width: min(100% - 2rem, var(--max));
+  margin-inline: auto;
+}
+
+.site-header {
+  padding: 1.25rem 0;
+}
+
+.site-header__inner,
+.site-footer__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.site-brand {
+  font-size: clamp(1.5rem, 2vw, 2rem);
+  font-weight: 700;
+  color: var(--brand);
+  text-decoration: none;
+  letter-spacing: -0.02em;
+}
+
+.site-nav__list {
+  display: flex;
+  gap: 1rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.site-nav a,
+.site-footer a {
+  color: var(--muted);
+  text-decoration: none;
+}
+
+.site-nav a:hover,
+.site-nav a.is-active,
+.site-footer a:hover {
+  color: var(--brand);
+}
+
+.site-main {
+  flex: 1;
+  padding: 2rem 0 3rem;
+}
+
+.site-footer {
+  padding: 1.5rem 0 2rem;
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+.page-hero {
+  padding: 2.5rem;
+  border: 1px solid var(--line);
+  background: var(--surface);
+}
+
+.page-hero h1 {
+  margin: 0 0 0.75rem;
+  font-size: clamp(2rem, 4vw, 3rem);
+  line-height: 1.15;
+  letter-spacing: -0.03em;
+}
+
+.page-hero p {
+  margin: 0;
+  max-width: 40rem;
+  color: var(--muted);
+  font-size: 1.05rem;
+}
+
+@media (max-width: 640px) {
+  .site-header__inner,
+  .site-footer__inner {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .page-hero {
+    padding: 1.5rem;
+  }
+}

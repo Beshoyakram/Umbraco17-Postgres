@@ -2,7 +2,13 @@
 @inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<ContentModels.HomePage>
 @using ContentModels = Umbraco.Cms.Web.Common.PublishedModels;
 @{
-	Layout = null;
+	Layout = "Layout.cshtml";
 }
 
-<h1>HomePage</h1>
+<section class="page-hero">
+	<h1>@(Model.Name ?? "Centro")</h1>
+	<p>
+		Welcome to Centro. This page is server-rendered for search engines and AI crawlers.
+		Add SEO Title and SEO Description on the SEO Settings tab in the backoffice.
+	</p>
+</section>
