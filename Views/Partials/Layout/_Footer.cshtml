@@ -40,7 +40,7 @@
                     <div class="footer_widget">
                         @if (!string.IsNullOrWhiteSpace(logoUrl))
                         {
-                            <div class="footer_logo">
+                            <div class="footer_logo" data-aos="fade-up" data-aos-duration="1000">
                                 <a href="@homeUrl">
                                     <img src="@logoUrl" alt="Footer Logo">
                                 </a>
@@ -48,7 +48,7 @@
                         }
                         @if (socialLinks != null && socialLinks.Any())
                         {
-                            <ul class="social_links">
+                            <ul class="social_links" data-aos="fade-up" data-aos-duration="2000">
                                 @foreach (var item in socialLinks)
                                 {
                                     var content = item.Content;
@@ -90,16 +90,16 @@
                         <div class="footer_header_left">
                             @if (!string.IsNullOrWhiteSpace(ctaTitle))
                             {
-                                <h3>@ctaTitle</h3>
+                                <h3 data-aos="fade-up" data-aos-duration="2000">@ctaTitle</h3>
                             }
                             @if (!string.IsNullOrWhiteSpace(ctaText))
                             {
-                                <p>@ctaText</p>
+                                <p data-aos="fade-up" data-aos-duration="3000">@ctaText</p>
                             }
                         </div>
                         @if (!string.IsNullOrWhiteSpace(ctaButtonLabel) && !string.IsNullOrWhiteSpace(ctaButtonLink))
                         {
-                            <div class="footer_btn">
+                            <div class="footer_btn" data-aos="fade-up" data-aos-duration="3000">
                                 <a href="@ctaButtonLink" class="boxed-btn2">@ctaButtonLabel</a>
                             </div>
                         }
@@ -109,8 +109,8 @@
                             <div class="row">
                                 <div class="col-xl-4 col-12 col-md-4">
                                     <div class="footer_widget">
-                                        <h3 class="footer_heading">Navigation</h3>
-                                        <ul class="quick_links">
+                                        <h3 class="footer_heading" data-aos="fade-up" data-aos-duration="2000">Navigation</h3>
+                                        <ul class="quick_links" data-aos="fade-up" data-aos-duration="3000">
                                             <li><a href="@homeUrl">Home</a></li>
                                             <li><a href="#about">About</a></li>
                                             <li><a href="#contact">Careers</a></li>
@@ -121,8 +121,8 @@
                                 </div>
                                 <div class="col-xl-4 col-12 col-md-4">
                                     <div class="footer_widget">
-                                        <h3 class="footer_heading">Services</h3>
-                                        <ul class="quick_links">
+                                        <h3 class="footer_heading" data-aos="fade-up" data-aos-duration="2000">Services</h3>
+                                        <ul class="quick_links" data-aos="fade-up" data-aos-duration="3000">
                                             <li><a href="#solutions">Digital Transformation</a></li>
                                             <li><a href="#solutions">Healthcare Solutions</a></li>
                                             <li><a href="#solutions">Business Outsourcing</a></li>
@@ -131,8 +131,8 @@
                                 </div>
                                 <div class="col-xl-4 col-12 col-md-4">
                                     <div class="footer_widget">
-                                        <h3 class="footer_heading">How To Reach Us</h3>
-                                        <ul class="quick_links">
+                                        <h3 class="footer_heading" data-aos="fade-up" data-aos-duration="2000">How To Reach Us</h3>
+                                        <ul class="quick_links" data-aos="fade-up" data-aos-duration="3000">
                                             @if (!string.IsNullOrWhiteSpace(phone))
                                             {
                                                 <li><a href="tel:@phone.Replace("-", "").Replace(" ", "")">@phone</a></li>

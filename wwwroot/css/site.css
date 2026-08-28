@@ -48,3 +48,12 @@
   height: 18px;
   object-fit: contain;
 }
+
+/* Partner logo marquee — paused until scrolled into view (staging WP behaviour) */
+.logo-slid .slide-track img {
+  animation-play-state: paused;
+}
+
+.logo-slid .slide-track.is-in-view img {
+  animation-play-state: running;
+}

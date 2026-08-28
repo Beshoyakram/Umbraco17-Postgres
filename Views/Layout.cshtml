@@ -189,10 +189,65 @@
     <script src="@theme/js/main.js"></script>
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
-        AOS.init({ once: true, duration: 800, offset: 80 });
-        window.addEventListener('load', function () {
-            AOS.refresh();
-        });
+        (function () {
+            function initAos() {
+                if (typeof AOS === 'undefined') return;
+                // Match staging WP: replay when scrolling back to a section (once: false).
+                AOS.init({ duration: 800, offset: 80, once: false });
+                AOS.refresh();
+            }
+
+            initAos();
+
+            window.addEventListener('load', function () {
+                if (typeof AOS !== 'undefined') AOS.refresh();
+            });
+
+            window.addEventListener('pageshow', function (event) {
+                if (typeof AOS === 'undefined') return;
+                if (event.persisted) {
+                    document.querySelectorAll('[data-aos]').forEach(function (el) {
+                        el.classList.remove('aos-animate');
+                    });
+                }
+                AOS.refresh();
+            });
+
+            // Partner marquee: start when the section enters the viewport (not on initial load).
+            var tracks = document.querySelectorAll('.logo-slid .slide-track');
+            if (!tracks.length || !('IntersectionObserver' in window)) return;
+
+            var trackObserver = new IntersectionObserver(function (entries) {
+                entries.forEach(function (entry) {
+                    var track = entry.target;
+                    if (entry.isIntersecting) {
+                        track.classList.add('is-in-view');
+                        track.querySelectorAll('img').forEach(function (img) {
+                            img.style.animation = 'none';
+                            void img.offsetWidth;
+                            img.style.animation = '';
+                        });
+                    } else {
+                        track.classList.remove('is-in-view');
+                    }
+                });
+            }, { threshold: 0.15 });
+
+            tracks.forEach(function (track) { trackObserver.observe(track); });
+
+            // Footer is below the fold — refresh AOS when it enters view so fade-up triggers reliably.
+            var footer = document.querySelector('.footer.footer_bg');
+            if (footer && 'IntersectionObserver' in window) {
+                var footerObserver = new IntersectionObserver(function (entries) {
+                    entries.forEach(function (entry) {
+                        if (entry.isIntersecting && typeof AOS !== 'undefined') {
+                            AOS.refresh();
+                        }
+                    });
+                }, { threshold: 0.08 });
+                footerObserver.observe(footer);
+            }
+        })();
     </script>
     @RenderSection("Scripts", required: false)
 </body>
