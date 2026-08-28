@@ -72,18 +72,16 @@
 	var showContact = !string.IsNullOrWhiteSpace(contactTitle) || !string.IsNullOrWhiteSpace(contactImageUrl);
 }
 
+@section Head {
+	<link rel="stylesheet" href="~/css/pages/home.css" asp-append-version="true" />
+}
+
 @if (showHero)
 {
-	<style>
-		@if (!string.IsNullOrWhiteSpace(heroFallbackUrl))
-		{
-			<text>.fallbackImage { background-image: url('@heroFallbackUrl') !important; }</text>
-		}
-	</style>
 	<div class="slider_area">
 		@if (!string.IsNullOrWhiteSpace(heroFallbackUrl))
 		{
-			<div class="fallbackImage d-block d-lg-none"></div>
+			<div class="fallbackImage d-block d-lg-none" style="--hero-fallback-bg: url('@heroFallbackUrl');"></div>
 		}
 		@if (!string.IsNullOrWhiteSpace(heroVideoUrl))
 		{
@@ -102,7 +100,7 @@
 					<p data-aos="fade-up" data-aos-duration="2000">
 						@if (!string.IsNullOrWhiteSpace(heroLead))
 						{
-							<span style="font-weight: bold; font-size: 45px">@heroLead</span>
+							<span class="hero-lead">@heroLead</span>
 							<br>
 						}
 						@if (!string.IsNullOrWhiteSpace(heroSubtext))
@@ -177,13 +175,7 @@
 
 @if (showAi)
 {
-	<style>
-		@if (!string.IsNullOrWhiteSpace(aiBackgroundUrl))
-		{
-			<text>.Ai { background-image: url('@aiBackgroundUrl') !important; }</text>
-		}
-	</style>
-	<div class="Ai">
+	<div class="Ai" style="@(string.IsNullOrWhiteSpace(aiBackgroundUrl) ? null : $"--ai-section-bg: url('{aiBackgroundUrl}');")">
 		<div class="container-fluid">
 			<div class="row">
 				<div class="col-xl-12">
@@ -347,13 +339,7 @@
 
 @if (showTestimonials)
 {
-	<style>
-		@if (!string.IsNullOrWhiteSpace(testimonialsBackgroundUrl))
-		{
-			<text>.testmonial_area { background-image: url('@testimonialsBackgroundUrl') !important; }</text>
-		}
-	</style>
-	<div class="testmonial_area testimonial_bg overlay2">
+	<div class="testmonial_area testimonial_bg overlay2" style="@(string.IsNullOrWhiteSpace(testimonialsBackgroundUrl) ? null : $"--testimonials-bg: url('{testimonialsBackgroundUrl}');")">
 		<div class="container-fluid">
 			<div class="row">
 				<div class="col-xl-12">
@@ -435,7 +421,7 @@
 						<input type="tel" maxlength="50" name="phone" id="contact-phone" placeholder="Phone Number" required autocomplete="tel" />
 						<textarea name="message" id="contact-message" maxlength="2000" placeholder="Your Message" required></textarea>
 						<button type="submit" id="contact-submit-btn" class="boxed-btn">SEND</button>
-						<div id="form-response-message" style="margin-top: 15px; font-weight: bold; display: none;"></div>
+						<div id="form-response-message"></div>
 					</form>
 					@if (!string.IsNullOrWhiteSpace(contactNote))
 					{
@@ -448,47 +434,5 @@
 }
 
 @section Scripts {
-	<script>
-		(function () {
-			var form = document.getElementById('centro-contact-form');
-			if (!form) return;
-
-			var submitBtn = document.getElementById('contact-submit-btn');
-			var responseMsg = document.getElementById('form-response-message');
-
-			form.addEventListener('submit', async function (e) {
-				e.preventDefault();
-				if (!submitBtn || !responseMsg) return;
-
-				responseMsg.style.display = 'none';
-				submitBtn.innerText = 'Sending...';
-				submitBtn.disabled = true;
-
-				try {
-					var formData = new FormData(form);
-					var response = await fetch('/contact/submit', {
-						method: 'POST',
-						body: formData,
-						headers: { 'X-Requested-With': 'XMLHttpRequest' }
-					});
-
-					var data = await response.json();
-					responseMsg.style.color = data.success ? '#28a745' : '#dc3545';
-					responseMsg.innerText = data.message || (data.success ? 'Message sent.' : 'Could not send message.');
-					responseMsg.style.display = 'block';
-
-					if (data.success) {
-						form.reset();
-					}
-				} catch (err) {
-					responseMsg.style.color = '#dc3545';
-					responseMsg.innerText = 'Something went wrong. Please try again later.';
-					responseMsg.style.display = 'block';
-				} finally {
-					submitBtn.innerText = 'SEND';
-					submitBtn.disabled = false;
-				}
-			});
-		})();
-	</script>
+	<script src="~/js/pages/home.js" asp-append-version="true"></script>
 }

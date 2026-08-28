@@ -1,0 +1,27 @@
+/* Shared layout overrides (all pages) */
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  z-index: 9999;
+  background: #025376;
+  color: #fff;
+  padding: 0.75rem 1rem;
+}
+
+.skip-link:focus {
+  left: 1rem;
+  top: 1rem;
+}
+
+.header-area {
+  position: relative;
+  z-index: 20;
+}
+
+.footer .social_links__icon {
+  display: block;
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+}

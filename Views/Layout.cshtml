@@ -161,7 +161,7 @@
     <link rel="stylesheet" href="@theme/css/slicknav.css" />
     <link rel="stylesheet" href="@theme/css/style.css" asp-append-version="true" />
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/layout/site.css" asp-append-version="true" />
 
     <script type="application/ld+json">@Html.Raw(jsonLd)</script>
     @RenderSection("Head", required: false)
@@ -188,67 +188,7 @@
     <script src="@theme/js/wow.min.js"></script>
     <script src="@theme/js/main.js"></script>
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    <script>
-        (function () {
-            function initAos() {
-                if (typeof AOS === 'undefined') return;
-                // Match staging WP: replay when scrolling back to a section (once: false).
-                AOS.init({ duration: 800, offset: 80, once: false });
-                AOS.refresh();
-            }
-
-            initAos();
-
-            window.addEventListener('load', function () {
-                if (typeof AOS !== 'undefined') AOS.refresh();
-            });
-
-            window.addEventListener('pageshow', function (event) {
-                if (typeof AOS === 'undefined') return;
-                if (event.persisted) {
-                    document.querySelectorAll('[data-aos]').forEach(function (el) {
-                        el.classList.remove('aos-animate');
-                    });
-                }
-                AOS.refresh();
-            });
-
-            // Partner marquee: start when the section enters the viewport (not on initial load).
-            var tracks = document.querySelectorAll('.logo-slid .slide-track');
-            if (!tracks.length || !('IntersectionObserver' in window)) return;
-
-            var trackObserver = new IntersectionObserver(function (entries) {
-                entries.forEach(function (entry) {
-                    var track = entry.target;
-                    if (entry.isIntersecting) {
-                        track.classList.add('is-in-view');
-                        track.querySelectorAll('img').forEach(function (img) {
-                            img.style.animation = 'none';
-                            void img.offsetWidth;
-                            img.style.animation = '';
-                        });
-                    } else {
-                        track.classList.remove('is-in-view');
-                    }
-                });
-            }, { threshold: 0.15 });
-
-            tracks.forEach(function (track) { trackObserver.observe(track); });
-
-            // Footer is below the fold — refresh AOS when it enters view so fade-up triggers reliably.
-            var footer = document.querySelector('.footer.footer_bg');
-            if (footer && 'IntersectionObserver' in window) {
-                var footerObserver = new IntersectionObserver(function (entries) {
-                    entries.forEach(function (entry) {
-                        if (entry.isIntersecting && typeof AOS !== 'undefined') {
-                            AOS.refresh();
-                        }
-                    });
-                }, { threshold: 0.08 });
-                footerObserver.observe(footer);
-            }
-        })();
-    </script>
+    <script src="~/js/layout/animations.js" asp-append-version="true"></script>
     @RenderSection("Scripts", required: false)
 </body>
 </html>
