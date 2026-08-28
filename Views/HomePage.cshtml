@@ -61,8 +61,6 @@
 	var contactTitle = Text("contactTitle");
 	var contactImageUrl = MediaUrl("contactImage");
 	var contactNote = Text("contactNote");
-	var footer = SiteInfo.GetFooter();
-	var contactEmail = footer?.Value<string>("email");
 
 	var showHero = !string.IsNullOrWhiteSpace(heroTitle) || !string.IsNullOrWhiteSpace(heroVideoUrl) || !string.IsNullOrWhiteSpace(heroFallbackUrl);
 	var showAbout = !string.IsNullOrWhiteSpace(aboutTitle) || !string.IsNullOrWhiteSpace(aboutText) || !string.IsNullOrWhiteSpace(aboutImageUrl);
@@ -430,21 +428,15 @@
 						}
 					</div>
 
-					@if (!string.IsNullOrWhiteSpace(contactEmail))
-					{
-						<iframe name="zoho_hidden_iframe" id="zoho_hidden_iframe" style="display:none;" onload="if(window.formSubmitted){onZohoFormSubmit();}"></iframe>
-						<form class="messege" action="https://forms.zohopublic.com/centrocdx/form/HomeForm/formperma/TXkaX_FSlwlviooT56HiL5dLyfnZ0NgSKkcv8DWfSIQ/htmlRecords/submit" method="POST" target="zoho_hidden_iframe" id="zoho-custom-form" onsubmit="window.formSubmitted=true;">
-							<input type="hidden" name="zf_referrer_name" value="">
-							<input type="hidden" name="zf_redirect_url" value="">
-							<input type="hidden" name="zc_gad" value="">
-							<input type="text" maxlength="255" name="SingleLine" placeholder="Your Name" required />
-							<input type="text" maxlength="255" name="Email" placeholder="Your Email" required />
-							<input type="text" maxlength="20" name="PhoneNumber_countrycode" placeholder="Phone Number" required />
-							<textarea name="SingleLine1" maxlength="255" placeholder="Your Message" required></textarea>
-							<button type="submit" id="zoho-submit-btn" class="boxed-btn">SEND</button>
-							<div id="form-response-message" style="margin-top: 15px; font-weight: bold; display: none;"></div>
-						</form>
-					}
+					<form class="messege" id="centro-contact-form" novalidate>
+						@Html.AntiForgeryToken()
+						<input type="text" maxlength="255" name="name" id="contact-name" placeholder="Your Name" required autocomplete="name" />
+						<input type="email" maxlength="255" name="email" id="contact-email" placeholder="Your Email" required autocomplete="email" />
+						<input type="tel" maxlength="50" name="phone" id="contact-phone" placeholder="Phone Number" required autocomplete="tel" />
+						<textarea name="message" id="contact-message" maxlength="2000" placeholder="Your Message" required></textarea>
+						<button type="submit" id="contact-submit-btn" class="boxed-btn">SEND</button>
+						<div id="form-response-message" style="margin-top: 15px; font-weight: bold; display: none;"></div>
+					</form>
 					@if (!string.IsNullOrWhiteSpace(contactNote))
 					{
 						<p class="mt-3">@contactNote</p>
@@ -457,25 +449,46 @@
 
 @section Scripts {
 	<script>
-		window.formSubmitted = false;
-		function onZohoFormSubmit() {
-			var form = document.getElementById('zoho-custom-form');
-			var submitBtn = document.getElementById('zoho-submit-btn');
+		(function () {
+			var form = document.getElementById('centro-contact-form');
+			if (!form) return;
+
+			var submitBtn = document.getElementById('contact-submit-btn');
 			var responseMsg = document.getElementById('form-response-message');
-			if (!form || !submitBtn || !responseMsg) return;
-			responseMsg.style.color = '#28a745';
-			responseMsg.innerText = 'Thank you! Your message has been sent successfully.';
-			responseMsg.style.display = 'block';
-			form.reset();
-			submitBtn.innerText = 'SEND';
-			submitBtn.disabled = false;
-			window.formSubmitted = false;
-		}
-		document.getElementById('zoho-custom-form')?.addEventListener('submit', function () {
-			var submitBtn = document.getElementById('zoho-submit-btn');
-			if (!submitBtn) return;
-			submitBtn.innerText = 'Sending...';
-			submitBtn.disabled = true;
-		});
+
+			form.addEventListener('submit', async function (e) {
+				e.preventDefault();
+				if (!submitBtn || !responseMsg) return;
+
+				responseMsg.style.display = 'none';
+				submitBtn.innerText = 'Sending...';
+				submitBtn.disabled = true;
+
+				try {
+					var formData = new FormData(form);
+					var response = await fetch('/contact/submit', {
+						method: 'POST',
+						body: formData,
+						headers: { 'X-Requested-With': 'XMLHttpRequest' }
+					});
+
+					var data = await response.json();
+					responseMsg.style.color = data.success ? '#28a745' : '#dc3545';
+					responseMsg.innerText = data.message || (data.success ? 'Message sent.' : 'Could not send message.');
+					responseMsg.style.display = 'block';
+
+					if (data.success) {
+						form.reset();
+					}
+				} catch (err) {
+					responseMsg.style.color = '#dc3545';
+					responseMsg.innerText = 'Something went wrong. Please try again later.';
+					responseMsg.style.display = 'block';
+				} finally {
+					submitBtn.innerText = 'SEND';
+					submitBtn.disabled = false;
+				}
+			});
+		})();
 	</script>
 }
