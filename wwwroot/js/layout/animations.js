@@ -53,4 +53,16 @@
     }, { threshold: 0.08 });
     footerObserver.observe(footer);
   }
+
+  var projectSection = document.querySelector('.lastest_project');
+  if (projectSection && 'IntersectionObserver' in window && typeof AOS !== 'undefined') {
+    var projectObserver = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          AOS.refresh();
+        }
+      });
+    }, { threshold: 0.1 });
+    projectObserver.observe(projectSection);
+  }
 })();

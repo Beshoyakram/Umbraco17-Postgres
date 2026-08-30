@@ -13,6 +13,8 @@ public interface ISiteInfoService
     IPublishedContent? GetFooter();
     IPublishedContent? GetHomePage();
     IPublishedContent? GetAboutPage();
+    IPublishedContent? GetSolutionPage(string urlSegment);
+    IEnumerable<IPublishedContent> GetSolutionPages();
     string? GetMediaUrl(IPublishedContent? media);
 }
 
@@ -54,6 +56,17 @@ public class SiteInfoService : ISiteInfoService
         => _umbracoHelper.ContentAtRoot()
             .SelectMany(x => x.DescendantsOrSelfOfType("aboutPage"))
             .FirstOrDefault();
+
+    public IPublishedContent? GetSolutionPage(string urlSegment)
+        => GetSolutionPages()
+            .FirstOrDefault(x =>
+                string.Equals(x.UrlSegment, urlSegment, StringComparison.OrdinalIgnoreCase)
+                || string.Equals(x.Name, urlSegment, StringComparison.OrdinalIgnoreCase));
+
+    public IEnumerable<IPublishedContent> GetSolutionPages()
+        => _umbracoHelper.ContentAtRoot()
+            .SelectMany(x => x.DescendantsOrSelfOfType("solutionPage"))
+            .OrderBy(x => x.SortOrder);
 
     public string? GetMediaUrl(IPublishedContent? media)
     {

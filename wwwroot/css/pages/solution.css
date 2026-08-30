@@ -1,0 +1,86 @@
+/* Solution pages — staging centrotheme layout */
+
+/* Only override theme banner (.bg / .bg1 / .bg2) when CMS sets --solution-banner-bg */
+.bg[style*="--solution-banner-bg"] .breadcam_area,
+.bg1[style*="--solution-banner-bg"] .breadcam_area,
+.bg2[style*="--solution-banner-bg"] .breadcam_area {
+  background-image: var(--solution-banner-bg);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+}
+
+.testmonial_area[style*="--testimonials-bg"] {
+  background-image: var(--testimonials-bg);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+}
+
+.solution-author-role {
+  margin-top: 10px;
+}
+
+.solution-cta-btn {
+  border-color: #333 !important;
+  color: #333 !important;
+}
+
+.solution-get-in-touch {
+  margin-top: 40px;
+  margin-bottom: 60px;
+}
+
+.solution-get-in-touch .contact-title {
+  margin-bottom: 24px;
+}
+
+.lastest_project .single_project_thumb img,
+.lastest_project .col-lg-3 img,
+.lastest_project .col-lg-4 img {
+  max-width: 100%;
+  height: auto;
+}
+
+.lastest_project .col-lg-3 p,
+.lastest_project .col-lg-4 p {
+  font-size: 16px;
+  line-height: 28px;
+  color: #808080;
+  margin-top: 0;
+}
+
+#form-response-message {
+  margin-top: 15px;
+  font-weight: bold;
+  display: none;
+}
+
+#form-response-message.is-visible {
+  display: block;
+}
+
+#form-response-message.is-success {
+  color: #28a745;
+}
+
+#form-response-message.is-error {
+  color: #dc3545;
+}
+
+@media (max-width: 767px) {
+  .solution-get-in-touch {
+    margin-top: 24px;
+    margin-bottom: 40px;
+  }
+
+  .lastest_project .footer_header {
+    flex-direction: column;
+    gap: 20px;
+    text-align: center;
+  }
+
+  .lastest_project .footer_header_left {
+    text-align: center !important;
+  }
+}

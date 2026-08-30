@@ -14,7 +14,10 @@ public record ContactSubmissionRequest(
     string Email,
     string Phone,
     string Message,
-    string? FormKey = null);
+    string? FormKey = null,
+    string? Occupation = null,
+    string? Company = null,
+    string? SourcePage = null);
 
 public record ContactSubmissionResult(bool Success, string? ErrorMessage = null);
 
@@ -36,7 +39,9 @@ public class ContactSubmissionService : IContactSubmissionService
     {
         var formKey = string.IsNullOrWhiteSpace(request.FormKey) ? DefaultFormKey : request.FormKey.Trim();
         var inbox = FindInboxByFormKey(formKey)
-                    ?? _contentService.GetById(ContactUsPageKey)
+                    ?? (formKey.Equals("getInTouch", StringComparison.OrdinalIgnoreCase)
+                        ? null
+                        : _contentService.GetById(ContactUsPageKey))
                     ?? FindFirstContactUsInbox();
 
         if (inbox == null)
@@ -56,6 +61,21 @@ public class ContactSubmissionService : IContactSubmissionService
         submission.SetValue("email", email);
         submission.SetValue("phone", phone);
         submission.SetValue("message", message);
+
+        if (!string.IsNullOrWhiteSpace(request.Occupation))
+        {
+            submission.SetValue("occupation", request.Occupation.Trim());
+        }
+
+        if (!string.IsNullOrWhiteSpace(request.Company))
+        {
+            submission.SetValue("company", request.Company.Trim());
+        }
+
+        if (!string.IsNullOrWhiteSpace(request.SourcePage))
+        {
+            submission.SetValue("sourcePage", request.SourcePage.Trim());
+        }
 
         var saveResult = _contentService.Save(submission);
         if (!saveResult.Success)

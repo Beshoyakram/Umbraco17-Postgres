@@ -22,7 +22,16 @@ public class ContactFormController : Controller
     [Produces("application/json")]
     public async Task<IActionResult> Submit([FromForm] ContactFormModel model, CancellationToken cancellationToken)
     {
-        if (!ModelState.IsValid)
+        var displayName = BuildDisplayName(model);
+        if (string.IsNullOrWhiteSpace(displayName)
+            || string.IsNullOrWhiteSpace(model.Email)
+            || string.IsNullOrWhiteSpace(model.Phone)
+            || string.IsNullOrWhiteSpace(model.Message))
+        {
+            return Json(new { success = false, message = "Please fill in all required fields correctly." });
+        }
+
+        if (!new EmailAddressAttribute().IsValid(model.Email))
         {
             return Json(new { success = false, message = "Please fill in all required fields correctly." });
         }
@@ -30,7 +39,15 @@ public class ContactFormController : Controller
         try
         {
             var result = await _contactSubmissionService.SaveAsync(
-                new ContactSubmissionRequest(model.Name, model.Email, model.Phone, model.Message, model.FormKey),
+                new ContactSubmissionRequest(
+                    displayName,
+                    model.Email.Trim(),
+                    model.Phone.Trim(),
+                    model.Message.Trim(),
+                    model.FormKey,
+                    model.Occupation,
+                    model.Company,
+                    model.SourcePage),
                 cancellationToken);
 
             if (!result.Success)
@@ -48,26 +65,48 @@ public class ContactFormController : Controller
         }
     }
 
+    private static string BuildDisplayName(ContactFormModel model)
+    {
+        if (!string.IsNullOrWhiteSpace(model.Name))
+        {
+            return model.Name.Trim();
+        }
+
+        var first = model.FirstName?.Trim() ?? string.Empty;
+        var last = model.LastName?.Trim() ?? string.Empty;
+        return $"{first} {last}".Trim();
+    }
+
     public class ContactFormModel
     {
-        [Required]
         [StringLength(255)]
-        public string Name { get; set; } = string.Empty;
+        public string? Name { get; set; }
 
-        [Required]
-        [EmailAddress]
+        [StringLength(255)]
+        public string? FirstName { get; set; }
+
+        [StringLength(255)]
+        public string? LastName { get; set; }
+
         [StringLength(255)]
         public string Email { get; set; } = string.Empty;
 
-        [Required]
         [StringLength(50)]
         public string Phone { get; set; } = string.Empty;
 
-        [Required]
         [StringLength(2000)]
         public string Message { get; set; } = string.Empty;
 
+        [StringLength(255)]
+        public string? Occupation { get; set; }
+
+        [StringLength(255)]
+        public string? Company { get; set; }
+
         [StringLength(100)]
         public string? FormKey { get; set; }
+
+        [StringLength(100)]
+        public string? SourcePage { get; set; }
     }
 }

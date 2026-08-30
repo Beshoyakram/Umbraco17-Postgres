@@ -111,5 +111,6 @@ public class CentroServicesComposer : IComposer
         builder.Services.AddScoped<ISiteInfoService, SiteInfoService>();
         builder.Services.AddScoped<IContactSubmissionService, ContactSubmissionService>();
         builder.AddNotificationAsyncHandler<UmbracoApplicationStartedNotification, HeroVideoMediaRepairHandler>();
+        builder.AddNotificationAsyncHandler<UmbracoApplicationStartedNotification, SolutionMediaSeedHandler>();
     }
 }

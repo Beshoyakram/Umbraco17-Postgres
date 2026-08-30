@@ -6,6 +6,10 @@
     var homeUrl = home?.Url() ?? "/";
     var about = SiteInfo.GetAboutPage();
     var aboutUrl = about?.Url() ?? "/aboutus";
+    var solutions = SiteInfo.GetSolutionPages().ToList();
+    var bpoUrl = SiteInfo.GetSolutionPage("bpo")?.Url() ?? "/bpo";
+    var healthUrl = SiteInfo.GetSolutionPage("health")?.Url() ?? "/health";
+    var digitalUrl = SiteInfo.GetSolutionPage("digital")?.Url() ?? "/digital";
     var site = SiteInfo.GetSiteMainInformation();
     var siteTitle = site?.Value<string>("siteTitle");
     var logoUrl = SiteInfo.GetMediaUrl(site?.Value<Umbraco.Cms.Core.Models.PublishedContent.IPublishedContent>("siteLogo"));
@@ -13,6 +17,7 @@
     var ctaLink = site?.Value<string>("headerCtaLink");
     var isAbout = Model.ContentType.Alias.Equals("aboutPage", StringComparison.OrdinalIgnoreCase);
     var isHome = Model.ContentType.Alias.Equals("homePage", StringComparison.OrdinalIgnoreCase);
+    var isSolution = Model.ContentType.Alias.Equals("solutionPage", StringComparison.OrdinalIgnoreCase);
 }
 <header>
     <div class="header-area">
@@ -40,11 +45,11 @@
                                     <li><a class="@(isHome ? "active" : null)" href="@homeUrl">home</a></li>
                                     <li><a class="@(isAbout ? "active" : null)" href="@aboutUrl">About</a></li>
                                     <li>
-                                        <a href="@(homeUrl.TrimEnd('/'))#solutions">solutions <i class="ti-angle-down"></i></a>
+                                        <a class="@(isSolution ? "active" : null)" href="@(solutions.FirstOrDefault()?.Url() ?? bpoUrl)">solutions <i class="ti-angle-down"></i></a>
                                         <ul class="submenu">
-                                            <li><a href="@(homeUrl.TrimEnd('/'))#solutions">Business outsourcing</a></li>
-                                            <li><a href="@(homeUrl.TrimEnd('/'))#solutions">Healthcare solutions</a></li>
-                                            <li><a href="@(homeUrl.TrimEnd('/'))#solutions">Digital Transformation</a></li>
+                                            <li><a href="@bpoUrl">Business outsourcing</a></li>
+                                            <li><a href="@healthUrl">Healthcare solutions</a></li>
+                                            <li><a href="@digitalUrl">Digital Transformation</a></li>
                                         </ul>
                                     </li>
                                     <li><a href="@(homeUrl.TrimEnd('/'))#contact">careers</a></li>
