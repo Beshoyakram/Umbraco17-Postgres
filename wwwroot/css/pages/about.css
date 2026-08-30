@@ -1,0 +1,118 @@
+/* About page — match staging centrotheme markup */
+
+/* CMS banner override; default comes from theme .bg3 .breadcam_area */
+.bg3 .breadcam_area {
+  background-image: var(--about-banner-bg, url("/theme/centrotheme/img/About-Us%202.png"));
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+}
+
+.about-chairman-row {
+  margin-top: 100px;
+}
+
+.about-chairman-signature {
+  margin-bottom: 20px;
+  margin-top: 15px;
+}
+
+.about-chairman-signature img {
+  max-width: 220px;
+  height: auto;
+}
+
+.about-history {
+  margin-bottom: 70px;
+  margin-top: 70px;
+}
+
+.about-timeline-scroll {
+  display: inline-block;
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding-bottom: 10px;
+}
+
+.about-certificates-title {
+  margin-top: 70px;
+}
+
+.about-awards-row {
+  margin-top: 40px;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.about-awards-row img {
+  max-width: 100%;
+  height: auto;
+}
+
+.about-author-role {
+  margin-top: 10px;
+}
+
+.testmonial_area {
+  background-image: var(--testimonials-bg);
+}
+
+.logo-slid .slide-track img {
+  animation-play-state: paused;
+}
+
+.logo-slid .slide-track.is-in-view img {
+  animation-play-state: running;
+}
+
+/*
+  Partners after testimonials: Home gets 100px via .Ai { margin-bottom: 100px }.
+  Staging About uses mt-30 (too tight under the blue band) — match Home / other About sections.
+*/
+.about-partners {
+  margin-top: 100px;
+  margin-bottom: 40px;
+}
+
+.about-partners .section_title {
+  margin-top: 0;
+  padding-top: 0;
+}
+
+@media (max-width: 767px) {
+  .about-partners {
+    margin-top: 60px;
+    margin-bottom: 30px;
+  }
+}
+
+#form-response-message {
+  margin-top: 15px;
+  font-weight: bold;
+  display: none;
+}
+
+#form-response-message.is-visible {
+  display: block;
+}
+
+#form-response-message.is-success {
+  color: #28a745;
+}
+
+#form-response-message.is-error {
+  color: #dc3545;
+}
+
+@media (max-width: 767px) {
+  .about-chairman-row {
+    margin-top: 50px;
+  }
+
+  .about-history {
+    margin-top: 40px;
+    margin-bottom: 40px;
+  }
+}

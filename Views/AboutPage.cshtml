@@ -1,0 +1,438 @@
+﻿@using Umbraco.Cms.Core.Models.Blocks
+@using Umbraco.Cms.Core.Models.PublishedContent
+@using Centrocdx.Services
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
+@inject ISiteInfoService SiteInfo
+@{
+	Layout = "Layout.cshtml";
+	var theme = Url.Content("~/theme/centrotheme");
+
+	string? MediaUrl(string alias)
+	{
+		if (!Model.HasProperty(alias) || !Model.HasValue(alias)) return null;
+		try
+		{
+			return SiteInfo.GetMediaUrl(Model.Value<IPublishedContent>(alias));
+		}
+		catch (Exception)
+		{
+			return null;
+		}
+	}
+
+	string? Text(string alias)
+		=> Model.HasValue(alias) ? Model.Value<string>(alias) : null;
+
+	var bannerTitle = Text("bannerTitle");
+	var bannerImageUrl = MediaUrl("bannerImage");
+
+	var aboutTitle = Text("aboutTitle");
+	var aboutText = Text("aboutText");
+	var aboutImageUrl = MediaUrl("aboutImage");
+
+	var chairmanTitle = Text("chairmanTitle");
+	var chairmanQuote = Text("chairmanQuote");
+	var chairmanImageUrl = MediaUrl("chairmanImage");
+	var chairmanSignatureUrl = Url.Content("~/theme/centrotheme/img/image 63.png");
+
+	var historyEyebrow = Text("historyEyebrow");
+	var historyTitle = Text("historyTitle");
+	var historyItems = Model.HasValue("historyItems") ? Model.Value<BlockListModel>("historyItems") : null;
+
+	var certificatesTitle = Text("certificatesTitle");
+	var certificateImages = Model.HasValue("certificateImages")
+		? Model.Value<IEnumerable<IPublishedContent>>("certificateImages")?.Where(x => x != null).ToList()
+		: null;
+
+	var testimonialsBackgroundUrl = MediaUrl("testimonialsBackground");
+	var testimonials = Model.HasValue("testimonials") ? Model.Value<BlockListModel>("testimonials") : null;
+
+	var partnersEyebrow = Text("partnersEyebrow");
+	var partnersTitle = Text("partnersTitle");
+	var partnerLogos = Model.HasValue("partnerLogos")
+		? Model.Value<IEnumerable<IPublishedContent>>("partnerLogos")?.Where(x => x != null).ToList()
+		: null;
+
+	var contactEyebrow = Text("contactEyebrow");
+	var contactTitle = Text("contactTitle");
+	var contactImageUrl = MediaUrl("contactImage");
+	var contactNote = Text("contactNote");
+
+	var showBanner = !string.IsNullOrWhiteSpace(bannerTitle) || !string.IsNullOrWhiteSpace(bannerImageUrl);
+	var showIntro = !string.IsNullOrWhiteSpace(aboutTitle) || !string.IsNullOrWhiteSpace(aboutText) || !string.IsNullOrWhiteSpace(aboutImageUrl);
+	var showChairman = !string.IsNullOrWhiteSpace(chairmanTitle) || !string.IsNullOrWhiteSpace(chairmanQuote) || !string.IsNullOrWhiteSpace(chairmanImageUrl);
+	var showAboutBlock = showIntro || showChairman;
+	var showHistory = (historyItems != null && historyItems.Any()) || !string.IsNullOrWhiteSpace(historyTitle);
+	var showCertificates = (certificateImages != null && certificateImages.Any()) || !string.IsNullOrWhiteSpace(certificatesTitle);
+	var showTestimonials = testimonials != null && testimonials.Any();
+	var showPartners = (partnerLogos != null && partnerLogos.Any()) || !string.IsNullOrWhiteSpace(partnersTitle);
+	var showContact = !string.IsNullOrWhiteSpace(contactTitle) || !string.IsNullOrWhiteSpace(contactImageUrl);
+
+	var historyTitleHtml = string.IsNullOrWhiteSpace(historyTitle)
+		? null
+		: historyTitle.Replace("Growth & Excellence", "Growth<br> & Excellence", StringComparison.OrdinalIgnoreCase)
+			.Replace("\r\n", "<br>")
+			.Replace("\n", "<br>");
+
+	string CertColClass(int index) => index switch
+	{
+		0 => "col one",
+		6 => "col three",
+		_ => "col two"
+	};
+}
+
+@section Head {
+	<link rel="stylesheet" href="~/css/pages/about.css" asp-append-version="true" />
+}
+
+@if (showBanner)
+{
+	<div class="bg3" style="@(string.IsNullOrWhiteSpace(bannerImageUrl) ? null : $"--about-banner-bg: url('{bannerImageUrl}');")">
+		<div class="breadcam_area bradcam_bg overlay2">
+			<div class="bradcam_text">
+				@if (!string.IsNullOrWhiteSpace(bannerTitle))
+				{
+					<h3>@bannerTitle</h3>
+				}
+			</div>
+		</div>
+	</div>
+}
+
+@if (showAboutBlock)
+{
+	<div class="about_area">
+		<div class="container">
+			@if (showIntro)
+			{
+				<div class="row align-items-center">
+					@if (!string.IsNullOrWhiteSpace(aboutImageUrl))
+					{
+						<div class="col-xl-6 col-md-6">
+							<div data-aos="fade-up" data-aos-duration="2000" class="about_thumb">
+								<img src="@aboutImageUrl" alt="@(aboutTitle ?? "About")">
+							</div>
+						</div>
+					}
+					<div class="col-xl-5 offset-xl-1 col-md-6 bottom-left">
+						<div class="about_info">
+							<div class="section_title">
+								@if (!string.IsNullOrWhiteSpace(aboutTitle))
+								{
+									<h3 data-aos="fade-up" data-aos-duration="800">@aboutTitle</h3>
+									<div data-aos="fade-up" data-aos-duration="800" class="seperator"></div>
+								}
+							</div>
+							@if (!string.IsNullOrWhiteSpace(aboutText))
+							{
+								<p data-aos="fade-up" data-aos-duration="1200">@aboutText</p>
+							}
+						</div>
+					</div>
+				</div>
+			}
+
+			@if (showChairman)
+			{
+				<div class="row align-items-center about-chairman-row">
+					<div class="col-xl-6 col-md-6 bottom-left">
+						<div class="about_info">
+							<div class="section_title">
+								@if (!string.IsNullOrWhiteSpace(chairmanTitle))
+								{
+									<h3 data-aos="fade-up" data-aos-duration="800">@chairmanTitle</h3>
+									<div data-aos="fade-up" data-aos-duration="800" class="seperator"></div>
+								}
+							</div>
+							@if (!string.IsNullOrWhiteSpace(chairmanQuote))
+							{
+								<p data-aos="fade-up" data-aos-duration="1200">“@chairmanQuote”</p>
+							}
+							<div class="text-right about-chairman-signature">
+								<img src="@chairmanSignatureUrl" alt="Signature">
+							</div>
+						</div>
+					</div>
+					@if (!string.IsNullOrWhiteSpace(chairmanImageUrl))
+					{
+						<div class="col-xl-5 offset-xl-1 col-md-6">
+							<div data-aos="fade-up" data-aos-duration="2000" class="about_thumb">
+								<img src="@chairmanImageUrl" alt="@(chairmanTitle ?? "Chairman")">
+							</div>
+						</div>
+					}
+				</div>
+			}
+		</div>
+	</div>
+}
+
+@if (showHistory)
+{
+	<div class="container about-history">
+		<div class="row">
+			<div class="col-xl-12">
+				<div class="section_title">
+					@if (!string.IsNullOrWhiteSpace(historyEyebrow))
+					{
+						<span data-aos="fade-up" data-aos-duration="1000" class="sub_heading">@historyEyebrow</span>
+					}
+					@if (!string.IsNullOrWhiteSpace(historyTitleHtml))
+					{
+						<h3 data-aos="fade-up" data-aos-duration="2000">@Html.Raw(historyTitleHtml)</h3>
+						<div data-aos="fade-up" data-aos-duration="2000" class="seperator"></div>
+					}
+				</div>
+			</div>
+		</div>
+		@if (historyItems != null && historyItems.Any())
+		{
+			<div class="row">
+				<div class="col-md-12">
+					<div class="about-timeline-scroll">
+						<ul class="timeline timeline-horizontal">
+							@{
+								var hi = 0;
+							}
+							@foreach (var item in historyItems)
+							{
+								var content = item.Content;
+								var year = content.Value<string>("year");
+								var text = content.Value<string>("text");
+								var badgeClass = hi == 0 ? "primary" : "info";
+								<li class="timeline-item">
+									<div class="timeline-badge @badgeClass"><i class="fa fa-check" aria-hidden="true"></i></div>
+									<div class="timeline-panel">
+										@if (!string.IsNullOrWhiteSpace(year))
+										{
+											<div class="timeline-heading">
+												<h4 class="timeline-title">@year</h4>
+											</div>
+										}
+										@if (!string.IsNullOrWhiteSpace(text))
+										{
+											<div class="timeline-body">
+												<p>@text</p>
+											</div>
+										}
+									</div>
+								</li>
+								hi++;
+							}
+						</ul>
+					</div>
+				</div>
+			</div>
+		}
+
+		@if (showCertificates)
+		{
+			<div class="certificate text-center">
+				@if (!string.IsNullOrWhiteSpace(certificatesTitle))
+				{
+					<div class="section_title text-left about-certificates-title">
+						<h3 data-aos="fade-up" data-aos-duration="800">@certificatesTitle</h3>
+						<div data-aos="fade-up" data-aos-duration="800" class="seperator"></div>
+					</div>
+				}
+				@if (certificateImages != null && certificateImages.Any())
+				{
+					<div class="row" data-aos="fade-up" data-aos-duration="2000">
+						@{
+							var ci = 0;
+						}
+						@foreach (var cert in certificateImages)
+						{
+							var url = SiteInfo.GetMediaUrl(cert);
+							if (string.IsNullOrWhiteSpace(url)) { continue; }
+							<div class="@CertColClass(ci)">
+								<img src="@url" alt="@(cert.Name)">
+							</div>
+							ci++;
+						}
+					</div>
+					<div class="row about-awards-row">
+						<div class="col-md-4 col-sm-6">
+							<img src="@theme/img/Marwa-5 1.png" alt="Award">
+						</div>
+						<div class="col-md-4 col-sm-6">
+							<img src="@theme/img/Marwa-3 1.png" alt="Award">
+						</div>
+					</div>
+				}
+			</div>
+		}
+	</div>
+}
+else if (showCertificates)
+{
+	<div class="container about-history">
+		<div class="certificate text-center">
+			@if (!string.IsNullOrWhiteSpace(certificatesTitle))
+			{
+				<div class="section_title text-left about-certificates-title">
+					<h3 data-aos="fade-up" data-aos-duration="800">@certificatesTitle</h3>
+					<div data-aos="fade-up" data-aos-duration="800" class="seperator"></div>
+				</div>
+			}
+			@if (certificateImages != null && certificateImages.Any())
+			{
+				<div class="row" data-aos="fade-up" data-aos-duration="2000">
+					@{
+						var ci = 0;
+					}
+					@foreach (var cert in certificateImages)
+					{
+						var url = SiteInfo.GetMediaUrl(cert);
+						if (string.IsNullOrWhiteSpace(url)) { continue; }
+						<div class="@CertColClass(ci)">
+							<img src="@url" alt="@(cert.Name)">
+						</div>
+						ci++;
+					}
+				</div>
+			}
+		</div>
+	</div>
+}
+
+@if (showTestimonials)
+{
+	<div class="testmonial_area testimonial_bg overlay2" style="@(string.IsNullOrWhiteSpace(testimonialsBackgroundUrl) ? null : $"--testimonials-bg: url('{testimonialsBackgroundUrl}');")">
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-xl-12">
+					<div class="testmonial_active owl-carousel">
+						@foreach (var item in testimonials!)
+						{
+							var content = item.Content;
+							var imageUrl = SiteInfo.GetMediaUrl(content.Value<IPublishedContent>("image"));
+							var quote = content.Value<string>("quote");
+							var authorName = content.Value<string>("authorName");
+							var authorTitle = content.Value<string>("authorTitle");
+							var authorRole = content.Value<string>("authorRole");
+							<div class="single_testmonial" data-aos="fade-up" data-aos-duration="1000">
+								<div class="testmonial_info text-center">
+									@if (!string.IsNullOrWhiteSpace(imageUrl))
+									{
+										<div class="author">
+											<img src="@imageUrl" alt="@(authorName ?? "Testimonial")" />
+										</div>
+									}
+									@if (!string.IsNullOrWhiteSpace(quote))
+									{
+										<p>“@quote”</p>
+									}
+									<div class="author_name">
+										@if (!string.IsNullOrWhiteSpace(authorName))
+										{
+											<h4>@authorName</h4>
+										}
+										@if (!string.IsNullOrWhiteSpace(authorTitle))
+										{
+											<h5>@authorTitle</h5>
+										}
+										@if (!string.IsNullOrWhiteSpace(authorRole))
+										{
+											<p class="about-author-role">@authorRole</p>
+										}
+									</div>
+								</div>
+							</div>
+						}
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+}
+
+@if (showPartners)
+{
+	<div class="logo-slid about-partners">
+		<div class="container">
+			<div class="row">
+				<div class="col-xl-12">
+					<div class="section_title mb-60">
+						@if (!string.IsNullOrWhiteSpace(partnersEyebrow))
+						{
+							<span data-aos="fade-up" data-aos-duration="1000" class="sub_heading">@partnersEyebrow</span>
+						}
+						@if (!string.IsNullOrWhiteSpace(partnersTitle))
+						{
+							<h3 data-aos="fade-up" data-aos-duration="2000">@partnersTitle</h3>
+							<div data-aos="fade-up" data-aos-duration="2000" class="seperator"></div>
+						}
+					</div>
+				</div>
+			</div>
+			@if (partnerLogos != null && partnerLogos.Any())
+			{
+				<div data-aos="fade-up" data-aos-duration="2000" class="slider">
+					<div class="slide-track">
+						@for (var loop = 0; loop < 2; loop++)
+						{
+							foreach (var logo in partnerLogos)
+							{
+								var url = SiteInfo.GetMediaUrl(logo);
+								if (string.IsNullOrWhiteSpace(url)) { continue; }
+								<div class="slide"><img src="@url" alt="@(logo.Name)"></div>
+							}
+						}
+					</div>
+				</div>
+			}
+		</div>
+	</div>
+}
+
+@if (showContact)
+{
+	<div id="contact" class="messege_area">
+		<div class="container">
+			<div class="row align-items-center">
+				@if (!string.IsNullOrWhiteSpace(contactImageUrl))
+				{
+					<div class="col-xl-6 col-md-6">
+						<div class="messege_thumb">
+							<img src="@contactImageUrl" alt="@(contactTitle ?? "Contact")">
+						</div>
+					</div>
+				}
+				<div class="col-xl-5 offset-xl-1 col-md-6">
+					<div class="section_title mb-20">
+						@if (!string.IsNullOrWhiteSpace(contactEyebrow))
+						{
+							<span class="sub_heading">@contactEyebrow</span>
+						}
+						@if (!string.IsNullOrWhiteSpace(contactTitle))
+						{
+							<h3>@contactTitle</h3>
+							<div class="seperator"></div>
+						}
+					</div>
+
+					<form class="messege" id="centro-contact-form" novalidate>
+						@Html.AntiForgeryToken()
+						<input type="hidden" name="formKey" value="home" />
+						<input type="text" maxlength="255" name="name" id="contact-name" placeholder="Your Name" required autocomplete="name" />
+						<input type="email" maxlength="255" name="email" id="contact-email" placeholder="Your Email" required autocomplete="email" />
+						<input type="tel" maxlength="50" name="phone" id="contact-phone" placeholder="Phone Number" required autocomplete="tel" />
+						<textarea name="message" id="contact-message" maxlength="2000" placeholder="Your Message" required></textarea>
+						<button type="submit" id="contact-submit-btn" class="boxed-btn">SEND</button>
+						<div id="form-response-message"></div>
+					</form>
+					@if (!string.IsNullOrWhiteSpace(contactNote))
+					{
+						<p class="mt-3">@contactNote</p>
+					}
+				</div>
+			</div>
+		</div>
+	</div>
+}
+
+@section Scripts {
+	<script src="~/js/pages/about.js" asp-append-version="true"></script>
+}

@@ -30,7 +30,7 @@ public class ContactFormController : Controller
         try
         {
             var result = await _contactSubmissionService.SaveAsync(
-                new ContactSubmissionRequest(model.Name, model.Email, model.Phone, model.Message),
+                new ContactSubmissionRequest(model.Name, model.Email, model.Phone, model.Message, model.FormKey),
                 cancellationToken);
 
             if (!result.Success)
@@ -66,5 +66,8 @@ public class ContactFormController : Controller
         [Required]
         [StringLength(2000)]
         public string Message { get; set; } = string.Empty;
+
+        [StringLength(100)]
+        public string? FormKey { get; set; }
     }
 }

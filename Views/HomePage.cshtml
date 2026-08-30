@@ -416,6 +416,7 @@
 
 					<form class="messege" id="centro-contact-form" novalidate>
 						@Html.AntiForgeryToken()
+						<input type="hidden" name="formKey" value="home" />
 						<input type="text" maxlength="255" name="name" id="contact-name" placeholder="Your Name" required autocomplete="name" />
 						<input type="email" maxlength="255" name="email" id="contact-email" placeholder="Your Email" required autocomplete="email" />
 						<input type="tel" maxlength="50" name="phone" id="contact-phone" placeholder="Phone Number" required autocomplete="tel" />

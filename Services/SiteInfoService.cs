@@ -12,6 +12,7 @@ public interface ISiteInfoService
     IPublishedContent? GetSiteMainInformation();
     IPublishedContent? GetFooter();
     IPublishedContent? GetHomePage();
+    IPublishedContent? GetAboutPage();
     string? GetMediaUrl(IPublishedContent? media);
 }
 
@@ -47,6 +48,11 @@ public class SiteInfoService : ISiteInfoService
     public IPublishedContent? GetHomePage()
         => _umbracoHelper.ContentAtRoot()
             .SelectMany(x => x.DescendantsOrSelfOfType("homePage"))
+            .FirstOrDefault();
+
+    public IPublishedContent? GetAboutPage()
+        => _umbracoHelper.ContentAtRoot()
+            .SelectMany(x => x.DescendantsOrSelfOfType("aboutPage"))
             .FirstOrDefault();
 
     public string? GetMediaUrl(IPublishedContent? media)

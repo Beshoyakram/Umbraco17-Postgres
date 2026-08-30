@@ -9,13 +9,19 @@ public interface IContactSubmissionService
     Task<ContactSubmissionResult> SaveAsync(ContactSubmissionRequest request, CancellationToken cancellationToken = default);
 }
 
-public record ContactSubmissionRequest(string Name, string Email, string Phone, string Message);
+public record ContactSubmissionRequest(
+    string Name,
+    string Email,
+    string Phone,
+    string Message,
+    string? FormKey = null);
 
 public record ContactSubmissionResult(bool Success, string? ErrorMessage = null);
 
 public class ContactSubmissionService : IContactSubmissionService
 {
     private static readonly Guid ContactUsPageKey = Guid.Parse("e5010005-1111-4111-8111-111111111501");
+    private const string DefaultFormKey = "home";
 
     private readonly IContentService _contentService;
     private readonly UmbracoHelper _umbracoHelper;
@@ -28,8 +34,10 @@ public class ContactSubmissionService : IContactSubmissionService
 
     public Task<ContactSubmissionResult> SaveAsync(ContactSubmissionRequest request, CancellationToken cancellationToken = default)
     {
-        var inbox = _contentService.GetById(ContactUsPageKey)
-                    ?? FindContactUsInbox();
+        var formKey = string.IsNullOrWhiteSpace(request.FormKey) ? DefaultFormKey : request.FormKey.Trim();
+        var inbox = FindInboxByFormKey(formKey)
+                    ?? _contentService.GetById(ContactUsPageKey)
+                    ?? FindFirstContactUsInbox();
 
         if (inbox == null)
         {
@@ -58,11 +66,23 @@ public class ContactSubmissionService : IContactSubmissionService
         return Task.FromResult(new ContactSubmissionResult(true));
     }
 
-    private IContent? FindContactUsInbox()
+    private IContent? FindInboxByFormKey(string formKey)
     {
-        return _umbracoHelper.ContentAtRoot()
+        var published = _umbracoHelper.ContentAtRoot()
             .SelectMany(x => x.DescendantsOrSelfOfType("contactUsPage"))
-            .Select(x => _contentService.GetById(x.Key))
-            .FirstOrDefault(x => x != null);
+            .FirstOrDefault(x =>
+                string.Equals(x.Value<string>("formKey"), formKey, StringComparison.OrdinalIgnoreCase)
+                || string.Equals(x.Name, formKey, StringComparison.OrdinalIgnoreCase));
+
+        return published == null ? null : _contentService.GetById(published.Key);
+    }
+
+    private IContent? FindFirstContactUsInbox()
+    {
+        var published = _umbracoHelper.ContentAtRoot()
+            .SelectMany(x => x.DescendantsOrSelfOfType("contactUsPage"))
+            .FirstOrDefault();
+
+        return published == null ? null : _contentService.GetById(published.Key);
     }
 }

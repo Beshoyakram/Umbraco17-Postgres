@@ -5,6 +5,7 @@
 @inject ISiteInfoService SiteInfo
 @{
     var homeUrl = SiteInfo.GetHomePage()?.Url() ?? "/";
+    var aboutUrl = SiteInfo.GetAboutPage()?.Url() ?? "/aboutus";
     var footer = SiteInfo.GetFooter();
     var logoUrl = SiteInfo.GetMediaUrl(footer?.Value<IPublishedContent>("footerLogo"));
     var ctaTitle = footer?.Value<string>("ctaTitle");
@@ -112,10 +113,10 @@
                                         <h3 class="footer_heading" data-aos="fade-up" data-aos-duration="2000">Navigation</h3>
                                         <ul class="quick_links" data-aos="fade-up" data-aos-duration="3000">
                                             <li><a href="@homeUrl">Home</a></li>
-                                            <li><a href="#about">About</a></li>
-                                            <li><a href="#contact">Careers</a></li>
-                                            <li><a href="#contact">Privacy &amp; Policy</a></li>
-                                            <li><a href="#contact">Blog</a></li>
+                                            <li><a href="@aboutUrl">About</a></li>
+                                            <li><a href="@(homeUrl.TrimEnd('/'))#contact">Careers</a></li>
+                                            <li><a href="@(homeUrl.TrimEnd('/'))#contact">Privacy &amp; Policy</a></li>
+                                            <li><a href="@(homeUrl.TrimEnd('/'))#contact">Blog</a></li>
                                         </ul>
                                     </div>
                                 </div>
@@ -123,9 +124,9 @@
                                     <div class="footer_widget">
                                         <h3 class="footer_heading" data-aos="fade-up" data-aos-duration="2000">Services</h3>
                                         <ul class="quick_links" data-aos="fade-up" data-aos-duration="3000">
-                                            <li><a href="#solutions">Digital Transformation</a></li>
-                                            <li><a href="#solutions">Healthcare Solutions</a></li>
-                                            <li><a href="#solutions">Business Outsourcing</a></li>
+                                            <li><a href="@(homeUrl.TrimEnd('/'))#solutions">Digital Transformation</a></li>
+                                            <li><a href="@(homeUrl.TrimEnd('/'))#solutions">Healthcare Solutions</a></li>
+                                            <li><a href="@(homeUrl.TrimEnd('/'))#solutions">Business Outsourcing</a></li>
                                         </ul>
                                     </div>
                                 </div>
