@@ -1,5 +1,6 @@
 using System.Text.Json;
 using Umbraco.Cms.Core;
+using Umbraco.Cms.Core.Models;
 using Umbraco.Cms.Core.Models.PublishedContent;
 using Umbraco.Cms.Web.Common;
 using Umbraco.Extensions;
@@ -13,9 +14,12 @@ public interface ISiteInfoService
     IPublishedContent? GetFooter();
     IPublishedContent? GetHomePage();
     IPublishedContent? GetAboutPage();
+    IPublishedContent? GetGetInTouchPage();
     IPublishedContent? GetSolutionPage(string urlSegment);
     IEnumerable<IPublishedContent> GetSolutionPages();
     string? GetMediaUrl(IPublishedContent? media);
+    Link? GetFirstLink(IPublishedElement? content, string alias);
+    IReadOnlyList<Link> GetLinks(IPublishedElement? content, string alias);
 }
 
 public class SiteInfoService : ISiteInfoService
@@ -57,6 +61,11 @@ public class SiteInfoService : ISiteInfoService
             .SelectMany(x => x.DescendantsOrSelfOfType("aboutPage"))
             .FirstOrDefault();
 
+    public IPublishedContent? GetGetInTouchPage()
+        => _umbracoHelper.ContentAtRoot()
+            .SelectMany(x => x.DescendantsOrSelfOfType("getInTouchPage"))
+            .FirstOrDefault();
+
     public IPublishedContent? GetSolutionPage(string urlSegment)
         => GetSolutionPages()
             .FirstOrDefault(x =>
@@ -89,6 +98,45 @@ public class SiteInfoService : ISiteInfoService
         }
 
         return NormalizePath(ExtractPathFromUmbracoFile(media.Value<string>(Constants.Conventions.Media.File)));
+    }
+
+    public Link? GetFirstLink(IPublishedElement? content, string alias)
+        => GetLinks(content, alias).FirstOrDefault();
+
+    public IReadOnlyList<Link> GetLinks(IPublishedElement? content, string alias)
+    {
+        if (content == null || string.IsNullOrWhiteSpace(alias) || !content.HasProperty(alias) || !content.HasValue(alias))
+        {
+            return Array.Empty<Link>();
+        }
+
+        try
+        {
+            var many = content.Value<IEnumerable<Link>>(alias);
+            if (many != null)
+            {
+                return many.Where(x => x != null && !string.IsNullOrWhiteSpace(x.Url)).ToList();
+            }
+        }
+        catch (Exception)
+        {
+            // Single-link configured data types return Link instead of IEnumerable<Link>
+        }
+
+        try
+        {
+            var one = content.Value<Link>(alias);
+            if (one != null && !string.IsNullOrWhiteSpace(one.Url))
+            {
+                return new[] { one };
+            }
+        }
+        catch (Exception)
+        {
+            // Ignore invalid stored values
+        }
+
+        return Array.Empty<Link>();
     }
 
     private static string? ExtractPathFromUmbracoFile(string? raw)

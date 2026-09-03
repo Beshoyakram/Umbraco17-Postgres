@@ -18,14 +18,14 @@ using Umbraco.Extensions;
 
 namespace Umbraco.Cms.Web.Common.PublishedModels
 {
-	/// <summary>Footer</summary>
-	[PublishedModel("footer")]
-	public partial class Footer : PublishedContentModel
+	/// <summary>Get-In-Touch-Page</summary>
+	[PublishedModel("getInTouchPage")]
+	public partial class GetInTouchPage : PublishedContentModel, ISEosettings
 	{
 		// helpers
 #pragma warning disable 0109 // new is redundant
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
-		public new const string ModelTypeAlias = "footer";
+		public new const string ModelTypeAlias = "getInTouchPage";
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
 		public new const PublishedItemType ModelItemType = PublishedItemType.Content;
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
@@ -34,14 +34,14 @@ namespace Umbraco.Cms.Web.Common.PublishedModels
 			=> PublishedModelUtility.GetModelContentType(contentTypeCache, ModelItemType, ModelTypeAlias);
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
 		[return: global::System.Diagnostics.CodeAnalysis.MaybeNull]
-		public static IPublishedPropertyType GetModelPropertyType<TValue>(IPublishedContentTypeCache contentTypeCache, Expression<Func<Footer, TValue>> selector)
+		public static IPublishedPropertyType GetModelPropertyType<TValue>(IPublishedContentTypeCache contentTypeCache, Expression<Func<GetInTouchPage, TValue>> selector)
 			=> PublishedModelUtility.GetModelPropertyType(GetModelContentType(contentTypeCache), selector);
 #pragma warning restore 0109
 
 		private IPublishedValueFallback _publishedValueFallback;
 
 		// ctor
-		public Footer(IPublishedContent content, IPublishedValueFallback publishedValueFallback)
+		public GetInTouchPage(IPublishedContent content, IPublishedValueFallback publishedValueFallback)
 			: base(content, publishedValueFallback)
 		{
 			_publishedValueFallback = publishedValueFallback;
@@ -50,91 +50,75 @@ namespace Umbraco.Cms.Web.Common.PublishedModels
 		// properties
 
 		///<summary>
-		/// Copyright: Leave empty to auto-generate year + Centro.
+		/// Banner Image: Optional. When set, overrides the theme class background.
 		///</summary>
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
 		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
-		[ImplementPropertyType("copyright")]
-		public virtual string Copyright => this.Value<string>(_publishedValueFallback, "copyright");
+		[ImplementPropertyType("bannerImage")]
+		public virtual global::Umbraco.Cms.Core.Models.MediaWithCrops BannerImage => this.Value<global::Umbraco.Cms.Core.Models.MediaWithCrops>(_publishedValueFallback, "bannerImage");
 
 		///<summary>
-		/// CTA Button: Pick an internal page (e.g. Get In Touch) or external URL.
+		/// Banner Theme Class: Default theme wrapper: bg7 (Free Consultation banner).
 		///</summary>
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
 		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
-		[ImplementPropertyType("ctaButton")]
-		public virtual global::Umbraco.Cms.Core.Models.Link CtaButton => this.Value<global::Umbraco.Cms.Core.Models.Link>(_publishedValueFallback, "ctaButton");
+		[ImplementPropertyType("bannerThemeClass")]
+		public virtual string BannerThemeClass => this.Value<string>(_publishedValueFallback, "bannerThemeClass");
 
 		///<summary>
-		/// CTA Button Label: Optional button text override. If empty, uses the CTA link name.
+		/// Banner Title: Banner heading, e.g. Free Consultation
 		///</summary>
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
 		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
-		[ImplementPropertyType("ctaButtonLabel")]
-		public virtual string CtaButtonLabel => this.Value<string>(_publishedValueFallback, "ctaButtonLabel");
+		[ImplementPropertyType("bannerTitle")]
+		public virtual string BannerTitle => this.Value<string>(_publishedValueFallback, "bannerTitle");
 
 		///<summary>
-		/// CTA Text
+		/// Form Key: Routes submissions to Contact Forms inbox. Default: getInTouch
 		///</summary>
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
 		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
-		[ImplementPropertyType("ctaText")]
-		public virtual string CtaText => this.Value<string>(_publishedValueFallback, "ctaText");
+		[ImplementPropertyType("formKey")]
+		public virtual string FormKey => this.Value<string>(_publishedValueFallback, "formKey");
 
 		///<summary>
-		/// CTA Title
+		/// Form Title: Form heading above the fields. Default: Get In Touch
 		///</summary>
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
 		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
-		[ImplementPropertyType("ctaTitle")]
-		public virtual string CtaTitle => this.Value<string>(_publishedValueFallback, "ctaTitle");
+		[ImplementPropertyType("formTitle")]
+		public virtual string FormTitle => this.Value<string>(_publishedValueFallback, "formTitle");
 
 		///<summary>
-		/// Email
+		/// OG Image: Social/share image (Open Graph / Twitter).
 		///</summary>
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
 		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
-		[ImplementPropertyType("email")]
-		public virtual string Email => this.Value<string>(_publishedValueFallback, "email");
+		[ImplementPropertyType("ogImage")]
+		public virtual global::Umbraco.Cms.Core.Models.MediaWithCrops OgImage => global::Umbraco.Cms.Web.Common.PublishedModels.SEosettings.GetOgImage(this, _publishedValueFallback);
 
 		///<summary>
-		/// Footer Logo
+		/// SEO Description: Short summary used by Google and AI search snippets.
 		///</summary>
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
 		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
-		[ImplementPropertyType("footerLogo")]
-		public virtual global::Umbraco.Cms.Core.Models.MediaWithCrops FooterLogo => this.Value<global::Umbraco.Cms.Core.Models.MediaWithCrops>(_publishedValueFallback, "footerLogo");
+		[ImplementPropertyType("sEODescription")]
+		public virtual string SEodescription => global::Umbraco.Cms.Web.Common.PublishedModels.SEosettings.GetSEodescription(this, _publishedValueFallback);
 
 		///<summary>
-		/// Navigation Links: Footer Navigation column — pick pages from the content tree (Home, About, Careers…).
+		/// SEO Keywords: Optional. Prefer strong titles and descriptions over keyword stuffing.
 		///</summary>
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
 		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
-		[ImplementPropertyType("navigationLinks")]
-		public virtual global::System.Collections.Generic.IEnumerable<global::Umbraco.Cms.Core.Models.Link> NavigationLinks => this.Value<global::System.Collections.Generic.IEnumerable<global::Umbraco.Cms.Core.Models.Link>>(_publishedValueFallback, "navigationLinks");
+		[ImplementPropertyType("sEOKeywords")]
+		public virtual string SEokeywords => global::Umbraco.Cms.Web.Common.PublishedModels.SEosettings.GetSEokeywords(this, _publishedValueFallback);
 
 		///<summary>
-		/// Phone
+		/// SEO Title: Overrides the browser/search title when set.
 		///</summary>
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
 		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
-		[ImplementPropertyType("phone")]
-		public virtual string Phone => this.Value<string>(_publishedValueFallback, "phone");
-
-		///<summary>
-		/// Services Links: Footer Services column — pick solution pages from the content tree.
-		///</summary>
-		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
-		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
-		[ImplementPropertyType("servicesLinks")]
-		public virtual global::System.Collections.Generic.IEnumerable<global::Umbraco.Cms.Core.Models.Link> ServicesLinks => this.Value<global::System.Collections.Generic.IEnumerable<global::Umbraco.Cms.Core.Models.Link>>(_publishedValueFallback, "servicesLinks");
-
-		///<summary>
-		/// Social Links: Add social networks — each item has an icon and a link.
-		///</summary>
-		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
-		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
-		[ImplementPropertyType("socialLinks")]
-		public virtual global::Umbraco.Cms.Core.Models.Blocks.BlockListModel SocialLinks => this.Value<global::Umbraco.Cms.Core.Models.Blocks.BlockListModel>(_publishedValueFallback, "socialLinks");
+		[ImplementPropertyType("sEOTitle")]
+		public virtual string SEotitle => global::Umbraco.Cms.Web.Common.PublishedModels.SEosettings.GetSEotitle(this, _publishedValueFallback);
 	}
 }

@@ -45,7 +45,16 @@
 	var ctaTitle = Text("ctaTitle");
 	var ctaText = Text("ctaText");
 	var ctaLabel = Text("ctaLabel");
-	var ctaUrl = Text("ctaUrl") ?? "#get-in-touch";
+	var ctaLinkItem = SiteInfo.GetFirstLink(Model, "ctaUrl");
+	var ctaUrl = ctaLinkItem?.Url;
+	if (string.IsNullOrWhiteSpace(ctaLabel))
+	{
+		ctaLabel = ctaLinkItem?.Name;
+	}
+	if (string.IsNullOrWhiteSpace(ctaUrl))
+	{
+		ctaUrl = "#get-in-touch";
+	}
 
 	var testimonialsBackgroundUrl = MediaUrl("testimonialsBackground");
 	var testimonials = Model.HasValue("testimonials") ? Model.Value<BlockListModel>("testimonials") : null;
@@ -198,10 +207,10 @@
 											<p data-aos="fade-up" data-aos-duration="3000">@Html.Raw(Nl(ctaText))</p>
 										}
 									</div>
-									@if (!string.IsNullOrWhiteSpace(ctaLabel))
+									@if (!string.IsNullOrWhiteSpace(ctaLabel) && !string.IsNullOrWhiteSpace(ctaUrl))
 									{
 										<div data-aos="fade-up" data-aos-duration="3000" class="footer_btn">
-											<a href="@ctaUrl" class="boxed-btn solution-cta-btn">@ctaLabel</a>
+											<a href="@ctaUrl" class="boxed-btn solution-cta-btn" target="@(ctaLinkItem?.Target)">@ctaLabel</a>
 										</div>
 									}
 								</div>

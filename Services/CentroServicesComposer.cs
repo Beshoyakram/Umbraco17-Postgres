@@ -5,6 +5,7 @@ using Umbraco.Cms.Core.Composing;
 using Umbraco.Cms.Core.DependencyInjection;
 using Umbraco.Cms.Core.Events;
 using Umbraco.Cms.Core.Notifications;
+using Umbraco.Cms.Core.Routing;
 using Umbraco.Cms.Core.Services;
 
 namespace Centrocdx.Services;
@@ -110,6 +111,7 @@ public class CentroServicesComposer : IComposer
     {
         builder.Services.AddScoped<ISiteInfoService, SiteInfoService>();
         builder.Services.AddScoped<IContactSubmissionService, ContactSubmissionService>();
+        builder.UrlProviders().InsertBefore<NewDefaultUrlProvider, SolutionsFolderUrlProvider>();
         builder.AddNotificationAsyncHandler<UmbracoApplicationStartedNotification, HeroVideoMediaRepairHandler>();
         builder.AddNotificationAsyncHandler<UmbracoApplicationStartedNotification, SolutionMediaSeedHandler>();
     }

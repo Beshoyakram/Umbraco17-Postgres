@@ -1,0 +1,42 @@
+/* Get In Touch / Free Consultation page */
+
+.bg7[style*="--get-in-touch-banner-bg"] .breadcam_area {
+  background-image: var(--get-in-touch-banner-bg);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+}
+
+.get-in-touch-page {
+  margin-top: 40px;
+  margin-bottom: 60px;
+}
+
+.get-in-touch-page .contact-title {
+  margin-bottom: 24px;
+}
+
+#form-response-message {
+  margin-top: 15px;
+  font-weight: bold;
+  display: none;
+}
+
+#form-response-message.is-visible {
+  display: block;
+}
+
+#form-response-message.is-success {
+  color: #28a745;
+}
+
+#form-response-message.is-error {
+  color: #dc3545;
+}
+
+@media (max-width: 767px) {
+  .get-in-touch-page {
+    margin-top: 24px;
+    margin-bottom: 40px;
+  }
+}

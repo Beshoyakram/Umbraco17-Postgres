@@ -1,0 +1,100 @@
+﻿@using Umbraco.Cms.Core.Models.PublishedContent
+@using Centrocdx.Services
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
+@inject ISiteInfoService SiteInfo
+@{
+	Layout = "Layout.cshtml";
+
+	string? MediaUrl(string alias)
+	{
+		if (!Model.HasProperty(alias) || !Model.HasValue(alias)) return null;
+		try
+		{
+			return SiteInfo.GetMediaUrl(Model.Value<IPublishedContent>(alias));
+		}
+		catch (Exception)
+		{
+			return null;
+		}
+	}
+
+	string? Text(string alias)
+		=> Model.HasValue(alias) ? Model.Value<string>(alias) : null;
+
+	var bannerTitle = Text("bannerTitle") ?? "Free Consultation";
+	var bannerImageUrl = MediaUrl("bannerImage");
+	var bannerThemeClass = Text("bannerThemeClass") ?? "bg7";
+	var formTitle = Text("formTitle") ?? "Get In Touch";
+	var formKey = Text("formKey") ?? "getInTouch";
+	var sourcePage = Model.UrlSegment ?? "get-in-touch";
+}
+
+@section Head {
+	<link rel="stylesheet" href="~/css/pages/get-in-touch.css" asp-append-version="true" />
+}
+
+<div class="@bannerThemeClass" style="@(string.IsNullOrWhiteSpace(bannerImageUrl) ? null : $"--get-in-touch-banner-bg: url('{bannerImageUrl}');")">
+	<div class="breadcam_area bradcam_bg overlay2">
+		<div class="bradcam_text">
+			<h3>@bannerTitle</h3>
+		</div>
+	</div>
+</div>
+
+<div id="get-in-touch" class="container get-in-touch-page">
+	<div class="row">
+		<div class="col-lg-10 offset-1">
+			<h2 class="contact-title">@formTitle</h2>
+			<form class="form-contact contact_form" id="centro-get-in-touch-form" novalidate>
+				@Html.AntiForgeryToken()
+				<input type="hidden" name="formKey" value="@formKey" />
+				<input type="hidden" name="sourcePage" value="@sourcePage" />
+				<div class="row">
+					<div class="col-sm-6">
+						<div class="form-group">
+							<input class="form-control valid" type="text" maxlength="255" name="firstName" placeholder="First Name" required autocomplete="given-name" />
+						</div>
+					</div>
+					<div class="col-sm-6">
+						<div class="form-group">
+							<input class="form-control valid" type="text" maxlength="255" name="lastName" placeholder="Last Name" required autocomplete="family-name" />
+						</div>
+					</div>
+					<div class="col-sm-6">
+						<div class="form-group">
+							<input class="form-control valid" type="tel" maxlength="50" name="phone" placeholder="Phone" required autocomplete="tel" />
+						</div>
+					</div>
+					<div class="col-sm-6">
+						<div class="form-group">
+							<input class="form-control valid" type="email" maxlength="255" name="email" placeholder="Email" required autocomplete="email" />
+						</div>
+					</div>
+					<div class="col-sm-6">
+						<div class="form-group">
+							<input class="form-control valid" type="text" maxlength="255" name="occupation" placeholder="Occupation" autocomplete="organization-title" />
+						</div>
+					</div>
+					<div class="col-sm-6">
+						<div class="form-group">
+							<input class="form-control valid" type="text" maxlength="255" name="company" placeholder="Company" autocomplete="organization" />
+						</div>
+					</div>
+					<div class="col-12">
+						<div class="form-group">
+							<textarea class="form-control w-100" name="message" maxlength="2000" placeholder="Enter Message" required></textarea>
+						</div>
+					</div>
+				</div>
+				<div class="form-group mt-3">
+					<button type="submit" id="get-in-touch-submit-btn" class="button button-contactForm boxed-btn">Send</button>
+				</div>
+				<div id="form-response-message"></div>
+			</form>
+		</div>
+	</div>
+</div>
+
+@section Scripts {
+	<script src="~/js/pages/get-in-touch.js" asp-append-version="true"></script>
+}

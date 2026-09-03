@@ -18,14 +18,14 @@ using Umbraco.Extensions;
 
 namespace Umbraco.Cms.Web.Common.PublishedModels
 {
-	/// <summary>Home-Page</summary>
-	[PublishedModel("homePage")]
-	public partial class HomePage : PublishedContentModel, ISEosettings
+	/// <summary>Solution-Page</summary>
+	[PublishedModel("solutionPage")]
+	public partial class SolutionPage : PublishedContentModel, ISEosettings
 	{
 		// helpers
 #pragma warning disable 0109 // new is redundant
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
-		public new const string ModelTypeAlias = "homePage";
+		public new const string ModelTypeAlias = "solutionPage";
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
 		public new const PublishedItemType ModelItemType = PublishedItemType.Content;
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
@@ -34,14 +34,14 @@ namespace Umbraco.Cms.Web.Common.PublishedModels
 			=> PublishedModelUtility.GetModelContentType(contentTypeCache, ModelItemType, ModelTypeAlias);
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
 		[return: global::System.Diagnostics.CodeAnalysis.MaybeNull]
-		public static IPublishedPropertyType GetModelPropertyType<TValue>(IPublishedContentTypeCache contentTypeCache, Expression<Func<HomePage, TValue>> selector)
+		public static IPublishedPropertyType GetModelPropertyType<TValue>(IPublishedContentTypeCache contentTypeCache, Expression<Func<SolutionPage, TValue>> selector)
 			=> PublishedModelUtility.GetModelPropertyType(GetModelContentType(contentTypeCache), selector);
 #pragma warning restore 0109
 
 		private IPublishedValueFallback _publishedValueFallback;
 
 		// ctor
-		public HomePage(IPublishedContent content, IPublishedValueFallback publishedValueFallback)
+		public SolutionPage(IPublishedContent content, IPublishedValueFallback publishedValueFallback)
 			: base(content, publishedValueFallback)
 		{
 			_publishedValueFallback = publishedValueFallback;
@@ -50,196 +50,140 @@ namespace Umbraco.Cms.Web.Common.PublishedModels
 		// properties
 
 		///<summary>
-		/// About CTA Label
+		/// Banner Image: Optional banner background image. When set, overrides the theme class background.
 		///</summary>
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
 		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
-		[ImplementPropertyType("aboutCtaLabel")]
-		public virtual string AboutCtaLabel => this.Value<string>(_publishedValueFallback, "aboutCtaLabel");
+		[ImplementPropertyType("bannerImage")]
+		public virtual global::Umbraco.Cms.Core.Models.MediaWithCrops BannerImage => this.Value<global::Umbraco.Cms.Core.Models.MediaWithCrops>(_publishedValueFallback, "bannerImage");
 
 		///<summary>
-		/// About CTA: Pick an internal page (e.g. About) or enter a URL/anchor.
+		/// Banner Theme Class: Theme wrapper class: bg (BPO), bg1 (Digital), bg2 (Healthcare).
 		///</summary>
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
 		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
-		[ImplementPropertyType("aboutCtaLink")]
-		public virtual global::Umbraco.Cms.Core.Models.Link AboutCtaLink => this.Value<global::Umbraco.Cms.Core.Models.Link>(_publishedValueFallback, "aboutCtaLink");
+		[ImplementPropertyType("bannerThemeClass")]
+		public virtual string BannerThemeClass => this.Value<string>(_publishedValueFallback, "bannerThemeClass");
 
 		///<summary>
-		/// About Image
+		/// Banner Title
 		///</summary>
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
 		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
-		[ImplementPropertyType("aboutImage")]
-		public virtual global::Umbraco.Cms.Core.Models.MediaWithCrops AboutImage => this.Value<global::Umbraco.Cms.Core.Models.MediaWithCrops>(_publishedValueFallback, "aboutImage");
+		[ImplementPropertyType("bannerTitle")]
+		public virtual string BannerTitle => this.Value<string>(_publishedValueFallback, "bannerTitle");
 
 		///<summary>
-		/// About Text
+		/// CTA Label
 		///</summary>
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
 		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
-		[ImplementPropertyType("aboutText")]
-		public virtual string AboutText => this.Value<string>(_publishedValueFallback, "aboutText");
+		[ImplementPropertyType("ctaLabel")]
+		public virtual string CtaLabel => this.Value<string>(_publishedValueFallback, "ctaLabel");
 
 		///<summary>
-		/// About Title
+		/// CTA Text
 		///</summary>
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
 		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
-		[ImplementPropertyType("aboutTitle")]
-		public virtual string AboutTitle => this.Value<string>(_publishedValueFallback, "aboutTitle");
+		[ImplementPropertyType("ctaText")]
+		public virtual string CtaText => this.Value<string>(_publishedValueFallback, "ctaText");
 
 		///<summary>
-		/// AI Background
+		/// CTA Title
 		///</summary>
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
 		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
-		[ImplementPropertyType("aiBackground")]
-		public virtual global::Umbraco.Cms.Core.Models.MediaWithCrops AiBackground => this.Value<global::Umbraco.Cms.Core.Models.MediaWithCrops>(_publishedValueFallback, "aiBackground");
+		[ImplementPropertyType("ctaTitle")]
+		public virtual string CtaTitle => this.Value<string>(_publishedValueFallback, "ctaTitle");
 
 		///<summary>
-		/// AI Title
+		/// CTA Link: Pick Get In Touch page, or use #get-in-touch to scroll to the form on this page.
 		///</summary>
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
 		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
-		[ImplementPropertyType("aiTitle")]
-		public virtual string AiTitle => this.Value<string>(_publishedValueFallback, "aiTitle");
+		[ImplementPropertyType("ctaUrl")]
+		public virtual global::Umbraco.Cms.Core.Models.Link CtaUrl => this.Value<global::Umbraco.Cms.Core.Models.Link>(_publishedValueFallback, "ctaUrl");
 
 		///<summary>
-		/// Contact Eyebrow
+		/// Eyebrow: e.g. Explore our solutions
 		///</summary>
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
 		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
-		[ImplementPropertyType("contactEyebrow")]
-		public virtual string ContactEyebrow => this.Value<string>(_publishedValueFallback, "contactEyebrow");
+		[ImplementPropertyType("eyebrow")]
+		public virtual string Eyebrow => this.Value<string>(_publishedValueFallback, "eyebrow");
 
 		///<summary>
-		/// Contact Image
+		/// Features: Service / advantage cards (4-column grid).
 		///</summary>
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
 		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
-		[ImplementPropertyType("contactImage")]
-		public virtual global::Umbraco.Cms.Core.Models.MediaWithCrops ContactImage => this.Value<global::Umbraco.Cms.Core.Models.MediaWithCrops>(_publishedValueFallback, "contactImage");
+		[ImplementPropertyType("features")]
+		public virtual global::Umbraco.Cms.Core.Models.Blocks.BlockListModel Features => this.Value<global::Umbraco.Cms.Core.Models.Blocks.BlockListModel>(_publishedValueFallback, "features");
 
 		///<summary>
-		/// Contact Title
+		/// Features Heading: e.g. Our BPO Services
 		///</summary>
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
 		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
-		[ImplementPropertyType("contactTitle")]
-		public virtual string ContactTitle => this.Value<string>(_publishedValueFallback, "contactTitle");
+		[ImplementPropertyType("featuresHeading")]
+		public virtual string FeaturesHeading => this.Value<string>(_publishedValueFallback, "featuresHeading");
 
 		///<summary>
-		/// Hero CTA Label
+		/// Form Key: Routes submissions to Contact Forms inbox. Default: getInTouch
 		///</summary>
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
 		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
-		[ImplementPropertyType("heroCtaLabel")]
-		public virtual string HeroCtaLabel => this.Value<string>(_publishedValueFallback, "heroCtaLabel");
+		[ImplementPropertyType("formKey")]
+		public virtual string FormKey => this.Value<string>(_publishedValueFallback, "formKey");
 
 		///<summary>
-		/// Hero CTA: Pick an internal page or enter a URL/anchor (e.g. #about).
+		/// Get In Touch Title
 		///</summary>
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
 		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
-		[ImplementPropertyType("heroCtaLink")]
-		public virtual global::Umbraco.Cms.Core.Models.Link HeroCtaLink => this.Value<global::Umbraco.Cms.Core.Models.Link>(_publishedValueFallback, "heroCtaLink");
+		[ImplementPropertyType("getInTouchTitle")]
+		public virtual string GetInTouchTitle => this.Value<string>(_publishedValueFallback, "getInTouchTitle");
 
 		///<summary>
-		/// Hero Fallback Image: Shown on mobile instead of video.
+		/// Intro Heading
 		///</summary>
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
 		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
-		[ImplementPropertyType("heroFallbackImage")]
-		public virtual global::Umbraco.Cms.Core.Models.MediaWithCrops HeroFallbackImage => this.Value<global::Umbraco.Cms.Core.Models.MediaWithCrops>(_publishedValueFallback, "heroFallbackImage");
+		[ImplementPropertyType("introHeading")]
+		public virtual string IntroHeading => this.Value<string>(_publishedValueFallback, "introHeading");
 
 		///<summary>
-		/// Hero Lead
+		/// Intro Image
 		///</summary>
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
 		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
-		[ImplementPropertyType("heroLead")]
-		public virtual string HeroLead => this.Value<string>(_publishedValueFallback, "heroLead");
+		[ImplementPropertyType("introImage")]
+		public virtual global::Umbraco.Cms.Core.Models.MediaWithCrops IntroImage => this.Value<global::Umbraco.Cms.Core.Models.MediaWithCrops>(_publishedValueFallback, "introImage");
 
 		///<summary>
-		/// Hero Subtext
+		/// Intro Text
 		///</summary>
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
 		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
-		[ImplementPropertyType("heroSubtext")]
-		public virtual string HeroSubtext => this.Value<string>(_publishedValueFallback, "heroSubtext");
+		[ImplementPropertyType("introText")]
+		public virtual string IntroText => this.Value<string>(_publishedValueFallback, "introText");
 
 		///<summary>
-		/// Hero Title: Use line breaks for stacked headline.
+		/// Offers
 		///</summary>
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
 		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
-		[ImplementPropertyType("heroTitle")]
-		public virtual string HeroTitle => this.Value<string>(_publishedValueFallback, "heroTitle");
+		[ImplementPropertyType("offers")]
+		public virtual global::Umbraco.Cms.Core.Models.Blocks.BlockListModel Offers => this.Value<global::Umbraco.Cms.Core.Models.Blocks.BlockListModel>(_publishedValueFallback, "offers");
 
 		///<summary>
-		/// Hero Video: MP4 from Media (desktop).
+		/// Offers Heading: e.g. The Centro Advantage in BPO / What We Offer
 		///</summary>
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
 		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
-		[ImplementPropertyType("heroVideo")]
-		public virtual global::Umbraco.Cms.Core.Models.MediaWithCrops HeroVideo => this.Value<global::Umbraco.Cms.Core.Models.MediaWithCrops>(_publishedValueFallback, "heroVideo");
-
-		///<summary>
-		/// Partner Logos: Select multiple images from Media / Centro / Partners.
-		///</summary>
-		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
-		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
-		[ImplementPropertyType("partnerLogos")]
-		public virtual global::System.Collections.Generic.IEnumerable<global::Umbraco.Cms.Core.Models.MediaWithCrops> PartnerLogos => this.Value<global::System.Collections.Generic.IEnumerable<global::Umbraco.Cms.Core.Models.MediaWithCrops>>(_publishedValueFallback, "partnerLogos");
-
-		///<summary>
-		/// Partners Eyebrow
-		///</summary>
-		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
-		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
-		[ImplementPropertyType("partnersEyebrow")]
-		public virtual string PartnersEyebrow => this.Value<string>(_publishedValueFallback, "partnersEyebrow");
-
-		///<summary>
-		/// Partners Title
-		///</summary>
-		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
-		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
-		[ImplementPropertyType("partnersTitle")]
-		public virtual string PartnersTitle => this.Value<string>(_publishedValueFallback, "partnersTitle");
-
-		///<summary>
-		/// Solutions
-		///</summary>
-		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
-		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
-		[ImplementPropertyType("solutions")]
-		public virtual global::Umbraco.Cms.Core.Models.Blocks.BlockListModel Solutions => this.Value<global::Umbraco.Cms.Core.Models.Blocks.BlockListModel>(_publishedValueFallback, "solutions");
-
-		///<summary>
-		/// Solutions Eyebrow
-		///</summary>
-		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
-		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
-		[ImplementPropertyType("solutionsEyebrow")]
-		public virtual string SolutionsEyebrow => this.Value<string>(_publishedValueFallback, "solutionsEyebrow");
-
-		///<summary>
-		/// Solutions Title
-		///</summary>
-		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
-		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
-		[ImplementPropertyType("solutionsTitle")]
-		public virtual string SolutionsTitle => this.Value<string>(_publishedValueFallback, "solutionsTitle");
-
-		///<summary>
-		/// Stats
-		///</summary>
-		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
-		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
-		[ImplementPropertyType("stats")]
-		public virtual global::Umbraco.Cms.Core.Models.Blocks.BlockListModel Stats => this.Value<global::Umbraco.Cms.Core.Models.Blocks.BlockListModel>(_publishedValueFallback, "stats");
+		[ImplementPropertyType("offersHeading")]
+		public virtual string OffersHeading => this.Value<string>(_publishedValueFallback, "offersHeading");
 
 		///<summary>
 		/// Testimonials
@@ -256,6 +200,14 @@ namespace Umbraco.Cms.Web.Common.PublishedModels
 		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
 		[ImplementPropertyType("testimonialsBackground")]
 		public virtual global::Umbraco.Cms.Core.Models.MediaWithCrops TestimonialsBackground => this.Value<global::Umbraco.Cms.Core.Models.MediaWithCrops>(_publishedValueFallback, "testimonialsBackground");
+
+		///<summary>
+		/// Title: Main H3 under eyebrow. Use line breaks as needed.
+		///</summary>
+		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
+		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
+		[ImplementPropertyType("title")]
+		public virtual string Title => this.Value<string>(_publishedValueFallback, "title");
 
 		///<summary>
 		/// OG Image: Social/share image (Open Graph / Twitter).

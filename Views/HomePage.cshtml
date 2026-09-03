@@ -29,7 +29,12 @@
 	var heroLead = Text("heroLead");
 	var heroSubtext = Text("heroSubtext");
 	var heroCtaLabel = Text("heroCtaLabel");
-	var heroCtaLink = Text("heroCtaLink");
+	var heroCta = SiteInfo.GetFirstLink(Model, "heroCtaLink");
+	var heroCtaLink = heroCta?.Url;
+	if (string.IsNullOrWhiteSpace(heroCtaLabel))
+	{
+		heroCtaLabel = heroCta?.Name;
+	}
 	var heroVideoUrl = MediaUrl("heroVideo");
 	var heroFallbackUrl = MediaUrl("heroFallbackImage");
 
@@ -37,7 +42,12 @@
 	var aboutText = Text("aboutText");
 	var aboutImageUrl = MediaUrl("aboutImage");
 	var aboutCtaLabel = Text("aboutCtaLabel");
-	var aboutCtaLink = Text("aboutCtaLink");
+	var aboutCta = SiteInfo.GetFirstLink(Model, "aboutCtaLink");
+	var aboutCtaLink = aboutCta?.Url;
+	if (string.IsNullOrWhiteSpace(aboutCtaLabel))
+	{
+		aboutCtaLabel = aboutCta?.Name;
+	}
 
 	var stats = Model.HasValue("stats") ? Model.Value<BlockListModel>("stats") : null;
 	var aiTitle = Text("aiTitle");
@@ -111,7 +121,7 @@
 				}
 				@if (!string.IsNullOrWhiteSpace(heroCtaLabel) && !string.IsNullOrWhiteSpace(heroCtaLink))
 				{
-					<a data-aos="fade-up" data-aos-duration="3000" href="@heroCtaLink" class="boxed-btn mt-4">@heroCtaLabel</a>
+					<a data-aos="fade-up" data-aos-duration="3000" href="@heroCtaLink" class="boxed-btn mt-4" target="@(heroCta?.Target)">@heroCtaLabel</a>
 				}
 			</div>
 		</div>
@@ -146,7 +156,7 @@
 						}
 						@if (!string.IsNullOrWhiteSpace(aboutCtaLabel) && !string.IsNullOrWhiteSpace(aboutCtaLink))
 						{
-							<a data-aos="fade-up" data-aos-duration="2000" href="@aboutCtaLink" class="boxed-btn mt-30">@aboutCtaLabel</a>
+							<a data-aos="fade-up" data-aos-duration="2000" href="@aboutCtaLink" class="boxed-btn mt-30" target="@(aboutCta?.Target)">@aboutCtaLabel</a>
 						}
 					</div>
 				</div>
@@ -265,8 +275,13 @@
 				var title = content.Value<string>("title");
 				var text = content.Value<string>("text");
 				var index = content.Value<string>("index");
-				var link = content.Value<string>("linkUrl");
+				var linkItem = SiteInfo.GetFirstLink(content, "linkUrl");
+				var link = linkItem?.Url;
 				var linkLabel = content.Value<string>("linkLabel");
+				if (string.IsNullOrWhiteSpace(linkLabel))
+				{
+					linkLabel = linkItem?.Name;
+				}
 				<div class="row align-items-center mb-80">
 					@if (reverse)
 					{
@@ -294,7 +309,7 @@
 								}
 								@if (!string.IsNullOrWhiteSpace(linkLabel) && !string.IsNullOrWhiteSpace(link))
 								{
-									<a data-aos="fade-up" data-aos-duration="3000" href="@link" class="boxed-btn">@linkLabel</a>
+									<a data-aos="fade-up" data-aos-duration="3000" href="@link" class="boxed-btn" target="@(linkItem?.Target)">@linkLabel</a>
 								}
 							</div>
 						</div>
@@ -317,7 +332,7 @@
 								}
 								@if (!string.IsNullOrWhiteSpace(linkLabel) && !string.IsNullOrWhiteSpace(link))
 								{
-									<a data-aos="fade-up" data-aos-duration="3000" href="@link" class="boxed-btn">@linkLabel</a>
+									<a data-aos="fade-up" data-aos-duration="3000" href="@link" class="boxed-btn" target="@(linkItem?.Target)">@linkLabel</a>
 								}
 							</div>
 						</div>
