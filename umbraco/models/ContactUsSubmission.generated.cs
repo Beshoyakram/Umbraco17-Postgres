@@ -50,6 +50,14 @@ namespace Umbraco.Cms.Web.Common.PublishedModels
 		// properties
 
 		///<summary>
+		/// Company: Get In Touch forms only.
+		///</summary>
+		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
+		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
+		[ImplementPropertyType("company")]
+		public virtual string Company => this.Value<string>(_publishedValueFallback, "company");
+
+		///<summary>
 		/// Email
 		///</summary>
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
@@ -66,12 +74,28 @@ namespace Umbraco.Cms.Web.Common.PublishedModels
 		public virtual string Message => this.Value<string>(_publishedValueFallback, "message");
 
 		///<summary>
+		/// Occupation: Get In Touch forms only.
+		///</summary>
+		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
+		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
+		[ImplementPropertyType("occupation")]
+		public virtual string Occupation => this.Value<string>(_publishedValueFallback, "occupation");
+
+		///<summary>
 		/// Phone
 		///</summary>
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
 		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
 		[ImplementPropertyType("phone")]
 		public virtual string Phone => this.Value<string>(_publishedValueFallback, "phone");
+
+		///<summary>
+		/// Source Page: Which page submitted the form (e.g. bpo, health, digital).
+		///</summary>
+		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
+		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
+		[ImplementPropertyType("sourcePage")]
+		public virtual string SourcePage => this.Value<string>(_publishedValueFallback, "sourcePage");
 
 		///<summary>
 		/// Name

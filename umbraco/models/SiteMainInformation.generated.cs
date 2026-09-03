@@ -58,20 +58,20 @@ namespace Umbraco.Cms.Web.Common.PublishedModels
 		public virtual global::Umbraco.Cms.Core.Models.MediaWithCrops FavIcon => this.Value<global::Umbraco.Cms.Core.Models.MediaWithCrops>(_publishedValueFallback, "favIcon");
 
 		///<summary>
-		/// Header CTA Label: e.g. Free Consultation
+		/// Header CTA: Pick an internal page (e.g. Get In Touch) or external URL for Free Consultation.
+		///</summary>
+		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
+		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
+		[ImplementPropertyType("headerCta")]
+		public virtual global::Umbraco.Cms.Core.Models.Link HeaderCta => this.Value<global::Umbraco.Cms.Core.Models.Link>(_publishedValueFallback, "headerCta");
+
+		///<summary>
+		/// Header CTA Label: Optional button text override. If empty, uses the CTA link name.
 		///</summary>
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
 		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
 		[ImplementPropertyType("headerCtaLabel")]
 		public virtual string HeaderCtaLabel => this.Value<string>(_publishedValueFallback, "headerCtaLabel");
-
-		///<summary>
-		/// Header CTA Link: URL or anchor, e.g. #contact
-		///</summary>
-		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
-		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
-		[ImplementPropertyType("headerCtaLink")]
-		public virtual string HeaderCtaLink => this.Value<string>(_publishedValueFallback, "headerCtaLink");
 
 		///<summary>
 		/// Site Logo: Header logo from Media library.

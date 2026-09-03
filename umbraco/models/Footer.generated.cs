@@ -58,20 +58,20 @@ namespace Umbraco.Cms.Web.Common.PublishedModels
 		public virtual string Copyright => this.Value<string>(_publishedValueFallback, "copyright");
 
 		///<summary>
-		/// CTA Button Label
+		/// CTA Button: Pick an internal page (e.g. Get In Touch) or external URL.
+		///</summary>
+		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
+		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
+		[ImplementPropertyType("ctaButton")]
+		public virtual global::Umbraco.Cms.Core.Models.Link CtaButton => this.Value<global::Umbraco.Cms.Core.Models.Link>(_publishedValueFallback, "ctaButton");
+
+		///<summary>
+		/// CTA Button Label: Optional button text override. If empty, uses the CTA link name.
 		///</summary>
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
 		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
 		[ImplementPropertyType("ctaButtonLabel")]
 		public virtual string CtaButtonLabel => this.Value<string>(_publishedValueFallback, "ctaButtonLabel");
-
-		///<summary>
-		/// CTA Button Link
-		///</summary>
-		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
-		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
-		[ImplementPropertyType("ctaButtonLink")]
-		public virtual string CtaButtonLink => this.Value<string>(_publishedValueFallback, "ctaButtonLink");
 
 		///<summary>
 		/// CTA Text
@@ -106,12 +106,28 @@ namespace Umbraco.Cms.Web.Common.PublishedModels
 		public virtual global::Umbraco.Cms.Core.Models.MediaWithCrops FooterLogo => this.Value<global::Umbraco.Cms.Core.Models.MediaWithCrops>(_publishedValueFallback, "footerLogo");
 
 		///<summary>
+		/// Navigation Links: Footer Navigation column — pick pages from the content tree (Home, About, Careers…).
+		///</summary>
+		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
+		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
+		[ImplementPropertyType("navigationLinks")]
+		public virtual global::System.Collections.Generic.IEnumerable<global::Umbraco.Cms.Core.Models.Link> NavigationLinks => this.Value<global::System.Collections.Generic.IEnumerable<global::Umbraco.Cms.Core.Models.Link>>(_publishedValueFallback, "navigationLinks");
+
+		///<summary>
 		/// Phone
 		///</summary>
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
 		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
 		[ImplementPropertyType("phone")]
 		public virtual string Phone => this.Value<string>(_publishedValueFallback, "phone");
+
+		///<summary>
+		/// Services Links: Footer Services column — pick solution pages from the content tree.
+		///</summary>
+		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
+		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
+		[ImplementPropertyType("servicesLinks")]
+		public virtual global::System.Collections.Generic.IEnumerable<global::Umbraco.Cms.Core.Models.Link> ServicesLinks => this.Value<global::System.Collections.Generic.IEnumerable<global::Umbraco.Cms.Core.Models.Link>>(_publishedValueFallback, "servicesLinks");
 
 		///<summary>
 		/// Social Links: Add social networks — each item has an icon and a link.

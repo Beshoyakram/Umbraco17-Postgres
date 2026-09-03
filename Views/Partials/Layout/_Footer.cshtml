@@ -1,3 +1,4 @@
+@using Umbraco.Cms.Core.Models
 @using Umbraco.Cms.Core.Models.Blocks
 @using Umbraco.Cms.Core.Models.PublishedContent
 @using Centrocdx.Services
@@ -5,12 +6,29 @@
 @inject ISiteInfoService SiteInfo
 @{
     var homeUrl = SiteInfo.GetHomePage()?.Url() ?? "/";
+    var getInTouchUrl = SiteInfo.GetGetInTouchPage()?.Url() ?? "/get-in-touch";
     var footer = SiteInfo.GetFooter();
     var logoUrl = SiteInfo.GetMediaUrl(footer?.Value<IPublishedContent>("footerLogo"));
     var ctaTitle = footer?.Value<string>("ctaTitle");
     var ctaText = footer?.Value<string>("ctaText");
     var ctaButtonLabel = footer?.Value<string>("ctaButtonLabel");
-    var ctaButtonLink = footer?.Value<string>("ctaButtonLink");
+    var ctaButton = SiteInfo.GetFirstLink(footer, "ctaButton");
+    var ctaButtonLink = ctaButton?.Url;
+    if (string.IsNullOrWhiteSpace(ctaButtonLabel))
+    {
+        ctaButtonLabel = ctaButton?.Name;
+    }
+    if (string.IsNullOrWhiteSpace(ctaButtonLink))
+    {
+        ctaButtonLink = getInTouchUrl;
+    }
+    if (string.IsNullOrWhiteSpace(ctaButtonLabel))
+    {
+        ctaButtonLabel = "Get Started Today";
+    }
+
+    var navigationLinks = SiteInfo.GetLinks(footer, "navigationLinks");
+    var servicesLinks = SiteInfo.GetLinks(footer, "servicesLinks");
     var phone = footer?.Value<string>("phone");
     var email = footer?.Value<string>("email");
     var copyright = footer?.Value<string>("copyright");
@@ -100,7 +118,7 @@
                         @if (!string.IsNullOrWhiteSpace(ctaButtonLabel) && !string.IsNullOrWhiteSpace(ctaButtonLink))
                         {
                             <div class="footer_btn" data-aos="fade-up" data-aos-duration="3000">
-                                <a href="@ctaButtonLink" class="boxed-btn2">@ctaButtonLabel</a>
+                                <a href="@ctaButtonLink" class="boxed-btn2" target="@(ctaButton?.Target)">@ctaButtonLabel</a>
                             </div>
                         }
                     </div>
@@ -111,11 +129,19 @@
                                     <div class="footer_widget">
                                         <h3 class="footer_heading" data-aos="fade-up" data-aos-duration="2000">Navigation</h3>
                                         <ul class="quick_links" data-aos="fade-up" data-aos-duration="3000">
-                                            <li><a href="@homeUrl">Home</a></li>
-                                            <li><a href="#about">About</a></li>
-                                            <li><a href="#contact">Careers</a></li>
-                                            <li><a href="#contact">Privacy &amp; Policy</a></li>
-                                            <li><a href="#contact">Blog</a></li>
+                                            @if (navigationLinks.Any())
+                                            {
+                                                @foreach (var link in navigationLinks)
+                                                {
+                                                    <li><a href="@link.Url" target="@link.Target">@(link.Name ?? link.Url)</a></li>
+                                                }
+                                            }
+                                            else
+                                            {
+                                                var aboutUrl = SiteInfo.GetAboutPage()?.Url() ?? "/aboutus";
+                                                <li><a href="@homeUrl">Home</a></li>
+                                                <li><a href="@aboutUrl">About</a></li>
+                                            }
                                         </ul>
                                     </div>
                                 </div>
@@ -123,9 +149,20 @@
                                     <div class="footer_widget">
                                         <h3 class="footer_heading" data-aos="fade-up" data-aos-duration="2000">Services</h3>
                                         <ul class="quick_links" data-aos="fade-up" data-aos-duration="3000">
-                                            <li><a href="#solutions">Digital Transformation</a></li>
-                                            <li><a href="#solutions">Healthcare Solutions</a></li>
-                                            <li><a href="#solutions">Business Outsourcing</a></li>
+                                            @if (servicesLinks.Any())
+                                            {
+                                                @foreach (var link in servicesLinks)
+                                                {
+                                                    <li><a href="@link.Url" target="@link.Target">@(link.Name ?? link.Url)</a></li>
+                                                }
+                                            }
+                                            else
+                                            {
+                                                foreach (var solution in SiteInfo.GetSolutionPages())
+                                                {
+                                                    <li><a href="@solution.Url()">@solution.Name</a></li>
+                                                }
+                                            }
                                         </ul>
                                     </div>
                                 </div>

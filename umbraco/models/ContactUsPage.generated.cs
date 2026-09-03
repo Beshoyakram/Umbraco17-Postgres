@@ -50,7 +50,15 @@ namespace Umbraco.Cms.Web.Common.PublishedModels
 		// properties
 
 		///<summary>
-		/// Inbox Note: Optional note for editors. Form copy is edited on the Home page.
+		/// Form Key: Stable key used by the website to route submissions (e.g. home, getInTouch). Must be unique under Contact Forms.
+		///</summary>
+		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
+		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
+		[ImplementPropertyType("formKey")]
+		public virtual string FormKey => this.Value<string>(_publishedValueFallback, "formKey");
+
+		///<summary>
+		/// Inbox Note: Optional note for editors.
 		///</summary>
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
 		[global::System.Diagnostics.CodeAnalysis.MaybeNull]

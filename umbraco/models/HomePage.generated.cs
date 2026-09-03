@@ -58,12 +58,12 @@ namespace Umbraco.Cms.Web.Common.PublishedModels
 		public virtual string AboutCtaLabel => this.Value<string>(_publishedValueFallback, "aboutCtaLabel");
 
 		///<summary>
-		/// About CTA Link
+		/// About CTA: Pick an internal page (e.g. About) or enter a URL/anchor.
 		///</summary>
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
 		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
 		[ImplementPropertyType("aboutCtaLink")]
-		public virtual string AboutCtaLink => this.Value<string>(_publishedValueFallback, "aboutCtaLink");
+		public virtual global::Umbraco.Cms.Core.Models.Link AboutCtaLink => this.Value<global::Umbraco.Cms.Core.Models.Link>(_publishedValueFallback, "aboutCtaLink");
 
 		///<summary>
 		/// About Image
@@ -138,12 +138,12 @@ namespace Umbraco.Cms.Web.Common.PublishedModels
 		public virtual string HeroCtaLabel => this.Value<string>(_publishedValueFallback, "heroCtaLabel");
 
 		///<summary>
-		/// Hero CTA Link
+		/// Hero CTA: Pick an internal page or enter a URL/anchor (e.g. #about).
 		///</summary>
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
 		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
 		[ImplementPropertyType("heroCtaLink")]
-		public virtual string HeroCtaLink => this.Value<string>(_publishedValueFallback, "heroCtaLink");
+		public virtual global::Umbraco.Cms.Core.Models.Link HeroCtaLink => this.Value<global::Umbraco.Cms.Core.Models.Link>(_publishedValueFallback, "heroCtaLink");
 
 		///<summary>
 		/// Hero Fallback Image: Shown on mobile instead of video.

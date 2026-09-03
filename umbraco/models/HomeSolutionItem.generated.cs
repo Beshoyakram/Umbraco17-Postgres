@@ -74,12 +74,12 @@ namespace Umbraco.Cms.Web.Common.PublishedModels
 		public virtual string LinkLabel => this.Value<string>(_publishedValueFallback, "linkLabel");
 
 		///<summary>
-		/// Link Url
+		/// Link: Pick a solution page from the content tree.
 		///</summary>
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
 		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
 		[ImplementPropertyType("linkUrl")]
-		public virtual string LinkUrl => this.Value<string>(_publishedValueFallback, "linkUrl");
+		public virtual global::Umbraco.Cms.Core.Models.Link LinkUrl => this.Value<global::Umbraco.Cms.Core.Models.Link>(_publishedValueFallback, "linkUrl");
 
 		///<summary>
 		/// Text

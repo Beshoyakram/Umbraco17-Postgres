@@ -1,14 +1,40 @@
+@using Umbraco.Cms.Core.Models
 @using Centrocdx.Services
 @inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
 @inject ISiteInfoService SiteInfo
 @{
     var home = SiteInfo.GetHomePage() ?? Model.Root()?.DescendantsOrSelfOfType("homePage").FirstOrDefault() ?? Model;
     var homeUrl = home?.Url() ?? "/";
+    var about = SiteInfo.GetAboutPage();
+    var aboutUrl = about?.Url() ?? "/aboutus";
+    var getInTouchUrl = SiteInfo.GetGetInTouchPage()?.Url() ?? "/get-in-touch";
+    var solutions = SiteInfo.GetSolutionPages().ToList();
+    var bpoUrl = SiteInfo.GetSolutionPage("bpo")?.Url() ?? "/bpo";
+    var healthUrl = SiteInfo.GetSolutionPage("health")?.Url() ?? "/health";
+    var digitalUrl = SiteInfo.GetSolutionPage("digital")?.Url() ?? "/digital";
     var site = SiteInfo.GetSiteMainInformation();
     var siteTitle = site?.Value<string>("siteTitle");
     var logoUrl = SiteInfo.GetMediaUrl(site?.Value<Umbraco.Cms.Core.Models.PublishedContent.IPublishedContent>("siteLogo"));
+
+    var headerCta = SiteInfo.GetFirstLink(site, "headerCta");
     var ctaLabel = site?.Value<string>("headerCtaLabel");
-    var ctaLink = site?.Value<string>("headerCtaLink");
+    if (string.IsNullOrWhiteSpace(ctaLabel))
+    {
+        ctaLabel = headerCta?.Name;
+    }
+    var ctaLink = headerCta?.Url;
+    if (string.IsNullOrWhiteSpace(ctaLink))
+    {
+        ctaLink = getInTouchUrl;
+    }
+    if (string.IsNullOrWhiteSpace(ctaLabel))
+    {
+        ctaLabel = "Free Consultation";
+    }
+
+    var isAbout = Model.ContentType.Alias.Equals("aboutPage", StringComparison.OrdinalIgnoreCase);
+    var isHome = Model.ContentType.Alias.Equals("homePage", StringComparison.OrdinalIgnoreCase);
+    var isSolution = Model.ContentType.Alias.Equals("solutionPage", StringComparison.OrdinalIgnoreCase);
 }
 <header>
     <div class="header-area">
@@ -33,18 +59,18 @@
                         <div class="main-menu d-none d-lg-block">
                             <nav>
                                 <ul id="navigation">
-                                    <li><a class="active" href="@homeUrl">home</a></li>
-                                    <li><a href="#about">About</a></li>
+                                    <li><a class="@(isHome ? "active" : null)" href="@homeUrl">home</a></li>
+                                    <li><a class="@(isAbout ? "active" : null)" href="@aboutUrl">About</a></li>
                                     <li>
-                                        <a href="#solutions">solutions <i class="ti-angle-down"></i></a>
+                                        <a class="@(isSolution ? "active" : null)" href="@(solutions.FirstOrDefault()?.Url() ?? bpoUrl)">solutions <i class="ti-angle-down"></i></a>
                                         <ul class="submenu">
-                                            <li><a href="#solutions">Business outsourcing</a></li>
-                                            <li><a href="#solutions">Healthcare solutions</a></li>
-                                            <li><a href="#solutions">Digital Transformation</a></li>
+                                            <li><a href="@bpoUrl">Business outsourcing</a></li>
+                                            <li><a href="@healthUrl">Healthcare solutions</a></li>
+                                            <li><a href="@digitalUrl">Digital Transformation</a></li>
                                         </ul>
                                     </li>
-                                    <li><a href="#contact">careers</a></li>
-                                    <li><a href="#contact">Blog</a></li>
+                                    <li><a href="@(homeUrl.TrimEnd('/'))#contact">careers</a></li>
+                                    <li><a href="@(homeUrl.TrimEnd('/'))#contact">Blog</a></li>
                                 </ul>
                             </nav>
                         </div>
@@ -53,7 +79,7 @@
                         @if (!string.IsNullOrWhiteSpace(ctaLabel) && !string.IsNullOrWhiteSpace(ctaLink))
                         {
                             <div class="get_in_tauch">
-                                <a href="@ctaLink" class="boxed-btn">@ctaLabel</a>
+                                <a href="@ctaLink" class="boxed-btn" target="@(headerCta?.Target)">@ctaLabel</a>
                             </div>
                         }
                     </div>

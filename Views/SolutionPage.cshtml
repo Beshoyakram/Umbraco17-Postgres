@@ -1,0 +1,336 @@
+﻿@using Umbraco.Cms.Core.Models.Blocks
+@using Umbraco.Cms.Core.Models.PublishedContent
+@using Centrocdx.Services
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
+@inject ISiteInfoService SiteInfo
+@{
+	Layout = "Layout.cshtml";
+
+	string? MediaUrl(string alias)
+	{
+		if (!Model.HasProperty(alias) || !Model.HasValue(alias)) return null;
+		try
+		{
+			return SiteInfo.GetMediaUrl(Model.Value<IPublishedContent>(alias));
+		}
+		catch (Exception)
+		{
+			return null;
+		}
+	}
+
+	string? Text(string alias)
+		=> Model.HasValue(alias) ? Model.Value<string>(alias) : null;
+
+	string Nl(string? value)
+		=> string.IsNullOrWhiteSpace(value)
+			? string.Empty
+			: value.Replace("\r\n", "<br>").Replace("\n", "<br>");
+
+	var bannerTitle = Text("bannerTitle");
+	var bannerImageUrl = MediaUrl("bannerImage");
+	var bannerThemeClass = Text("bannerThemeClass") ?? "bg";
+
+	var eyebrow = Text("eyebrow");
+	var title = Text("title");
+	var introHeading = Text("introHeading");
+	var introText = Text("introText");
+	var introImageUrl = MediaUrl("introImage");
+	var offersHeading = Text("offersHeading");
+	var offers = Model.HasValue("offers") ? Model.Value<BlockListModel>("offers") : null;
+
+	var featuresHeading = Text("featuresHeading");
+	var features = Model.HasValue("features") ? Model.Value<BlockListModel>("features") : null;
+
+	var ctaTitle = Text("ctaTitle");
+	var ctaText = Text("ctaText");
+	var ctaLabel = Text("ctaLabel");
+	var ctaLinkItem = SiteInfo.GetFirstLink(Model, "ctaUrl");
+	var ctaUrl = ctaLinkItem?.Url;
+	if (string.IsNullOrWhiteSpace(ctaLabel))
+	{
+		ctaLabel = ctaLinkItem?.Name;
+	}
+	if (string.IsNullOrWhiteSpace(ctaUrl))
+	{
+		ctaUrl = "#get-in-touch";
+	}
+
+	var testimonialsBackgroundUrl = MediaUrl("testimonialsBackground");
+	var testimonials = Model.HasValue("testimonials") ? Model.Value<BlockListModel>("testimonials") : null;
+
+	var getInTouchTitle = Text("getInTouchTitle") ?? "Get In Touch";
+	var formKey = Text("formKey") ?? "getInTouch";
+	var sourcePage = Model.UrlSegment ?? Model.Name ?? "solution";
+
+	var showBanner = !string.IsNullOrWhiteSpace(bannerTitle) || !string.IsNullOrWhiteSpace(bannerImageUrl);
+	var showIntro = !string.IsNullOrWhiteSpace(title) || !string.IsNullOrWhiteSpace(introHeading) || !string.IsNullOrWhiteSpace(introText);
+	var showFeatures = (features != null && features.Any()) || !string.IsNullOrWhiteSpace(featuresHeading);
+	var showCta = !string.IsNullOrWhiteSpace(ctaTitle) || !string.IsNullOrWhiteSpace(ctaLabel);
+	var showTestimonials = testimonials != null && testimonials.Any();
+	var showGetInTouch = true;
+	var featureColClass = features != null && features.Count() > 4 ? "col-lg-4" : "col-lg-3";
+}
+
+@section Head {
+	<link rel="stylesheet" href="~/css/pages/solution.css" asp-append-version="true" />
+}
+
+@if (showBanner)
+{
+	<div class="@bannerThemeClass" style="@(string.IsNullOrWhiteSpace(bannerImageUrl) ? null : $"--solution-banner-bg: url('{bannerImageUrl}');")">
+		<div class="breadcam_area bradcam_bg overlay2">
+			<div class="bradcam_text">
+				@if (!string.IsNullOrWhiteSpace(bannerTitle))
+				{
+					<h3>@bannerTitle</h3>
+				}
+			</div>
+		</div>
+	</div>
+}
+
+@if (showIntro || showFeatures || showCta)
+{
+	<div class="lastest_project">
+		<div class="container">
+			@if (showIntro)
+			{
+				<div class="row">
+					<div class="col-xl-12">
+						<div class="section_title mb-60">
+							@if (!string.IsNullOrWhiteSpace(eyebrow))
+							{
+								<span data-aos="fade-up" data-aos-duration="1000" class="sub_heading">@eyebrow</span>
+							}
+							@if (!string.IsNullOrWhiteSpace(title))
+							{
+								<h3 data-aos="fade-up" data-aos-duration="2000">@Html.Raw(Nl(title))</h3>
+								<div data-aos="fade-up" data-aos-duration="2000" class="seperator"></div>
+							}
+						</div>
+					</div>
+				</div>
+
+				<div class="row align-items-center mb-80">
+					<div class="col-xl-6 col-md-6">
+						<div class="section_title">
+							@if (!string.IsNullOrWhiteSpace(introHeading))
+							{
+								<h4 data-aos="fade-up" data-aos-duration="2000">@Html.Raw(Nl(introHeading))</h4>
+							}
+							@if (!string.IsNullOrWhiteSpace(introText))
+							{
+								<p data-aos="fade-up" data-aos-duration="3000">@introText</p>
+							}
+							@if (!string.IsNullOrWhiteSpace(offersHeading))
+							{
+								<h4 data-aos="fade-up" data-aos-duration="2000">@Html.Raw(Nl(offersHeading))</h4>
+							}
+							@if (offers != null)
+							{
+								foreach (var item in offers)
+								{
+									var offerLabel = item.Content.Value<string>("label");
+									var offerText = item.Content.Value<string>("text");
+									if (string.IsNullOrWhiteSpace(offerLabel) && string.IsNullOrWhiteSpace(offerText))
+									{
+										continue;
+									}
+									<p data-aos="fade-up" data-aos-duration="3000">
+										@if (!string.IsNullOrWhiteSpace(offerLabel))
+										{
+											<b style="color: #333;">@offerLabel</b>
+										}
+										@(offerText)
+									</p>
+								}
+							}
+						</div>
+					</div>
+					@if (!string.IsNullOrWhiteSpace(introImageUrl))
+					{
+						<div class="col-xl-5 offset-xl-1 col-md-6">
+							<div data-aos="fade-up" data-aos-duration="3000" class="single_project_thumb">
+								<img src="@introImageUrl" alt="@(introHeading ?? bannerTitle ?? "Solution")">
+							</div>
+						</div>
+					}
+				</div>
+			}
+
+			@if (showFeatures || showCta)
+			{
+				<div class="row align-items-center mb-80 text-center">
+					<div class="col-xl-12">
+						<div class="section_title">
+							@if (!string.IsNullOrWhiteSpace(featuresHeading))
+							{
+								<h4 data-aos="fade-up" data-aos-duration="2000">@featuresHeading</h4>
+							}
+							@if (features != null && features.Any())
+							{
+								<div class="row mt-5">
+									@foreach (var item in features)
+									{
+										var fTitle = item.Content.Value<string>("title");
+										var fText = item.Content.Value<string>("text");
+										var fMedia = item.Content.Value<IPublishedContent>("image");
+										var fImage = SiteInfo.GetMediaUrl(fMedia);
+										<div class="@featureColClass">
+											@if (!string.IsNullOrWhiteSpace(fImage))
+											{
+												<img class="mb-20" src="@fImage" alt="@(fTitle ?? "Feature")">
+											}
+											@if (!string.IsNullOrWhiteSpace(fTitle))
+											{
+												<h4>@Html.Raw(Nl(fTitle))</h4>
+											}
+											@if (!string.IsNullOrWhiteSpace(fText))
+											{
+												<p>@fText</p>
+											}
+										</div>
+									}
+								</div>
+							}
+							@if (showCta)
+							{
+								<div class="footer_header d-flex justify-content-between mt-5">
+									<div class="footer_header_left text-left">
+										@if (!string.IsNullOrWhiteSpace(ctaTitle))
+										{
+											<h3 data-aos="fade-up" data-aos-duration="2000">@ctaTitle</h3>
+										}
+										@if (!string.IsNullOrWhiteSpace(ctaText))
+										{
+											<p data-aos="fade-up" data-aos-duration="3000">@Html.Raw(Nl(ctaText))</p>
+										}
+									</div>
+									@if (!string.IsNullOrWhiteSpace(ctaLabel) && !string.IsNullOrWhiteSpace(ctaUrl))
+									{
+										<div data-aos="fade-up" data-aos-duration="3000" class="footer_btn">
+											<a href="@ctaUrl" class="boxed-btn solution-cta-btn" target="@(ctaLinkItem?.Target)">@ctaLabel</a>
+										</div>
+									}
+								</div>
+							}
+						</div>
+					</div>
+				</div>
+			}
+		</div>
+	</div>
+}
+
+@if (showTestimonials)
+{
+	<div class="testmonial_area testimonial_bg overlay2" style="@(string.IsNullOrWhiteSpace(testimonialsBackgroundUrl) ? null : $"--testimonials-bg: url('{testimonialsBackgroundUrl}');")">
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-xl-12">
+					<div class="testmonial_active owl-carousel">
+						@foreach (var item in testimonials!)
+						{
+							var content = item.Content;
+							var imageUrl = SiteInfo.GetMediaUrl(content.Value<IPublishedContent>("image"));
+							var quote = content.Value<string>("quote");
+							var authorName = content.Value<string>("authorName");
+							var authorTitle = content.Value<string>("authorTitle");
+							var authorRole = content.Value<string>("authorRole");
+							<div class="single_testmonial" data-aos="fade-up" data-aos-duration="1000">
+								<div class="testmonial_info text-center">
+									@if (!string.IsNullOrWhiteSpace(imageUrl))
+									{
+										<div class="author">
+											<img src="@imageUrl" alt="@(authorName ?? "Testimonial")" />
+										</div>
+									}
+									@if (!string.IsNullOrWhiteSpace(quote))
+									{
+										<p>“@quote”</p>
+									}
+									<div class="author_name">
+										@if (!string.IsNullOrWhiteSpace(authorName))
+										{
+											<h4>@authorName</h4>
+										}
+										@if (!string.IsNullOrWhiteSpace(authorTitle))
+										{
+											<h5>@authorTitle</h5>
+										}
+										@if (!string.IsNullOrWhiteSpace(authorRole))
+										{
+											<p class="solution-author-role">@authorRole</p>
+										}
+									</div>
+								</div>
+							</div>
+						}
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+}
+
+@if (showGetInTouch)
+{
+	<div id="get-in-touch" class="container solution-get-in-touch">
+		<div class="row">
+			<div class="col-lg-10 offset-1">
+				<h2 class="contact-title">@getInTouchTitle</h2>
+				<form class="form-contact contact_form" id="centro-get-in-touch-form" novalidate>
+					@Html.AntiForgeryToken()
+					<input type="hidden" name="formKey" value="@formKey" />
+					<input type="hidden" name="sourcePage" value="@sourcePage" />
+					<div class="row">
+						<div class="col-sm-6">
+							<div class="form-group">
+								<input class="form-control valid" type="text" maxlength="255" name="firstName" placeholder="First Name" required autocomplete="given-name" />
+							</div>
+						</div>
+						<div class="col-sm-6">
+							<div class="form-group">
+								<input class="form-control valid" type="text" maxlength="255" name="lastName" placeholder="Last Name" required autocomplete="family-name" />
+							</div>
+						</div>
+						<div class="col-sm-6">
+							<div class="form-group">
+								<input class="form-control valid" type="tel" maxlength="50" name="phone" placeholder="Phone" required autocomplete="tel" />
+							</div>
+						</div>
+						<div class="col-sm-6">
+							<div class="form-group">
+								<input class="form-control valid" type="email" maxlength="255" name="email" placeholder="Email" required autocomplete="email" />
+							</div>
+						</div>
+						<div class="col-sm-6">
+							<div class="form-group">
+								<input class="form-control valid" type="text" maxlength="255" name="occupation" placeholder="Occupation" autocomplete="organization-title" />
+							</div>
+						</div>
+						<div class="col-sm-6">
+							<div class="form-group">
+								<input class="form-control valid" type="text" maxlength="255" name="company" placeholder="Company" autocomplete="organization" />
+							</div>
+						</div>
+						<div class="col-12">
+							<div class="form-group">
+								<textarea class="form-control w-100" name="message" maxlength="2000" placeholder="Enter Message" required></textarea>
+							</div>
+						</div>
+					</div>
+					<div class="form-group mt-3">
+						<button type="submit" id="get-in-touch-submit-btn" class="button button-contactForm boxed-btn">Send</button>
+					</div>
+					<div id="form-response-message"></div>
+				</form>
+			</div>
+		</div>
+	</div>
+}
+
+@section Scripts {
+	<script src="~/js/pages/solution.js" asp-append-version="true"></script>
+}
