@@ -115,10 +115,13 @@ public class CentroServicesComposer : IComposer
         builder.Services.AddScoped<ICareerApplicationService, CareerApplicationService>();
         builder.UrlProviders().InsertBefore<NewDefaultUrlProvider, SolutionsFolderUrlProvider>();
         builder.UrlProviders().InsertBefore<NewDefaultUrlProvider, CareersFolderUrlProvider>();
-        // Inbound companion to CareersFolderUrlProvider (flat /job-slug → nested careerDetailPage).
+        builder.UrlProviders().InsertBefore<NewDefaultUrlProvider, BlogFolderUrlProvider>();
         builder.ContentFinders().InsertBefore<ContentFinderByUrlNew, CareersFolderContentFinder>();
+        builder.ContentFinders().InsertBefore<ContentFinderByUrlNew, BlogFolderContentFinder>();
         builder.AddNotificationAsyncHandler<UmbracoApplicationStartedNotification, HeroVideoMediaRepairHandler>();
         builder.AddNotificationAsyncHandler<UmbracoApplicationStartedNotification, SolutionMediaSeedHandler>();
         builder.AddNotificationAsyncHandler<UmbracoApplicationStartedNotification, CareerMediaSeedHandler>();
+        builder.AddNotificationAsyncHandler<UmbracoApplicationStartedNotification, BlogMediaSeedHandler>();
+        builder.AddNotificationAsyncHandler<UmbracoApplicationStartedNotification, PrivacyMediaSeedHandler>();
     }
 }

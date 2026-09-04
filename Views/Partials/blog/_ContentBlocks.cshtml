@@ -1,0 +1,218 @@
+@using Umbraco.Cms.Core.Models
+@using Umbraco.Cms.Core.Models.Blocks
+@using Umbraco.Cms.Core.Models.PublishedContent
+@using Centrocdx.Services
+@inject ISiteInfoService SiteInfo
+@model BlockListModel?
+@{
+	string? ResolveMediaUrl(object? mediaValue)
+	{
+		if (mediaValue == null) return null;
+		try
+		{
+			if (mediaValue is MediaWithCrops mwc)
+			{
+				return SiteInfo.GetMediaUrl(mwc.Content) ?? SiteInfo.GetMediaUrl(mwc);
+			}
+			if (mediaValue is IPublishedContent ipc)
+			{
+				return SiteInfo.GetMediaUrl(ipc);
+			}
+			if (mediaValue is IEnumerable<MediaWithCrops> manyCrops)
+			{
+				var first = manyCrops.FirstOrDefault();
+				return first == null ? null : SiteInfo.GetMediaUrl(first.Content) ?? SiteInfo.GetMediaUrl(first);
+			}
+			if (mediaValue is IEnumerable<IPublishedContent> many)
+			{
+				return SiteInfo.GetMediaUrl(many.FirstOrDefault());
+			}
+		}
+		catch (Exception)
+		{
+			return null;
+		}
+		return null;
+	}
+
+	string? FirstLinkUrl(IPublishedElement content, string alias)
+	{
+		var link = SiteInfo.GetFirstLink(content, alias);
+		return link?.Url;
+	}
+
+	static string? DropdownValue(IPublishedElement content, string alias)
+	{
+		try
+		{
+			var many = content.Value<IEnumerable<string>>(alias);
+			var first = many?.FirstOrDefault();
+			if (!string.IsNullOrWhiteSpace(first)) return first;
+		}
+		catch { /* ignore */ }
+		return content.Value<string>(alias);
+	}
+}
+
+@if (Model == null)
+{
+	return;
+}
+
+@foreach (var block in Model)
+{
+	var data = block.Content;
+	var alias = data.ContentType.Alias;
+
+	if (alias == "blogRichTextBlock")
+	{
+		var html = BlogRichTextHelper.Render(data, "text");
+		if (!string.IsNullOrWhiteSpace(html.ToString()))
+		{
+			<div class="blog-richtext-block">
+				@html
+			</div>
+		}
+	}
+	else if (alias == "blogHeadingBlock")
+	{
+		var heading = data.Value<string>("heading");
+		var level = (DropdownValue(data, "level") ?? "h2").Trim().ToLowerInvariant();
+		if (level is not ("h2" or "h3")) level = "h2";
+		var anchorId = data.Value<string>("anchorId");
+		if (!string.IsNullOrWhiteSpace(heading))
+		{
+			<div class="blog-heading-block" id="@(!string.IsNullOrWhiteSpace(anchorId) ? anchorId : null)">
+				@if (level == "h3")
+				{
+					<h3>@heading</h3>
+				}
+				else
+				{
+					<h2>@heading</h2>
+				}
+			</div>
+		}
+	}
+	else if (alias == "blogSectionBlock")
+	{
+		var number = data.Value<string>("number");
+		var title = data.Value<string>("title");
+		var anchorId = data.Value<string>("anchorId");
+		var bodyHtml = BlogRichTextHelper.Render(data, "body");
+		<section class="blog-section-block" id="@(!string.IsNullOrWhiteSpace(anchorId) ? anchorId : null)">
+			<div class="blog-section-head">
+				@if (!string.IsNullOrWhiteSpace(number))
+				{
+					<span class="blog-section-num">@number</span>
+				}
+				@if (!string.IsNullOrWhiteSpace(title))
+				{
+					<h2>@title</h2>
+				}
+			</div>
+			@if (!string.IsNullOrWhiteSpace(bodyHtml.ToString()))
+			{
+				<div class="blog-section-body">
+					@bodyHtml
+				</div>
+			}
+		</section>
+	}
+	else if (alias == "blogImageBlock")
+	{
+		var imgUrl = ResolveMediaUrl(data.Value("image"));
+		var caption = data.Value<string>("caption");
+		if (!string.IsNullOrWhiteSpace(imgUrl))
+		{
+			<figure class="blog-image-block">
+				<img class="img-fluid" src="@imgUrl" alt="@(caption ?? "Blog image")" loading="lazy">
+				@if (!string.IsNullOrWhiteSpace(caption))
+				{
+					<figcaption>@caption</figcaption>
+				}
+			</figure>
+		}
+	}
+	else if (alias == "blogCalloutBlock")
+	{
+		var label = data.Value<string>("label");
+		var text = data.Value<string>("text");
+		if (!string.IsNullOrWhiteSpace(label) || !string.IsNullOrWhiteSpace(text))
+		{
+			<aside class="blog-callout-block">
+				@if (!string.IsNullOrWhiteSpace(label))
+				{
+					<span class="blog-callout-label">@label</span>
+				}
+				@if (!string.IsNullOrWhiteSpace(text))
+				{
+					<p>@text</p>
+				}
+			</aside>
+		}
+	}
+	else if (alias == "blogFaqItemBlock")
+	{
+		var question = data.Value<string>("question");
+		var answer = data.Value<string>("answer");
+		if (!string.IsNullOrWhiteSpace(question))
+		{
+			<details class="blog-faq-item">
+				<summary>@question</summary>
+				@if (!string.IsNullOrWhiteSpace(answer))
+				{
+					<p>@answer</p>
+				}
+			</details>
+		}
+	}
+	else if (alias == "blogCtaBlock")
+	{
+		var eyebrow = data.Value<string>("eyebrow");
+		var title = data.Value<string>("title");
+		var text = data.Value<string>("text");
+		var buttonLabel = data.Value<string>("buttonLabel");
+		var buttonUrl = FirstLinkUrl(data, "buttonLink");
+		<aside class="blog-cta-block">
+			@if (!string.IsNullOrWhiteSpace(eyebrow))
+			{
+				<span class="blog-cta-eyebrow">@eyebrow</span>
+			}
+			@if (!string.IsNullOrWhiteSpace(title))
+			{
+				<h2>@title</h2>
+			}
+			@if (!string.IsNullOrWhiteSpace(text))
+			{
+				@foreach (var para in text.Split(new[] { "\r\n\r\n", "\n\n" }, StringSplitOptions.RemoveEmptyEntries))
+				{
+					<p>@para.Trim()</p>
+				}
+			}
+			@if (!string.IsNullOrWhiteSpace(buttonLabel) && !string.IsNullOrWhiteSpace(buttonUrl))
+			{
+				<a class="blog-cta-btn" href="@buttonUrl">@buttonLabel</a>
+			}
+		</aside>
+	}
+	else if (alias == "blogQuoteBlock")
+	{
+		var quote = data.Value<string>("quote");
+		var attribution = data.Value<string>("attribution");
+		if (!string.IsNullOrWhiteSpace(quote))
+		{
+			<blockquote class="blog-quote-block">
+				<p>@quote</p>
+				@if (!string.IsNullOrWhiteSpace(attribution))
+				{
+					<footer>@attribution</footer>
+				}
+			</blockquote>
+		}
+	}
+	else if (alias == "blogHtmlBlock")
+	{
+		@BlogHtmlHelper.ToHtml(data.Value<string>("html"))
+	}
+}

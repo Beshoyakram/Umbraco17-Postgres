@@ -1,0 +1,311 @@
+﻿@using System.Globalization
+@using System.Text.RegularExpressions
+@using Umbraco.Cms.Core.Models
+@using Umbraco.Cms.Core.Models.Blocks
+@using Umbraco.Cms.Core.Models.PublishedContent
+@using Umbraco.Cms.Core.Strings
+@using Centrocdx.Services
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
+@inject ISiteInfoService SiteInfo
+@{
+	Layout = "Layout.cshtml";
+
+	string? ResolveMediaUrl(object? mediaValue)
+	{
+		if (mediaValue == null) return null;
+		try
+		{
+			if (mediaValue is MediaWithCrops mwc)
+			{
+				return SiteInfo.GetMediaUrl(mwc.Content) ?? SiteInfo.GetMediaUrl(mwc);
+			}
+			if (mediaValue is IPublishedContent ipc)
+			{
+				return SiteInfo.GetMediaUrl(ipc);
+			}
+			if (mediaValue is IEnumerable<MediaWithCrops> manyCrops)
+			{
+				var first = manyCrops.FirstOrDefault();
+				return first == null ? null : SiteInfo.GetMediaUrl(first.Content) ?? SiteInfo.GetMediaUrl(first);
+			}
+			if (mediaValue is IEnumerable<IPublishedContent> many)
+			{
+				return SiteInfo.GetMediaUrl(many.FirstOrDefault());
+			}
+		}
+		catch (Exception)
+		{
+			return null;
+		}
+		return null;
+	}
+
+	string? MediaUrl(string alias)
+	{
+		if (!Model.HasProperty(alias) || !Model.HasValue(alias)) return null;
+		try
+		{
+			return ResolveMediaUrl(Model.Value(alias));
+		}
+		catch (Exception)
+		{
+			return null;
+		}
+	}
+
+	string? Text(string alias)
+		=> Model.HasValue(alias) ? Model.Value<string>(alias) : null;
+
+	static string StripHtml(string? html)
+	{
+		if (string.IsNullOrWhiteSpace(html)) return string.Empty;
+		return Regex.Replace(html, "<[^>]+>", " ");
+	}
+
+	static string BlockSearchText(IPublishedContent post)
+	{
+		if (!post.HasValue("contentBlocks")) return string.Empty;
+		var blocks = post.Value<BlockListModel>("contentBlocks");
+		if (blocks == null) return string.Empty;
+		var parts = new List<string>();
+		foreach (var block in blocks)
+		{
+			var data = block.Content;
+			var alias = data.ContentType.Alias;
+			if (alias == "blogHtmlBlock")
+			{
+				parts.Add(StripHtml(data.Value<string>("html")));
+			}
+			else if (alias == "blogRichTextBlock")
+			{
+				parts.Add(StripHtml(data.Value<IHtmlEncodedString>("text")?.ToString()));
+			}
+			else if (alias == "blogImageBlock")
+			{
+				parts.Add(data.Value<string>("caption") ?? string.Empty);
+			}
+			else if (alias == "blogHeadingBlock")
+			{
+				parts.Add(data.Value<string>("heading") ?? string.Empty);
+			}
+			else if (alias == "blogSectionBlock")
+			{
+				parts.Add(data.Value<string>("title") ?? string.Empty);
+				parts.Add(StripHtml(data.Value<IHtmlEncodedString>("body")?.ToString()));
+			}
+			else if (alias == "blogCalloutBlock")
+			{
+				parts.Add(data.Value<string>("label") ?? string.Empty);
+				parts.Add(data.Value<string>("text") ?? string.Empty);
+			}
+			else if (alias == "blogFaqItemBlock")
+			{
+				parts.Add(data.Value<string>("question") ?? string.Empty);
+				parts.Add(data.Value<string>("answer") ?? string.Empty);
+			}
+			else if (alias == "blogCtaBlock")
+			{
+				parts.Add(data.Value<string>("title") ?? string.Empty);
+				parts.Add(data.Value<string>("text") ?? string.Empty);
+			}
+			else if (alias == "blogQuoteBlock")
+			{
+				parts.Add(data.Value<string>("quote") ?? string.Empty);
+				parts.Add(data.Value<string>("attribution") ?? string.Empty);
+			}
+		}
+		return string.Join(" ", parts);
+	}
+
+	static bool MatchesQuery(IPublishedContent post, string query)
+	{
+		if (string.IsNullOrWhiteSpace(query)) return true;
+		var tokens = query.Split(' ', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+		var bodyText = post.HasValue("body")
+			? StripHtml(post.Value<string>("body") ?? post.Value<IHtmlEncodedString>("body")?.ToString())
+			: null;
+		var haystack = string.Join(" ",
+			post.Name,
+			post.HasValue("postTitle") ? post.Value<string>("postTitle") : null,
+			post.HasValue("excerpt") ? post.Value<string>("excerpt") : null,
+			post.HasValue("category") ? post.Value<string>("category") : null,
+			bodyText,
+			BlockSearchText(post));
+		return tokens.All(token => haystack.Contains(token, StringComparison.OrdinalIgnoreCase));
+	}
+
+	var bannerTitle = Text("bannerTitle") ?? "Blog";
+	var bannerImageUrl = MediaUrl("bannerImage");
+	var blogUrl = Model.Url();
+	var searchQuery = (Context.Request.Query["s"].ToString() ?? string.Empty).Trim();
+	var pageSize = 5;
+	var pageRaw = Context.Request.Query["page"].ToString();
+	var currentPage = int.TryParse(pageRaw, out var parsedPage) && parsedPage > 0 ? parsedPage : 1;
+
+	var allPosts = SiteInfo.GetBlogPosts().ToList();
+	var filtered = allPosts.Where(p => MatchesQuery(p, searchQuery)).ToList();
+	var totalPages = Math.Max(1, (int)Math.Ceiling(filtered.Count / (double)pageSize));
+	if (currentPage > totalPages) currentPage = totalPages;
+	var posts = filtered.Skip((currentPage - 1) * pageSize).Take(pageSize).ToList();
+	var recent = allPosts.Take(5).ToList();
+
+	string PageUrl(int page)
+	{
+		var q = new List<string>();
+		if (!string.IsNullOrWhiteSpace(searchQuery))
+		{
+			q.Add("s=" + Uri.EscapeDataString(searchQuery));
+		}
+		if (page > 1)
+		{
+			q.Add("page=" + page);
+		}
+		return q.Count == 0 ? blogUrl : blogUrl.TrimEnd('/') + "/?" + string.Join("&", q);
+	}
+}
+
+@section Head {
+	<link rel="stylesheet" href="~/css/pages/blog.css" asp-append-version="true" />
+}
+
+<div class="bg4" style="@(string.IsNullOrWhiteSpace(bannerImageUrl) ? null : $"--blog-banner-bg: url('{bannerImageUrl}');")">
+	<div class="breadcam_area bradcam_bg overlay2">
+		<div class="bradcam_text">
+			<h3>@bannerTitle</h3>
+		</div>
+	</div>
+</div>
+
+<section class="blog_area section-padding blog-listing">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-8 mb-5 mb-lg-0">
+				<div class="blog_left_sidebar">
+					@if (!string.IsNullOrWhiteSpace(searchQuery))
+					{
+						<p class="blog-search-summary">
+							@(filtered.Count) result@(filtered.Count == 1 ? "" : "s") for “@searchQuery”
+							@if (filtered.Count > 0)
+							{
+								<a href="@blogUrl">Clear</a>
+							}
+						</p>
+					}
+
+					@if (posts.Count == 0)
+					{
+						<p class="blog-empty">No blog posts matched your search.</p>
+					}
+
+					@foreach (var post in posts)
+					{
+						var title = post.HasValue("postTitle") ? post.Value<string>("postTitle") : post.Name;
+						var excerpt = post.HasValue("excerpt") ? post.Value<string>("excerpt") : null;
+						var category = post.HasValue("category") ? post.Value<string>("category") : null;
+						var imageUrl = post.HasValue("featuredImage") ? ResolveMediaUrl(post.Value("featuredImage")) : null;
+						DateTime? publishDate = post.HasValue("publishDate") ? post.Value<DateTime>("publishDate") : null;
+						<article class="blog_item">
+							<div class="blog_item_img">
+								@if (!string.IsNullOrWhiteSpace(imageUrl))
+								{
+									<img class="card-img rounded-0" src="@imageUrl" alt="@title" loading="lazy">
+								}
+								@if (publishDate.HasValue)
+								{
+									<a href="@post.Url()" class="blog_item_date">
+										<h3>@publishDate.Value.ToString("dd")</h3>
+										<p>@publishDate.Value.ToString("MMM", CultureInfo.InvariantCulture)</p>
+									</a>
+								}
+							</div>
+							<div class="blog_details">
+								<a class="d-inline-block" href="@post.Url()">
+									<h2>@title</h2>
+								</a>
+								@if (!string.IsNullOrWhiteSpace(excerpt))
+								{
+									<p>@excerpt</p>
+								}
+								@if (!string.IsNullOrWhiteSpace(category))
+								{
+									<ul class="blog-info-link">
+										<li><i class="fa fa-user"></i> @category</li>
+									</ul>
+								}
+							</div>
+						</article>
+					}
+
+					@if (totalPages > 1)
+					{
+						<nav class="blog-pagination justify-content-center d-flex">
+							<ul class="pagination">
+								@for (var i = 1; i <= totalPages; i++)
+								{
+									<li class="page-item @(i == currentPage ? "active" : null)">
+										@if (i == currentPage)
+										{
+											<span aria-current="page" class="page-link current">@i</span>
+										}
+										else
+										{
+											<a class="page-link" href="@PageUrl(i)">@i</a>
+										}
+									</li>
+								}
+								@if (currentPage < totalPages)
+								{
+									<li class="page-item">
+										<a class="next page-link" href="@PageUrl(currentPage + 1)"><i class="ti-angle-right"></i></a>
+									</li>
+								}
+							</ul>
+						</nav>
+					}
+				</div>
+			</div>
+			<div class="col-lg-4">
+				<div class="blog_right_sidebar">
+					<aside class="single_sidebar_widget search_widget">
+						<form method="get" action="@blogUrl" id="blog-search-form">
+							<div class="form-group">
+								<div class="input-group mb-3">
+									<input class="form-control" type="text" name="s" value="@searchQuery" placeholder="Search Keyword" autocomplete="off" />
+									<div class="input-group-append">
+										<button class="btn" type="submit" aria-label="Search"><i class="ti-search"></i></button>
+									</div>
+								</div>
+							</div>
+							<button class="button rounded-0 primary-bg text-white w-100 btn_1 boxed-btn" type="submit">Search</button>
+						</form>
+					</aside>
+
+					<aside class="single_sidebar_widget popular_post_widget">
+						<h3 class="widget_title">Recent Post</h3>
+						@foreach (var post in recent)
+						{
+							var title = post.HasValue("postTitle") ? post.Value<string>("postTitle") : post.Name;
+							var imageUrl = post.HasValue("featuredImage") ? ResolveMediaUrl(post.Value("featuredImage")) : null;
+							DateTime? publishDate = post.HasValue("publishDate") ? post.Value<DateTime>("publishDate") : null;
+							<div class="media post_item">
+								@if (!string.IsNullOrWhiteSpace(imageUrl))
+								{
+									<img src="@imageUrl" alt="@title" loading="lazy">
+								}
+								<div class="media-body">
+									<a href="@post.Url()">
+										<h3>@title</h3>
+									</a>
+									@if (publishDate.HasValue)
+									{
+										<p>@publishDate.Value.ToString("MMMM d, yyyy", CultureInfo.InvariantCulture)</p>
+									}
+								</div>
+							</div>
+						}
+					</aside>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>

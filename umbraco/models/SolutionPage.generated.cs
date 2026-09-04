@@ -50,20 +50,12 @@ namespace Umbraco.Cms.Web.Common.PublishedModels
 		// properties
 
 		///<summary>
-		/// Banner Image: Optional banner background image. When set, overrides the theme class background.
+		/// Banner Image: Optional banner background image. When set, overrides the default theme banner background.
 		///</summary>
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
 		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
 		[ImplementPropertyType("bannerImage")]
 		public virtual global::Umbraco.Cms.Core.Models.MediaWithCrops BannerImage => this.Value<global::Umbraco.Cms.Core.Models.MediaWithCrops>(_publishedValueFallback, "bannerImage");
-
-		///<summary>
-		/// Banner Theme Class: Theme wrapper class: bg (BPO), bg1 (Digital), bg2 (Healthcare).
-		///</summary>
-		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
-		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
-		[ImplementPropertyType("bannerThemeClass")]
-		public virtual string BannerThemeClass => this.Value<string>(_publishedValueFallback, "bannerThemeClass");
 
 		///<summary>
 		/// Banner Title

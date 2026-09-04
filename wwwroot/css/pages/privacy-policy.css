@@ -1,0 +1,26 @@
+/* Privacy Policy — banner image from CMS; body mirrors centrocdx.com */
+
+.bg14[style*="--privacy-banner-bg"] .breadcam_area {
+  background-image: var(--privacy-banner-bg);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+}
+
+.privacy-policy-page {
+  padding-bottom: 40px;
+}
+
+.privacy-policy-page .section_title h4,
+.privacy-policy-page .section_title h5 {
+  margin-top: 1.25rem;
+  margin-bottom: 0.75rem;
+}
+
+.privacy-policy-page .section_title ul {
+  margin: 0 0 1rem;
+}
+
+.privacy-policy-page .section_title li {
+  margin-bottom: 0.4rem;
+}

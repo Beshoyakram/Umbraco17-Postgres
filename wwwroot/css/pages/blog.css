@@ -1,0 +1,344 @@
+/* Blog listing + detail — chrome only.
+   Article body styling for mirrored production posts comes from each post's own <style> embed. */
+
+.bg4[style*="--blog-banner-bg"] .breadcam_area {
+  background-image: var(--blog-banner-bg);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+}
+
+.blog-listing .blog_item {
+  margin-bottom: 40px;
+}
+
+.blog-listing .blog_item_img {
+  position: relative;
+  overflow: hidden;
+}
+
+.blog-listing .blog_item_img img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.blog-detail .post-views {
+  color: #8a8a8a;
+  font-weight: 400;
+}
+
+.blog-detail .post-views .fa,
+.blog-detail .post-views .fa-solid {
+  margin-right: 4px;
+}
+
+.blog-detail .feature-img {
+  margin-bottom: 24px;
+  overflow: hidden;
+}
+
+.blog-detail .feature-img img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.blog-detail .blog_details > h2 {
+  margin-bottom: 0;
+}
+
+.blog-detail .excert {
+  margin-bottom: 18px;
+}
+
+.blog-detail .blog-full-body {
+  overflow-x: clip;
+  max-width: 100%;
+}
+
+/* Optional component blocks (for new editor-built posts) */
+.blog-detail .blog-richtext-block {
+  margin-bottom: 20px;
+}
+
+.blog-detail .blog-richtext-block p {
+  margin: 0 0 16px;
+}
+
+.blog-detail .blog-heading-block {
+  scroll-margin-top: 100px;
+  margin-top: 28px;
+  margin-bottom: 12px;
+}
+
+.blog-detail .blog-heading-block h2,
+.blog-detail .blog-heading-block h3 {
+  margin: 0;
+  color: #015376;
+}
+
+.blog-detail .blog-section-block {
+  margin: 40px 0 0;
+  scroll-margin-top: 100px;
+}
+
+.blog-detail .blog-section-head {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 14px;
+  align-items: start;
+  padding-top: 18px;
+  border-top: 1px solid #cfdae0;
+}
+
+.blog-detail .blog-section-num {
+  color: #009cc1;
+  font-size: 2.4rem;
+  font-weight: 650;
+  line-height: 0.95;
+  letter-spacing: -0.05em;
+  font-family: system-ui, sans-serif;
+}
+
+.blog-detail .blog-section-head h2 {
+  margin: 0;
+  color: #015376;
+  font-size: clamp(1.45rem, 2.8vw, 1.9rem);
+  line-height: 1.2;
+}
+
+.blog-detail .blog-section-body {
+  margin-top: 18px;
+}
+
+.blog-detail .blog-image-block {
+  margin: 24px 0;
+}
+
+.blog-detail .blog-image-block img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.blog-detail .blog-image-block figcaption {
+  margin-top: 8px;
+  color: #6b7c85;
+  font-size: 0.9rem;
+  font-family: system-ui, sans-serif;
+}
+
+.blog-detail .blog-callout-block {
+  margin: 22px 0;
+  padding: 18px 20px;
+  border-left: 3px solid #009cc1;
+  background: linear-gradient(90deg, #f4fafb, #fff);
+}
+
+.blog-detail .blog-callout-label {
+  display: block;
+  margin-bottom: 6px;
+  color: #009cc1;
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-family: system-ui, sans-serif;
+}
+
+.blog-detail .blog-callout-block p {
+  margin: 0;
+  color: #153846;
+}
+
+.blog-detail .blog-faq-item {
+  border-top: 1px solid #cfdae0;
+}
+
+.blog-detail .blog-faq-item:last-of-type {
+  border-bottom: 1px solid #cfdae0;
+}
+
+.blog-detail .blog-faq-item summary {
+  position: relative;
+  padding: 16px 40px 16px 0;
+  cursor: pointer;
+  font-weight: 700;
+  color: #153846;
+  list-style: none;
+  font-family: system-ui, sans-serif;
+}
+
+.blog-detail .blog-faq-item summary::-webkit-details-marker {
+  display: none;
+}
+
+.blog-detail .blog-faq-item summary::after {
+  content: "+";
+  position: absolute;
+  right: 4px;
+  top: 14px;
+  color: #009cc1;
+  font-size: 1.35rem;
+  font-weight: 400;
+}
+
+.blog-detail .blog-faq-item[open] summary::after {
+  content: "–";
+}
+
+.blog-detail .blog-faq-item p {
+  margin: 0 0 16px;
+  padding-right: 24px;
+  color: #536874;
+}
+
+.blog-detail .blog-cta-block {
+  margin: 36px 0 0;
+  padding: 24px;
+  border: 1px solid #cfdae0;
+  background: linear-gradient(135deg, #f4fafb, #fff);
+}
+
+.blog-detail .blog-cta-eyebrow {
+  display: block;
+  margin-bottom: 10px;
+  color: #009cc1;
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-family: system-ui, sans-serif;
+}
+
+.blog-detail .blog-cta-block h2 {
+  margin: 0 0 12px;
+  color: #015376;
+}
+
+.blog-detail .blog-cta-block p {
+  margin: 0 0 16px;
+  color: #536874;
+}
+
+.blog-detail .blog-cta-btn {
+  display: inline-flex;
+  align-items: center;
+  padding: 12px 18px;
+  background: #009cc1;
+  color: #fff !important;
+  font-weight: 700;
+  text-decoration: none !important;
+  font-family: system-ui, sans-serif;
+}
+
+.blog-detail .blog-cta-btn:hover {
+  background: #015376;
+  color: #fff !important;
+}
+
+.blog-detail .blog-quote-block {
+  margin: 24px 0;
+  padding: 18px 20px;
+  border-left: 3px solid #015376;
+  background: #f7fbfc;
+}
+
+.blog-detail .blog-quote-block p {
+  margin: 0;
+  color: #153846;
+  font-size: 1.05rem;
+  font-style: italic;
+}
+
+.blog-detail .blog-quote-block footer {
+  margin-top: 10px;
+  color: #6b7c85;
+  font-size: 0.85rem;
+}
+
+/* Production HTML embeds — do not restyle custom internals */
+.blog-detail .blog-html-embed {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: clip;
+}
+
+.blog-detail .blog-html-embed img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Plain WordPress prose posts (no custom <style>) */
+.blog-detail .blog-html-embed > p,
+.blog-detail .blog-html-embed .wp-block-paragraph {
+  margin: 0 0 16px;
+}
+
+.blog-detail .blog-html-embed > h2,
+.blog-detail .blog-html-embed > h3,
+.blog-detail .blog-html-embed .wp-block-heading {
+  margin: 24px 0 12px;
+}
+
+.blog-detail .blog_right_sidebar {
+  position: sticky;
+  top: 100px;
+}
+
+.blog-detail .popular_post_widget .post_item,
+.blog-listing .popular_post_widget .post_item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.blog-detail .popular_post_widget .post_item img,
+.blog-listing .popular_post_widget .post_item img {
+  width: 80px;
+  min-width: 80px;
+  height: 80px;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.blog-detail .popular_post_widget .media-body,
+.blog-listing .popular_post_widget .media-body {
+  min-width: 0;
+}
+
+.blog-sidebar-empty {
+  margin: 0;
+  color: #8a8a8a;
+  font-family: system-ui, sans-serif;
+}
+
+.blog-search-summary {
+  margin-bottom: 24px;
+  font-family: system-ui, sans-serif;
+}
+
+.blog-search-summary a {
+  margin-left: 8px;
+  color: #025376;
+  text-decoration: underline;
+}
+
+.blog-empty {
+  margin: 24px 0 40px;
+  font-family: system-ui, sans-serif;
+}
+
+.blog-listing .blog-pagination {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+@media (max-width: 991px) {
+  .blog-detail .blog_right_sidebar {
+    position: static;
+    margin-top: 40px;
+  }
+}

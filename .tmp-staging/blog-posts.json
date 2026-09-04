@@ -1,0 +1,106 @@
+{
+  "posts": [
+    {
+      "href": "https://staging.centrocdx.com/how-to-design-a-consistent-student-experience/",
+      "slug": "how-to-design-a-consistent-student-experience",
+      "title": "28",
+      "img": "https://staging.centrocdx.com/wp-content/uploads/2026/05/Blog-2-1.png",
+      "excerpt": "May"
+    },
+    {
+      "href": "https://staging.centrocdx.com/why-outsourcing-education-services-is-critical-during-peak-academic-cycles/",
+      "slug": "why-outsourcing-education-services-is-critical-during-peak-academic-cycles",
+      "title": "25",
+      "img": "https://staging.centrocdx.com/wp-content/uploads/2026/05/Blog-1-1.png",
+      "excerpt": "May"
+    },
+    {
+      "href": "https://staging.centrocdx.com/centro-places-in-top-500-global-outsourcing-firm-index/",
+      "slug": "centro-places-in-top-500-global-outsourcing-firm-index",
+      "title": "20",
+      "img": "https://staging.centrocdx.com/wp-content/uploads/2026/05/Blog-17-1.png",
+      "excerpt": "May"
+    },
+    {
+      "href": "https://staging.centrocdx.com/the-4-layers-of-consistent-customer-experience/",
+      "slug": "the-4-layers-of-consistent-customer-experience",
+      "title": "07",
+      "img": "https://staging.centrocdx.com/wp-content/uploads/2026/05/Blog-1.png",
+      "excerpt": "May"
+    },
+    {
+      "href": "https://staging.centrocdx.com/predictive-customer-experience-using-data-to-prevent-problems-before-they-happen/",
+      "slug": "predictive-customer-experience-using-data-to-prevent-problems-before-they-happen",
+      "title": "23",
+      "img": "https://staging.centrocdx.com/wp-content/uploads/2026/04/Blog.png",
+      "excerpt": "Apr"
+    }
+  ],
+  "details": {
+    "how-to-design-a-consistent-student-experience": {
+      "href": "https://staging.centrocdx.com/how-to-design-a-consistent-student-experience/",
+      "slug": "how-to-design-a-consistent-student-experience",
+      "title": "Design a Consistent Student Experience",
+      "img": "https://staging.centrocdx.com/wp-content/uploads/2026/05/Blog-2-1.png",
+      "date": "May 28, 2026",
+      "excerpt": "May",
+      "banner": "Blog Details",
+      "views": 91,
+      "featureImg": "https://staging.centrocdx.com/wp-content/uploads/2026/05/Blog-2-1.png",
+      "bodyLen": 12904,
+      "bodyPreview": "<p class=\"excert\"><p>Higher education leaders often mistake a quiet inbox for a satisfied student body. In reality, silence usually signals a student who has already checked out mentally. By the time the withdrawal form hits the registrar, the opportunity to intervene has vanished. </p>\n<p>A consistent student support services experience acts as an early warning system for disengagement. This stra"
+    },
+    "why-outsourcing-education-services-is-critical-during-peak-academic-cycles": {
+      "href": "https://staging.centrocdx.com/why-outsourcing-education-services-is-critical-during-peak-academic-cycles/",
+      "slug": "why-outsourcing-education-services-is-critical-during-peak-academic-cycles",
+      "title": "Why Outsourcing Education Services Is Critical During Peak Academic Cycles",
+      "img": "https://staging.centrocdx.com/wp-content/uploads/2026/05/Blog-1-1.png",
+      "date": "May 28, 2026",
+      "excerpt": "May",
+      "banner": "Blog Details",
+      "views": 86,
+      "featureImg": "https://staging.centrocdx.com/wp-content/uploads/2026/05/Blog-1-1.png",
+      "bodyLen": 11664,
+      "bodyPreview": "<p class=\"excert\"><p>Every institution knows what&#8217;s coming. When the application season is open, enrollment deadlines start to pile up, and suddenly, a team that handled things reasonably well last month is struggling to keep up with demand.</p>\n<p>At its core, this is a structural problem. Peak academic cycles expose the gaps that normal operations don’t typically show, and without the righ"
+    },
+    "centro-places-in-top-500-global-outsourcing-firm-index": {
+      "href": "https://staging.centrocdx.com/centro-places-in-top-500-global-outsourcing-firm-index/",
+      "slug": "centro-places-in-top-500-global-outsourcing-firm-index",
+      "title": "Centro Places in Top 500 Global Outsourcing Firm Index",
+      "img": "https://staging.centrocdx.com/wp-content/uploads/2026/05/Blog-17-1.png",
+      "date": "May 28, 2026",
+      "excerpt": "May",
+      "banner": "Blog Details",
+      "views": 72,
+      "featureImg": "https://staging.centrocdx.com/wp-content/uploads/2026/05/Blog-17-1.png",
+      "bodyLen": 4117,
+      "bodyPreview": "<p class=\"excert\"><p>Centro has been named to the OA500 Global Outsourcing Firm Index, the definitive ranking of the world’s top business process outsourcing providers by Outsource Accelerator.</p>\n</p>\n                            <p>\n<p class=\"wp-block-paragraph\">The OA500 evaluates more than 3,300 firms globally, drawing on 12 months of comprehensive research across 20+ objective data points. Fr"
+    },
+    "the-4-layers-of-consistent-customer-experience": {
+      "href": "https://staging.centrocdx.com/the-4-layers-of-consistent-customer-experience/",
+      "slug": "the-4-layers-of-consistent-customer-experience",
+      "title": "The 4 Layers of Consistent Customer Experience",
+      "img": "https://staging.centrocdx.com/wp-content/uploads/2026/05/Blog-1.png",
+      "date": "May 28, 2026",
+      "excerpt": "May",
+      "banner": "Blog Details",
+      "views": 120,
+      "featureImg": "https://staging.centrocdx.com/wp-content/uploads/2026/05/Blog-1.png",
+      "bodyLen": 14378,
+      "bodyPreview": "<p class=\"excert\"><p>Most customer experiences don’t fall apart all at once. They lose consistency over time through small inconsistencies, growing friction, and interactions that make people feel like just another ticket.  </p>\n<p>The problem is that most businesses only notice once it starts affecting results. You’ll see retention dropping, cancellations increasing, and support queues getting he"
+    },
+    "predictive-customer-experience-using-data-to-prevent-problems-before-they-happen": {
+      "href": "https://staging.centrocdx.com/predictive-customer-experience-using-data-to-prevent-problems-before-they-happen/",
+      "slug": "predictive-customer-experience-using-data-to-prevent-problems-before-they-happen",
+      "title": "Predictive Customer Experience: Using Data to Prevent Problems Before They Happen",
+      "img": "https://staging.centrocdx.com/wp-content/uploads/2026/04/Blog.png",
+      "date": "May 28, 2026",
+      "excerpt": "Apr",
+      "banner": "Blog Details",
+      "views": 121,
+      "featureImg": "https://staging.centrocdx.com/wp-content/uploads/2026/04/Blog.png",
+      "bodyLen": 10375,
+      "bodyPreview": "<p class=\"excert\"><p>Most businesses only find out something went wrong when a complaint arrives. By then, the frustration has already set in, the trust is already cracked, and the damage is already done.</p>\n</p>\n                            <p>\n<p class=\"wp-block-paragraph\">That’s the reactive model, and it’s still the default for many companies. Customers today expect not to have problems in the"
+    }
+  }
+}

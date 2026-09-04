@@ -15,8 +15,11 @@ public interface ISiteInfoService
     IPublishedContent? GetHomePage();
     IPublishedContent? GetAboutPage();
     IPublishedContent? GetGetInTouchPage();
+    IPublishedContent? GetPrivacyPolicyPage();
     IPublishedContent? GetCareersPage();
     IEnumerable<IPublishedContent> GetCareerJobs();
+    IPublishedContent? GetBlogPage();
+    IEnumerable<IPublishedContent> GetBlogPosts();
     IPublishedContent? GetSolutionPage(string urlSegment);
     IEnumerable<IPublishedContent> GetSolutionPages();
     string? GetMediaUrl(IPublishedContent? media);
@@ -68,6 +71,11 @@ public class SiteInfoService : ISiteInfoService
             .SelectMany(x => x.DescendantsOrSelfOfType("getInTouchPage"))
             .FirstOrDefault();
 
+    public IPublishedContent? GetPrivacyPolicyPage()
+        => _umbracoHelper.ContentAtRoot()
+            .SelectMany(x => x.DescendantsOrSelfOfType("privacyPolicyPage"))
+            .FirstOrDefault();
+
     public IPublishedContent? GetCareersPage()
         => _umbracoHelper.ContentAtRoot()
             .SelectMany(x => x.DescendantsOrSelfOfType("careersPage"))
@@ -78,6 +86,19 @@ public class SiteInfoService : ISiteInfoService
             .ChildrenOfType("careerDetailPage")
             .Where(x => x.IsPublished())
             .OrderBy(x => x.SortOrder)
+            ?? Enumerable.Empty<IPublishedContent>();
+
+    public IPublishedContent? GetBlogPage()
+        => _umbracoHelper.ContentAtRoot()
+            .SelectMany(x => x.DescendantsOrSelfOfType("blogPage"))
+            .FirstOrDefault();
+
+    public IEnumerable<IPublishedContent> GetBlogPosts()
+        => GetBlogPage()?
+            .ChildrenOfType("blogDetailPage")
+            .Where(x => x.IsPublished())
+            .OrderByDescending(x => x.HasValue("publishDate") ? x.Value<DateTime>("publishDate") : x.CreateDate)
+            .ThenBy(x => x.SortOrder)
             ?? Enumerable.Empty<IPublishedContent>();
 
     public IPublishedContent? GetSolutionPage(string urlSegment)

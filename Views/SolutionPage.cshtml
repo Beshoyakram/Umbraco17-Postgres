@@ -29,7 +29,13 @@
 
 	var bannerTitle = Text("bannerTitle");
 	var bannerImageUrl = MediaUrl("bannerImage");
-	var bannerThemeClass = Text("bannerThemeClass") ?? "bg";
+	// Theme banner class is fixed per solution URL (not editable in backoffice)
+	var bannerThemeClass = (Model.UrlSegment ?? string.Empty).ToLowerInvariant() switch
+	{
+		"digital" => "bg1",
+		"health" or "healthcare" => "bg2",
+		_ => "bg" // bpo / default
+	};
 
 	var eyebrow = Text("eyebrow");
 	var title = Text("title");
