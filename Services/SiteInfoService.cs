@@ -15,6 +15,8 @@ public interface ISiteInfoService
     IPublishedContent? GetHomePage();
     IPublishedContent? GetAboutPage();
     IPublishedContent? GetGetInTouchPage();
+    IPublishedContent? GetCareersPage();
+    IEnumerable<IPublishedContent> GetCareerJobs();
     IPublishedContent? GetSolutionPage(string urlSegment);
     IEnumerable<IPublishedContent> GetSolutionPages();
     string? GetMediaUrl(IPublishedContent? media);
@@ -65,6 +67,18 @@ public class SiteInfoService : ISiteInfoService
         => _umbracoHelper.ContentAtRoot()
             .SelectMany(x => x.DescendantsOrSelfOfType("getInTouchPage"))
             .FirstOrDefault();
+
+    public IPublishedContent? GetCareersPage()
+        => _umbracoHelper.ContentAtRoot()
+            .SelectMany(x => x.DescendantsOrSelfOfType("careersPage"))
+            .FirstOrDefault();
+
+    public IEnumerable<IPublishedContent> GetCareerJobs()
+        => GetCareersPage()?
+            .ChildrenOfType("careerDetailPage")
+            .Where(x => x.IsPublished())
+            .OrderBy(x => x.SortOrder)
+            ?? Enumerable.Empty<IPublishedContent>();
 
     public IPublishedContent? GetSolutionPage(string urlSegment)
         => GetSolutionPages()

@@ -1,0 +1,116 @@
+﻿@using Umbraco.Cms.Core.Models.Blocks
+@using Umbraco.Cms.Core.Models.PublishedContent
+@using Centrocdx.Services
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
+@inject ISiteInfoService SiteInfo
+@{
+	Layout = "Layout.cshtml";
+
+	string? MediaUrl(string alias)
+	{
+		if (!Model.HasProperty(alias) || !Model.HasValue(alias)) return null;
+		try
+		{
+			return SiteInfo.GetMediaUrl(Model.Value<IPublishedContent>(alias));
+		}
+		catch (Exception)
+		{
+			return null;
+		}
+	}
+
+	string? Text(string alias)
+		=> Model.HasValue(alias) ? Model.Value<string>(alias) : null;
+
+	var bannerTitle = Text("bannerTitle") ?? "Centro Careers";
+	var bannerImageUrl = MediaUrl("bannerImage");
+	var whyHeading = Text("whyHeading") ?? "Why Work With Us ?";
+	var whyItems = Model.HasValue("whyItems") ? Model.Value<BlockListModel>("whyItems") : null;
+	var jobsHeading = Text("jobsHeading") ?? "Jobs";
+	var jobs = Model.ChildrenOfType("careerDetailPage").Where(x => x.IsPublished()).OrderBy(x => x.SortOrder).ToList();
+}
+
+@section Head {
+	<link rel="stylesheet" href="~/css/pages/careers.css" asp-append-version="true" />
+}
+
+<div class="bg6" style="@(string.IsNullOrWhiteSpace(bannerImageUrl) ? null : $"--careers-banner-bg: url('{bannerImageUrl}');")">
+	<div class="breadcam_area bradcam_bg">
+		<div class="bradcam_text careers-banner-text">
+			<h3>@bannerTitle</h3>
+		</div>
+	</div>
+</div>
+
+@if (whyItems != null && whyItems.Any())
+{
+	<div class="careers careers-why mt-30">
+		<div class="container">
+			<div class="first mt-30">
+				<h2 class="contact-title careers-section-title">@whyHeading</h2>
+				<div class="row">
+					@foreach (var item in whyItems)
+					{
+						var content = item.Content;
+						var title = content.Value<string>("title");
+						var text = content.Value<string>("text");
+						<div class="col-lg-4">
+							<div class="media contact-info mt-10 text-left">
+								<span class="contact-info__icon"><i class="ti-star careers-why-icon"></i></span>
+								<div class="media-body">
+									@if (!string.IsNullOrWhiteSpace(title))
+									{
+										<h3>@title</h3>
+									}
+									@if (!string.IsNullOrWhiteSpace(text))
+									{
+										<p class="mt-10">@text</p>
+									}
+								</div>
+							</div>
+						</div>
+					}
+				</div>
+			</div>
+		</div>
+	</div>
+}
+
+<section class="jobs">
+	<div class="careers mt-30">
+		<div class="container">
+			<div class="first mt-30">
+				<h2 class="contact-title careers-section-title">@jobsHeading</h2>
+				<div class="row careers-jobs-row">
+					@foreach (var job in jobs)
+					{
+						var jobTitle = job.HasValue("jobTitle") ? job.Value<string>("jobTitle") : job.Name;
+						var employmentType = job.HasValue("employmentType") ? job.Value<string>("employmentType") : null;
+						var shortDescription = job.HasValue("shortDescription") ? job.Value<string>("shortDescription") : null;
+						<div class="col-lg-4 careers-job-col">
+							<div class="media contact-info mt-10 text-left careers-job-card">
+								<div class="media-body careers-job-card-body">
+									<div class="row careers-job-header">
+										@if (!string.IsNullOrWhiteSpace(jobTitle))
+										{
+											<h3>@jobTitle</h3>
+										}
+										@if (!string.IsNullOrWhiteSpace(employmentType))
+										{
+											<span class="boxed-btn careers-job-type">@employmentType</span>
+										}
+									</div>
+									@if (!string.IsNullOrWhiteSpace(shortDescription))
+									{
+										<p class="mt-10 careers-job-excerpt">@shortDescription</p>
+									}
+									<a class="careers-job-link" href="@job.Url()">Check job description</a>
+								</div>
+							</div>
+						</div>
+					}
+				</div>
+			</div>
+		</div>
+	</div>
+</section>

@@ -8,6 +8,7 @@
     var about = SiteInfo.GetAboutPage();
     var aboutUrl = about?.Url() ?? "/aboutus";
     var getInTouchUrl = SiteInfo.GetGetInTouchPage()?.Url() ?? "/get-in-touch";
+    var careersUrl = SiteInfo.GetCareersPage()?.Url() ?? "/careers";
     var solutions = SiteInfo.GetSolutionPages().ToList();
     var bpoUrl = SiteInfo.GetSolutionPage("bpo")?.Url() ?? "/bpo";
     var healthUrl = SiteInfo.GetSolutionPage("health")?.Url() ?? "/health";
@@ -35,6 +36,8 @@
     var isAbout = Model.ContentType.Alias.Equals("aboutPage", StringComparison.OrdinalIgnoreCase);
     var isHome = Model.ContentType.Alias.Equals("homePage", StringComparison.OrdinalIgnoreCase);
     var isSolution = Model.ContentType.Alias.Equals("solutionPage", StringComparison.OrdinalIgnoreCase);
+    var isCareers = Model.ContentType.Alias.Equals("careersPage", StringComparison.OrdinalIgnoreCase)
+        || Model.ContentType.Alias.Equals("careerDetailPage", StringComparison.OrdinalIgnoreCase);
 }
 <header>
     <div class="header-area">
@@ -69,7 +72,7 @@
                                             <li><a href="@digitalUrl">Digital Transformation</a></li>
                                         </ul>
                                     </li>
-                                    <li><a href="@(homeUrl.TrimEnd('/'))#contact">careers</a></li>
+                                    <li><a class="@(isCareers ? "active" : null)" href="@careersUrl">careers</a></li>
                                     <li><a href="@(homeUrl.TrimEnd('/'))#contact">Blog</a></li>
                                 </ul>
                             </nav>

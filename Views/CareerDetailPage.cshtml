@@ -1,0 +1,165 @@
+﻿@using Umbraco.Cms.Core.Models
+@using Umbraco.Cms.Core.Models.PublishedContent
+@using Umbraco.Cms.Core.Strings
+@using Centrocdx.Services
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
+@inject ISiteInfoService SiteInfo
+@inject ICareerViewService CareerViews
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+@{
+	Layout = "Layout.cshtml";
+
+	string? MediaUrl(string alias)
+	{
+		if (!Model.HasProperty(alias) || !Model.HasValue(alias)) return null;
+		try
+		{
+			return SiteInfo.GetMediaUrl(Model.Value<IPublishedContent>(alias));
+		}
+		catch (Exception)
+		{
+			return null;
+		}
+	}
+
+	string? Text(string alias)
+		=> Model.HasValue(alias) ? Model.Value<string>(alias) : null;
+
+	var bannerTitle = Text("bannerTitle") ?? "Job Description";
+	var bannerImageUrl = MediaUrl("bannerImage");
+	var jobTitle = Text("jobTitle") ?? Model.Name;
+	var employmentType = Text("employmentType");
+	var shortDescription = Text("shortDescription");
+	var fullDescription = Model.HasValue("fullDescription") ? Model.Value<IHtmlEncodedString>("fullDescription") : null;
+	var applyLabel = Text("applyLabel") ?? "Submit";
+	var careersUrl = SiteInfo.GetCareersPage()?.Url() ?? "/careers";
+
+	var cookieName = $"career_viewed_{Model.Key:N}";
+	var http = HttpContextAccessor.HttpContext;
+	var alreadyCounted = http?.Request.Cookies.ContainsKey(cookieName) == true;
+	var viewCount = CareerViews.IncrementAndGet(Model.Key, alreadyCounted);
+	if (http != null && !alreadyCounted)
+	{
+		http.Response.Cookies.Append(cookieName, "1", new CookieOptions
+		{
+			Expires = DateTimeOffset.UtcNow.AddDays(1),
+			HttpOnly = true,
+			IsEssential = true,
+			SameSite = SameSiteMode.Lax
+		});
+	}
+}
+
+@section Head {
+	<link rel="stylesheet" href="~/css/pages/careers.css" asp-append-version="true" />
+}
+
+<div class="bg6" style="@(string.IsNullOrWhiteSpace(bannerImageUrl) ? null : $"--careers-banner-bg: url('{bannerImageUrl}');")">
+	<div class="breadcam_area bradcam_bg overlay2">
+		<div class="bradcam_text">
+			<h3>@bannerTitle</h3>
+		</div>
+	</div>
+</div>
+
+<section class="blog_area single-post-area section-padding careers-detail">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-8 posts-list">
+				<div class="single-post">
+					<div class="feature-img"></div>
+					<div class="blog_details">
+						@if (!string.IsNullOrWhiteSpace(jobTitle))
+						{
+							<h2>@jobTitle</h2>
+						}
+						<ul class="blog-info-link mt-3 mb-4">
+							<li><i class="fa fa-user"></i> Job Posts</li>
+							@if (!string.IsNullOrWhiteSpace(employmentType))
+							{
+								<li><i class="fa fa-briefcase"></i> @employmentType</li>
+							}
+							<li>
+								<span class="post-views">
+									<i class="fa fa-eye"></i> @viewCount.ToString("N0") Views
+								</span>
+							</li>
+						</ul>
+						@if (!string.IsNullOrWhiteSpace(shortDescription))
+						{
+							<p class="excert">@shortDescription</p>
+						}
+						@if (fullDescription != null && !string.IsNullOrWhiteSpace(fullDescription.ToString()))
+						{
+							<div class="careers-full-description">
+								@fullDescription
+							</div>
+						}
+					</div>
+				</div>
+
+				<div class="careers-apply-form mt-4">
+					<form class="form-contact contact_form" id="centro-career-apply-form" enctype="multipart/form-data" novalidate>
+						@Html.AntiForgeryToken()
+						<input type="hidden" name="jobKey" value="@Model.Key" />
+						<div class="row">
+							<div class="col-sm-6">
+								<div class="form-group">
+									<input class="form-control valid" type="text" maxlength="255" name="name" placeholder="Full Name" required autocomplete="name" />
+								</div>
+							</div>
+							<div class="col-sm-6">
+								<div class="form-group">
+									<input class="form-control valid" type="email" maxlength="255" name="email" placeholder="Email" required autocomplete="email" />
+								</div>
+							</div>
+							<div class="col-sm-6">
+								<div class="form-group">
+									<input class="form-control valid" type="tel" maxlength="50" name="phone" placeholder="Phone" autocomplete="tel" />
+								</div>
+							</div>
+							<div class="col-12">
+								<div class="form-group">
+									<textarea class="form-control w-100" name="message" maxlength="2000" placeholder="Cover note (optional)"></textarea>
+								</div>
+							</div>
+							<div class="col-12">
+								<div class="form-group">
+									<label class="careers-cv-label" for="career-cv">Upload Your CV (doc, docx, pdf)</label>
+									<input id="career-cv" class="form-control" type="file" name="cv" accept=".doc,.docx,.pdf,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document" required />
+								</div>
+							</div>
+						</div>
+						<div class="form-group mt-3 careers-apply-actions">
+							<button type="submit" id="career-apply-submit-btn" class="button button-contactForm boxed-btn">@applyLabel</button>
+							<a href="@careersUrl" class="careers-back-link">Back to Careers</a>
+						</div>
+						<div id="career-apply-response"></div>
+					</form>
+				</div>
+			</div>
+			<div class="col-lg-4">
+				<div class="blog_right_sidebar">
+					<aside class="single_sidebar_widget post_category_widget">
+						<h4 class="widget_title">Open Roles</h4>
+						<ul class="list cat-list">
+							@foreach (var job in SiteInfo.GetCareerJobs())
+							{
+								var title = job.HasValue("jobTitle") ? job.Value<string>("jobTitle") : job.Name;
+								<li>
+									<a href="@job.Url()" class="d-flex @(job.Id == Model.Id ? "active" : null)">
+										<p>@title</p>
+									</a>
+								</li>
+							}
+						</ul>
+					</aside>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+@section Scripts {
+	<script src="~/js/pages/career-detail.js" asp-append-version="true"></script>
+}
