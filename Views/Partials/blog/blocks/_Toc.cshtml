@@ -1,0 +1,33 @@
+@using Umbraco.Cms.Core.Models.Blocks
+@using Centrocdx.Services
+@model BlockListItem
+@{
+	var data = Model.Content;
+	var title = data.Value<string>("title") ?? "Table of Contents";
+	var linksHtml = BlogRichTextHelper.Render(data, "linksHtml");
+	var rawHtml = linksHtml?.ToString() ?? "";
+	var isRail = title.Contains("In this article", StringComparison.OrdinalIgnoreCase)
+	             || rawHtml.Contains("data-no")
+	             || rawHtml.Contains("rcm-rail")
+	             || rawHtml.Contains("data-target");
+}
+@if (!string.IsNullOrWhiteSpace(rawHtml))
+{
+	@if (isRail)
+	{
+		<div class="rcm-progress" aria-hidden="true"><span></span></div>
+		<nav class="rcm-rail" aria-label="Article sections">
+			<span class="rcm-rail-label">@title</span>
+			@linksHtml
+		</nav>
+	}
+	else
+	{
+		<nav class="blog-toc-block" aria-label="Table of Contents">
+			<h3 class="blog-toc-title"><i class="fa fa-list-ul"></i> @title</h3>
+			<div class="blog-toc-links">
+				@linksHtml
+			</div>
+		</nav>
+	}
+}

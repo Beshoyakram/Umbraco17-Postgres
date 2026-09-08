@@ -1,0 +1,40 @@
+/* Quote Component Styling */
+.blog-detail .blog-quote-block {
+  position: relative;
+  margin: 32px 0;
+  padding: 24px 28px 24px 34px;
+  border-left: 4px solid #015376;
+  border-radius: 0 14px 14px 0;
+  background: #f7fbfc;
+}
+
+.blog-detail .blog-quote-block::before {
+  content: "“";
+  position: absolute;
+  top: -10px;
+  left: 12px;
+  color: rgba(1, 83, 118, 0.12);
+  font-family: Georgia, serif;
+  font-size: 64px;
+  line-height: 1;
+}
+
+.blog-detail .blog-quote-block p {
+  position: relative;
+  margin: 0;
+  color: #123748;
+  font-family: "Poppins", Arial, sans-serif;
+  font-size: 16.5px;
+  font-style: italic;
+  line-height: 1.75;
+}
+
+.blog-detail .blog-quote-block footer {
+  margin-top: 12px;
+  color: #009cc1;
+  font-family: "Poppins", Arial, sans-serif;
+  font-size: 12.5px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}

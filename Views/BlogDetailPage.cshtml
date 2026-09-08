@@ -67,8 +67,12 @@
 	var featuredImageUrl = MediaUrl("featuredImage");
 	var blogUrl = SiteInfo.GetBlogPage()?.Url() ?? "/blog";
 	var contentBlocks = Model.HasValue("contentBlocks") ? Model.Value<BlockListModel>("contentBlocks") : null;
-	var legacyBody = Text("body");
 	var hasBlocks = contentBlocks != null && contentBlocks.Any();
+	var hasRail = contentBlocks?.Any(b =>
+		b.Content.ContentType.Alias == "blogTocBlock" &&
+		((b.Content.Value<string>("title") ?? "").Contains("In this article", StringComparison.OrdinalIgnoreCase)
+		 || (b.Content.Value<string>("linksHtml") ?? "").Contains("data-no")
+		 || (b.Content.Value<string>("linksHtml") ?? "").Contains("rcm-rail"))) == true;
 
 	var cookieName = $"blog_viewed_{Model.Key:N}";
 	var http = HttpContextAccessor.HttpContext;
@@ -89,6 +93,7 @@
 }
 
 @section Head {
+	<link rel="stylesheet" href="~/css/pages/blog-components.css" asp-append-version="true" />
 	<link rel="stylesheet" href="~/css/pages/blog.css" asp-append-version="true" />
 }
 
@@ -136,14 +141,30 @@
 							<p class="excert">@excerpt</p>
 						}
 
-						<div class="blog-full-body">
+						<div class="blog-full-body @(hasRail ? "has-rail" : null)">
 							@if (hasBlocks)
 							{
-								@await Html.PartialAsync("~/Views/Partials/blog/_ContentBlocks.cshtml", contentBlocks)
-							}
-							else if (!string.IsNullOrWhiteSpace(legacyBody))
-							{
-								@BlogHtmlHelper.ToHtml(legacyBody)
+								@if (hasRail)
+								{
+									var railBlock = contentBlocks!.FirstOrDefault(b =>
+										b.Content.ContentType.Alias == "blogTocBlock" &&
+										((b.Content.Value<string>("title") ?? "").Contains("In this article", StringComparison.OrdinalIgnoreCase)
+										 || (b.Content.Value<string>("linksHtml") ?? "").Contains("data-no")
+										 || (b.Content.Value<string>("linksHtml") ?? "").Contains("rcm-rail")));
+									var otherBlocks = contentBlocks!.Where(b => b != railBlock);
+
+									if (railBlock != null)
+									{
+										@await Html.PartialAsync("~/Views/Partials/blog/blocks/_Toc.cshtml", railBlock)
+									}
+									<div class="rcm-article-flow">
+										@await Html.PartialAsync("~/Views/Partials/blog/_ContentBlocks.cshtml", otherBlocks)
+									</div>
+								}
+								else
+								{
+									@await Html.PartialAsync("~/Views/Partials/blog/_ContentBlocks.cshtml", contentBlocks)
+								}
 							}
 						</div>
 					</div>

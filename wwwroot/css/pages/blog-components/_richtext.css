@@ -1,0 +1,56 @@
+/* Rich Text Component Styling */
+.blog-detail .blog-richtext-block {
+  margin: 0 0 16px;
+  color: #344f63;
+  font-family: "Poppins", Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.75;
+}
+
+.blog-detail .blog-richtext-block p {
+  margin: 0 0 16px;
+  color: #344f63;
+  font-size: 16px;
+  line-height: 1.75;
+}
+
+.blog-detail .blog-richtext-block p:last-child {
+  margin-bottom: 0;
+}
+
+.blog-detail .blog-richtext-block p:empty {
+  display: none;
+}
+
+.blog-detail .blog-richtext-block strong,
+.blog-detail .blog-richtext-block b {
+  font-weight: 600;
+  color: #123748;
+}
+
+.blog-detail .blog-richtext-block a {
+  color: #015376;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: color 0.15s ease;
+}
+
+.blog-detail .blog-richtext-block a:hover {
+  color: #009cc1;
+}
+
+.blog-detail .blog-richtext-block ul,
+.blog-detail .blog-richtext-block ol {
+  margin: 16px 0 20px;
+  padding-left: 28px;
+}
+
+.blog-detail .blog-richtext-block li {
+  margin-bottom: 8px;
+  line-height: 1.7;
+}
+
+.blog-detail .blog-richtext-block li::marker {
+  color: #009cc1;
+}

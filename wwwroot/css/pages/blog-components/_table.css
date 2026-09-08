@@ -1,0 +1,59 @@
+/* Table Component Styling */
+.blog-detail .blog-table-block {
+  margin: 32px 0;
+}
+
+.blog-detail .blog-table-caption {
+  margin: 0 0 12px;
+  color: #015376;
+  font-family: "Poppins", Arial, sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.blog-detail .blog-table-scroll {
+  width: 100%;
+  overflow-x: auto;
+  border: 1px solid #dceaf0;
+  border-radius: 14px;
+  box-shadow: 0 6px 18px rgba(7, 59, 83, 0.04);
+}
+
+.blog-detail .blog-table-scroll table {
+  width: 100%;
+  min-width: 540px;
+  border-collapse: collapse;
+  font-family: "Poppins", Arial, sans-serif;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.blog-detail .blog-table-scroll th,
+.blog-detail .blog-table-scroll tr:first-child td {
+  padding: 14px 18px;
+  background: #015376;
+  color: #ffffff;
+  font-weight: 600;
+  text-align: left;
+  border: none;
+}
+
+.blog-detail .blog-table-scroll tr:first-child td strong,
+.blog-detail .blog-table-scroll th strong {
+  color: #ffffff;
+}
+
+.blog-detail .blog-table-scroll td {
+  padding: 13px 18px;
+  color: #344f63;
+  border-bottom: 1px solid #edf3f7;
+  vertical-align: middle;
+}
+
+.blog-detail .blog-table-scroll tr:nth-child(even) td {
+  background: #fbfdfe;
+}
+
+.blog-detail .blog-table-scroll tr:last-child td {
+  border-bottom: none;
+}

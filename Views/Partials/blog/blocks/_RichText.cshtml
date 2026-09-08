@@ -1,0 +1,13 @@
+@using Umbraco.Cms.Core.Models.Blocks
+@using Centrocdx.Services
+@model BlockListItem
+@{
+	var data = Model.Content;
+	var html = BlogRichTextHelper.Render(data, "text");
+}
+@if (!string.IsNullOrWhiteSpace(html.ToString()))
+{
+	<div class="blog-richtext-block">
+		@html
+	</div>
+}

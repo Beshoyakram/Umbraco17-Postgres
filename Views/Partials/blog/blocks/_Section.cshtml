@@ -1,0 +1,28 @@
+@using Umbraco.Cms.Core.Models.Blocks
+@using Centrocdx.Services
+@model BlockListItem
+@{
+	var data = Model.Content;
+	var number = data.Value<string>("number");
+	var title = data.Value<string>("title");
+	var anchorId = data.Value<string>("anchorId");
+	var bodyHtml = BlogRichTextHelper.Render(data, "body");
+}
+<section class="blog-section-block" id="@(!string.IsNullOrWhiteSpace(anchorId) ? anchorId : null)">
+	<div class="blog-section-head">
+		@if (!string.IsNullOrWhiteSpace(number))
+		{
+			<span class="blog-section-num" aria-hidden="true">@number</span>
+		}
+		@if (!string.IsNullOrWhiteSpace(title))
+		{
+			<h2>@title</h2>
+		}
+	</div>
+	@if (!string.IsNullOrWhiteSpace(bodyHtml.ToString()))
+	{
+		<div class="blog-section-body">
+			@bodyHtml
+		</div>
+	}
+</section>

@@ -1,0 +1,53 @@
+@using Umbraco.Cms.Core.Models
+@using Umbraco.Cms.Core.Models.Blocks
+@using Umbraco.Cms.Core.Models.PublishedContent
+@using Centrocdx.Services
+@inject ISiteInfoService SiteInfo
+@model BlockListItem
+@{
+	var data = Model.Content;
+	var name = data.Value<string>("authorName");
+	var role = data.Value<string>("role");
+	var bio = data.Value<string>("bio");
+	var linkedInUrl = data.Value<string>("linkedInUrl");
+	string? photoUrl = null;
+	try
+	{
+		var photo = data.Value<IPublishedContent>("avatarImage");
+		photoUrl = photo != null ? SiteInfo.GetMediaUrl(photo) : null;
+	}
+	catch { }
+}
+@if (!string.IsNullOrWhiteSpace(name))
+{
+	<aside class="blog-author-block">
+		<div class="blog-author-avatar">
+			@if (!string.IsNullOrWhiteSpace(photoUrl))
+			{
+				<img src="@photoUrl" alt="@name" loading="lazy" />
+			}
+			else
+			{
+				<div class="blog-author-initials">@(name.Length > 0 ? name.Substring(0, Math.Min(2, name.Length)).ToUpperInvariant() : "CA")</div>
+			}
+		</div>
+		<div class="blog-author-info">
+			<span class="blog-author-badge">About the Author</span>
+			<h4 class="blog-author-name">@name</h4>
+			@if (!string.IsNullOrWhiteSpace(role))
+			{
+				<p class="blog-author-role">@role</p>
+			}
+			@if (!string.IsNullOrWhiteSpace(bio))
+			{
+				<p class="blog-author-bio">@bio</p>
+			}
+			@if (!string.IsNullOrWhiteSpace(linkedInUrl))
+			{
+				<a class="blog-author-link" href="@linkedInUrl" target="_blank" rel="noopener noreferrer">
+					<i class="fa fa-linkedin"></i> Connect on LinkedIn
+				</a>
+			}
+		</div>
+	</aside>
+}

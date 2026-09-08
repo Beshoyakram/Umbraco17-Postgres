@@ -1,0 +1,57 @@
+@using Umbraco.Cms.Core.Models
+@using Umbraco.Cms.Core.Models.Blocks
+@using Umbraco.Cms.Core.Models.PublishedContent
+@using Centrocdx.Services
+@inject ISiteInfoService SiteInfo
+@model BlockListItem
+@{
+	var data = Model.Content;
+	string? ResolveMediaUrl(object? mediaValue)
+	{
+		if (mediaValue == null) return null;
+		try
+		{
+			if (mediaValue is MediaWithCrops mwc)
+			{
+				return SiteInfo.GetMediaUrl(mwc.Content) ?? SiteInfo.GetMediaUrl(mwc);
+			}
+			if (mediaValue is IPublishedContent ipc)
+			{
+				return SiteInfo.GetMediaUrl(ipc);
+			}
+			if (mediaValue is IEnumerable<MediaWithCrops> manyCrops)
+			{
+				var first = manyCrops.FirstOrDefault();
+				return first == null ? null : SiteInfo.GetMediaUrl(first.Content) ?? SiteInfo.GetMediaUrl(first);
+			}
+			if (mediaValue is IEnumerable<IPublishedContent> many)
+			{
+				return SiteInfo.GetMediaUrl(many.FirstOrDefault());
+			}
+		}
+		catch (Exception) { return null; }
+		return null;
+	}
+
+	var imgUrl = ResolveMediaUrl(data.Value("image"));
+	if (string.IsNullOrWhiteSpace(imgUrl))
+	{
+		imgUrl = data.Value<string>("imageUrl");
+	}
+	var caption = data.Value<string>("caption");
+	var altText = data.Value<string>("altText");
+	if (string.IsNullOrWhiteSpace(altText))
+	{
+		altText = caption ?? "Blog image";
+	}
+}
+@if (!string.IsNullOrWhiteSpace(imgUrl))
+{
+	<figure class="blog-image-block">
+		<img class="img-fluid" src="@imgUrl" alt="@altText" loading="lazy" />
+		@if (!string.IsNullOrWhiteSpace(caption))
+		{
+			<figcaption>@caption</figcaption>
+		}
+	</figure>
+}

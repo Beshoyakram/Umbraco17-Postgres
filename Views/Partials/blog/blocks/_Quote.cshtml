@@ -1,0 +1,17 @@
+@using Umbraco.Cms.Core.Models.Blocks
+@model BlockListItem
+@{
+	var data = Model.Content;
+	var quote = data.Value<string>("quote");
+	var attribution = data.Value<string>("attribution");
+}
+@if (!string.IsNullOrWhiteSpace(quote))
+{
+	<blockquote class="blog-quote-block">
+		<p>@quote</p>
+		@if (!string.IsNullOrWhiteSpace(attribution))
+		{
+			<footer>@attribution</footer>
+		}
+	</blockquote>
+}

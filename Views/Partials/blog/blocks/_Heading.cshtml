@@ -1,0 +1,56 @@
+@using Umbraco.Cms.Core.Models.Blocks
+@model BlockListItem
+@{
+	var data = Model.Content;
+	var heading = data.Value<string>("heading");
+	var level = "h2";
+	try
+	{
+		var val = data.Value("level");
+		if (val is IEnumerable<string> items)
+		{
+			level = items.FirstOrDefault() ?? "h2";
+		}
+		else if (val is string str && !string.IsNullOrWhiteSpace(str))
+		{
+			level = str;
+		}
+	}
+	catch
+	{
+		try
+		{
+			var raw = data.GetProperty("level")?.GetSourceValue()?.ToString();
+			if (!string.IsNullOrWhiteSpace(raw))
+			{
+				raw = raw.Trim().Trim('[', ']', '"', '\'', ' ');
+				if (!string.IsNullOrWhiteSpace(raw)) level = raw;
+			}
+		}
+		catch { level = "h2"; }
+	}
+
+	level = level.Trim().ToLowerInvariant();
+	if (level is not ("h2" or "h3")) level = "h2";
+	var anchorId = data.Value<string>("anchorId");
+
+	var isFaq = string.Equals(anchorId, "faq", StringComparison.OrdinalIgnoreCase);
+	var isHeadingFaq = (heading ?? "").Trim().Equals("Frequently Asked Questions", StringComparison.OrdinalIgnoreCase);
+}
+@if (!string.IsNullOrWhiteSpace(heading))
+{
+	<div class="blog-heading-block" id="@(!string.IsNullOrWhiteSpace(anchorId) ? anchorId : null)">
+		@if (isFaq && !isHeadingFaq)
+		{
+			<span class="rcm-section-label">Frequently asked questions</span>
+		}
+		@if (level == "h3")
+		{
+			<h3 id="@(!string.IsNullOrWhiteSpace(anchorId) ? anchorId : null)">@heading</h3>
+		}
+		else
+		{
+			<h2 id="@(!string.IsNullOrWhiteSpace(anchorId) ? anchorId : null)">@heading</h2>
+		}
+	</div>
+}
