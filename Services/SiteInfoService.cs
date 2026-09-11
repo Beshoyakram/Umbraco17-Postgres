@@ -94,12 +94,28 @@ public class SiteInfoService : ISiteInfoService
             .FirstOrDefault();
 
     public IEnumerable<IPublishedContent> GetBlogPosts()
-        => GetBlogPage()?
+    {
+        var posts = GetBlogPage()?
             .ChildrenOfType("blogDetailPage")
             .Where(x => x.IsPublished())
-            .OrderByDescending(x => x.HasValue("publishDate") ? x.Value<DateTime>("publishDate") : x.CreateDate)
-            .ThenBy(x => x.SortOrder)
-            ?? Enumerable.Empty<IPublishedContent>();
+            .ToList()
+            ?? [];
+
+        // Prefer the migration inventory when an obsolete local duplicate has
+        // the same editorial title. Newly created, uniquely titled posts remain visible.
+        var knownTitles = posts
+            .Where(ContentRouteCatalog.IsKnownBlog)
+            .Select(BlogIdentity)
+            .ToHashSet(StringComparer.OrdinalIgnoreCase);
+
+        return posts
+            .Where(x => ContentRouteCatalog.IsKnownBlog(x)
+                || !knownTitles.Contains(BlogIdentity(x)))
+            .OrderByDescending(x => x.HasValue("publishDate")
+                ? x.Value<DateTime>("publishDate")
+                : x.CreateDate)
+            .ThenBy(x => x.SortOrder);
+    }
 
     public IPublishedContent? GetSolutionPage(string urlSegment)
         => GetSolutionPages()
@@ -111,6 +127,11 @@ public class SiteInfoService : ISiteInfoService
         => _umbracoHelper.ContentAtRoot()
             .SelectMany(x => x.DescendantsOrSelfOfType("solutionPage"))
             .OrderBy(x => x.SortOrder);
+
+    private static string BlogIdentity(IPublishedContent post)
+        => (post.Value<string>("postTitle") ?? post.Name)
+            .Trim()
+            .ToLowerInvariant();
 
     public string? GetMediaUrl(IPublishedContent? media)
     {

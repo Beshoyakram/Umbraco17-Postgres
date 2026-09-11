@@ -49,9 +49,12 @@ public class BlogFolderContentFinder : IContentFinder
         var culture = request.Culture;
         var post = blog
             .ChildrenOfType(BlogFolderUrlProvider.BlogDetailAlias)
+            .OrderByDescending(ContentRouteCatalog.IsKnownBlog)
             .FirstOrDefault(x =>
-                string.Equals(x.UrlSegment(culture), path, StringComparison.OrdinalIgnoreCase)
-                || string.Equals(x.UrlSegment(), path, StringComparison.OrdinalIgnoreCase));
+                string.Equals(
+                    ContentRouteCatalog.GetBlogSlug(x, culture),
+                    path,
+                    StringComparison.OrdinalIgnoreCase));
 
         if (post is null)
         {

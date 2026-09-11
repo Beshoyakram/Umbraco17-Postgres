@@ -43,6 +43,12 @@
         }
     }
 
+    string NavTitle(Umbraco.Cms.Core.Models.PublishedContent.IPublishedContent item)
+    {
+        var title = item.HasProperty("navbarTitle") ? item.Value<string>("navbarTitle") : null;
+        return string.IsNullOrWhiteSpace(title) ? item.Name : title.Trim();
+    }
+
     var navigationRoot = Model
         .AncestorsOrSelf()
         .FirstOrDefault(x => x.ContentType.Alias.Equals("contentTreeRoot", StringComparison.OrdinalIgnoreCase))
@@ -99,6 +105,7 @@
                                         var hasTemplate = navigationItem.TemplateId > 0;
                                         var showDropdown = !hasTemplate && dropdownItems.Count > 0;
                                         var isActive = Model.AncestorsOrSelf().Any(x => x.Key == navigationItem.Key);
+                                        var itemTitle = NavTitle(navigationItem);
 
                                         if ((hasTemplate && !string.IsNullOrWhiteSpace(itemUrl)) || showDropdown)
                                         {
@@ -106,20 +113,20 @@
                                                 @if (showDropdown)
                                                 {
                                                     <a class="@(isActive ? "active" : null)" aria-haspopup="true">
-                                                        @navigationItem.Name
+                                                        @itemTitle
                                                         <i class="ti-angle-down"></i>
                                                     </a>
                                                 }
                                                 else
                                                 {
-                                                    <a class="@(isActive ? "active" : null)" href="@itemUrl">@navigationItem.Name</a>
+                                                    <a class="@(isActive ? "active" : null)" href="@itemUrl">@itemTitle</a>
                                                 }
                                                 @if (showDropdown)
                                                 {
                                                     <ul class="submenu">
                                                         @foreach (var dropdownItem in dropdownItems)
                                                         {
-                                                            <li><a href="@dropdownItem.Url">@dropdownItem.Content.Name</a></li>
+                                                            <li><a href="@dropdownItem.Url">@NavTitle(dropdownItem.Content)</a></li>
                                                         }
                                                     </ul>
                                                 }

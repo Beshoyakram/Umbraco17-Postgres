@@ -95,10 +95,12 @@ public static partial class BlogHtmlHelper
             {
                 styles.AppendLine(style.Value);
             }
-            // Keep JSON-LD / article scripts from head too
             foreach (Match script in ScriptBlockRegex().Matches(headInner))
             {
-                scripts.AppendLine(script.Value);
+                if (!IsStructuredDataScript(script.Value))
+                {
+                    scripts.AppendLine(script.Value);
+                }
             }
             raw = raw.Remove(headMatch.Index, headMatch.Length);
         }
@@ -111,7 +113,10 @@ public static partial class BlogHtmlHelper
         }
         foreach (Match script in ScriptBlockRegex().Matches(raw))
         {
-            scripts.AppendLine(script.Value);
+            if (!IsStructuredDataScript(script.Value))
+            {
+                scripts.AppendLine(script.Value);
+            }
         }
 
         var markup = StyleBlockRegex().Replace(raw, string.Empty);
@@ -140,4 +145,9 @@ public static partial class BlogHtmlHelper
 
         return new HtmlString(sb.ToString());
     }
+
+    private static bool IsStructuredDataScript(string script)
+        => script.Contains(
+            "application/ld+json",
+            StringComparison.OrdinalIgnoreCase);
 }

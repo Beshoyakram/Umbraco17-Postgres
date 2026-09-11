@@ -51,7 +51,7 @@ public class SolutionsFolderUrlProvider : IUrlProvider
             return null;
         }
 
-        var path = "/" + string.Join("/", segments);
+        var path = "/" + string.Join("/", segments) + "/";
         return UrlInfo.AsUrl(path, ProviderAlias, culture, isExternal: false);
     }
 

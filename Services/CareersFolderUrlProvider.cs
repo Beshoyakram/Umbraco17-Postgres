@@ -34,7 +34,9 @@ public class CareersFolderUrlProvider : IUrlProvider
                 continue;
             }
 
-            var segment = node.UrlSegment(culture);
+            var segment = node.ContentType.Alias.Equals(CareerDetailAlias, StringComparison.OrdinalIgnoreCase)
+                ? ContentRouteCatalog.GetCareerSlug(node, culture)
+                : node.UrlSegment(culture);
             if (!string.IsNullOrWhiteSpace(segment))
             {
                 segments.Add(segment);
@@ -46,7 +48,7 @@ public class CareersFolderUrlProvider : IUrlProvider
             return null;
         }
 
-        var path = "/" + string.Join("/", segments);
+        var path = "/" + string.Join("/", segments) + "/";
         return UrlInfo.AsUrl(path, ProviderAlias, culture, isExternal: false);
     }
 

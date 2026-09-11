@@ -34,7 +34,9 @@ public class BlogFolderUrlProvider : IUrlProvider
                 continue;
             }
 
-            var segment = node.UrlSegment(culture);
+            var segment = node.ContentType.Alias.Equals(BlogDetailAlias, StringComparison.OrdinalIgnoreCase)
+                ? ContentRouteCatalog.GetBlogSlug(node, culture)
+                : node.UrlSegment(culture);
             if (!string.IsNullOrWhiteSpace(segment))
             {
                 segments.Add(segment);
@@ -46,7 +48,7 @@ public class BlogFolderUrlProvider : IUrlProvider
             return null;
         }
 
-        var path = "/" + string.Join("/", segments);
+        var path = "/" + string.Join("/", segments) + "/";
         return UrlInfo.AsUrl(path, ProviderAlias, culture, isExternal: false);
     }
 

@@ -52,8 +52,10 @@ public class CareersFolderContentFinder : IContentFinder
         var job = careers
             .ChildrenOfType(CareersFolderUrlProvider.CareerDetailAlias)
             .FirstOrDefault(x =>
-                string.Equals(x.UrlSegment(culture), path, StringComparison.OrdinalIgnoreCase)
-                || string.Equals(x.UrlSegment(), path, StringComparison.OrdinalIgnoreCase));
+                string.Equals(
+                    ContentRouteCatalog.GetCareerSlug(x, culture),
+                    path,
+                    StringComparison.OrdinalIgnoreCase));
 
         if (job is null)
         {
