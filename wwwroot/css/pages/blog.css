@@ -1,5 +1,3 @@
-@import url('blog-components.css');
-
 /* Blog listing + detail — chrome only.
    Article body styling for mirrored production posts comes from each post's own <style> embed. */
 
@@ -16,7 +14,7 @@
 
 .blog-listing .blog_item_img {
   position: relative;
-  overflow: hidden;
+  overflow: visible;
 }
 
 .blog-listing .blog_item_img img {
@@ -57,6 +55,12 @@
 .blog-detail .blog-full-body {
   overflow-x: clip;
   max-width: 100%;
+}
+
+/* Advanced HTML embeds own their layout (e.g. .rcm-shell).
+   Never force an outer rail grid around .blog-html-embed. */
+.blog-detail .blog-full-body:has(.blog-html-embed) {
+  display: block !important;
 }
 
 /* Production HTML embeds — do not restyle custom internals */

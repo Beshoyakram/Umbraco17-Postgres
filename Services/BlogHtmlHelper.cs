@@ -40,11 +40,12 @@ public static partial class BlogHtmlHelper
 
         var raw = html.Trim();
 
-        // WordPress often wraps custom HTML in <p>…</p>; scrape can leave orphan tags
+        // WordPress often wraps custom HTML in bare <p>…</p>; scrape can leave orphan tags.
+        // Only strip bare <p>/< /p> — never classed paragraphs (real content).
         for (var i = 0; i < 8; i++)
         {
-            var next = Regex.Replace(raw, @"^</?p(?:\s[^>]*)?>\s*", string.Empty, RegexOptions.IgnoreCase).Trim();
-            next = Regex.Replace(next, @"\s*</?p(?:\s[^>]*)?>$", string.Empty, RegexOptions.IgnoreCase).Trim();
+            var next = Regex.Replace(raw, @"^</?p>\s*", string.Empty, RegexOptions.IgnoreCase).Trim();
+            next = Regex.Replace(next, @"\s*</?p>$", string.Empty, RegexOptions.IgnoreCase).Trim();
             if (string.Equals(next, raw, StringComparison.Ordinal))
             {
                 break;

@@ -113,6 +113,11 @@ public class BlogMediaSeedHandler : INotificationAsyncHandler<UmbracoApplication
         new(Guid.Parse("a7010006-2222-4222-8222-21111111072a"), "reducing-wait-times-increasing-loyalty-the-cx-impact-of-contact-center-outsourcing.png"),
         new(Guid.Parse("a7010006-2222-4222-8222-21111111072b"), "maximize-revenue-minimize-delays-why-centros-rcm-solutions-matter.jpg"),
         new(Guid.Parse("a7010006-2222-4222-8222-21111111072c"), "under-the-hood-of-consumer-first-brands-how-bpo-powers-growth-with-invisible-strength.png"),
-        new(Guid.Parse("a7010006-2222-4222-8222-21111111072d"), "corporate-responsibility-in-action-centros-emergency-response-initiative.png")
+        new(Guid.Parse("a7010006-2222-4222-8222-21111111072d"), "corporate-responsibility-in-action-centros-emergency-response-initiative.png"),
+        new(Guid.Parse("a7010006-2222-4222-8222-21111111072e"), "bpo-in-2025-what-the-next-decade-holds-for-business-process-outsourcing.png"),
+        new(Guid.Parse("a7010006-2222-4222-8222-21111111072f"), "centro-forge-forging-influence-driving-growth.png"),
+        new(Guid.Parse("a7010006-2222-4222-8222-211111110730"), "centro-receives-official-ntra-license-a-major-milestone-in-our-growth-journey.jpg"),
+        new(Guid.Parse("a7010006-2222-4222-8222-211111110731"), "centrocdx-com-prior-authorization-automation-2027.png"),
+        new(Guid.Parse("a7010006-2222-4222-8222-211111110732"), "cms-0057-f-prior-authorization-2026.png")
     ];
 }

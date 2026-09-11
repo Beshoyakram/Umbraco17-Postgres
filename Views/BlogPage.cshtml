@@ -3,7 +3,6 @@
 @using Umbraco.Cms.Core.Models
 @using Umbraco.Cms.Core.Models.Blocks
 @using Umbraco.Cms.Core.Models.PublishedContent
-@using Umbraco.Cms.Core.Strings
 @using Centrocdx.Services
 @inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
 @inject ISiteInfoService SiteInfo
@@ -71,47 +70,9 @@
 		foreach (var block in blocks)
 		{
 			var data = block.Content;
-			var alias = data.ContentType.Alias;
-			if (alias == "blogHtmlBlock")
+			if (data.ContentType.Alias == "blogHtmlBlock")
 			{
 				parts.Add(StripHtml(data.Value<string>("html")));
-			}
-			else if (alias == "blogRichTextBlock")
-			{
-				parts.Add(StripHtml(data.Value<IHtmlEncodedString>("text")?.ToString()));
-			}
-			else if (alias == "blogImageBlock")
-			{
-				parts.Add(data.Value<string>("caption") ?? string.Empty);
-			}
-			else if (alias == "blogHeadingBlock")
-			{
-				parts.Add(data.Value<string>("heading") ?? string.Empty);
-			}
-			else if (alias == "blogSectionBlock")
-			{
-				parts.Add(data.Value<string>("title") ?? string.Empty);
-				parts.Add(StripHtml(data.Value<IHtmlEncodedString>("body")?.ToString()));
-			}
-			else if (alias == "blogCalloutBlock")
-			{
-				parts.Add(data.Value<string>("label") ?? string.Empty);
-				parts.Add(data.Value<string>("text") ?? string.Empty);
-			}
-			else if (alias == "blogFaqItemBlock")
-			{
-				parts.Add(data.Value<string>("question") ?? string.Empty);
-				parts.Add(data.Value<string>("answer") ?? string.Empty);
-			}
-			else if (alias == "blogCtaBlock")
-			{
-				parts.Add(data.Value<string>("title") ?? string.Empty);
-				parts.Add(data.Value<string>("text") ?? string.Empty);
-			}
-			else if (alias == "blogQuoteBlock")
-			{
-				parts.Add(data.Value<string>("quote") ?? string.Empty);
-				parts.Add(data.Value<string>("attribution") ?? string.Empty);
 			}
 		}
 		return string.Join(" ", parts);
@@ -121,15 +82,11 @@
 	{
 		if (string.IsNullOrWhiteSpace(query)) return true;
 		var tokens = query.Split(' ', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
-		var bodyText = post.HasValue("body")
-			? StripHtml(post.Value<string>("body") ?? post.Value<IHtmlEncodedString>("body")?.ToString())
-			: null;
 		var haystack = string.Join(" ",
 			post.Name,
 			post.HasValue("postTitle") ? post.Value<string>("postTitle") : null,
 			post.HasValue("excerpt") ? post.Value<string>("excerpt") : null,
 			post.HasValue("category") ? post.Value<string>("category") : null,
-			bodyText,
 			BlockSearchText(post));
 		return tokens.All(token => haystack.Contains(token, StringComparison.OrdinalIgnoreCase));
 	}

@@ -116,6 +116,7 @@ public class CentroServicesComposer : IComposer
         builder.UrlProviders().InsertBefore<NewDefaultUrlProvider, SolutionsFolderUrlProvider>();
         builder.UrlProviders().InsertBefore<NewDefaultUrlProvider, CareersFolderUrlProvider>();
         builder.UrlProviders().InsertBefore<NewDefaultUrlProvider, BlogFolderUrlProvider>();
+        builder.ContentFinders().InsertBefore<ContentFinderByUrlNew, SolutionsFolderContentFinder>();
         builder.ContentFinders().InsertBefore<ContentFinderByUrlNew, CareersFolderContentFinder>();
         builder.ContentFinders().InsertBefore<ContentFinderByUrlNew, BlogFolderContentFinder>();
         builder.AddNotificationAsyncHandler<UmbracoApplicationStartedNotification, HeroVideoMediaRepairHandler>();

@@ -8,47 +8,8 @@
 
 @foreach (var block in Model)
 {
-	var alias = block.Content.ContentType.Alias;
-	switch (alias)
+	if (block.Content.ContentType.Alias == "blogHtmlBlock")
 	{
-		case "blogRichTextBlock":
-			@await Html.PartialAsync("~/Views/Partials/blog/blocks/_RichText.cshtml", block)
-			break;
-		case "blogHeadingBlock":
-			@await Html.PartialAsync("~/Views/Partials/blog/blocks/_Heading.cshtml", block)
-			break;
-		case "blogSectionBlock":
-			@await Html.PartialAsync("~/Views/Partials/blog/blocks/_Section.cshtml", block)
-			break;
-		case "blogImageBlock":
-			@await Html.PartialAsync("~/Views/Partials/blog/blocks/_Image.cshtml", block)
-			break;
-		case "blogCalloutBlock":
-			@await Html.PartialAsync("~/Views/Partials/blog/blocks/_Callout.cshtml", block)
-			break;
-		case "blogFaqItemBlock":
-			@await Html.PartialAsync("~/Views/Partials/blog/blocks/_FaqItem.cshtml", block)
-			break;
-		case "blogQuoteBlock":
-			@await Html.PartialAsync("~/Views/Partials/blog/blocks/_Quote.cshtml", block)
-			break;
-		case "blogCtaBlock":
-			@await Html.PartialAsync("~/Views/Partials/blog/blocks/_Cta.cshtml", block)
-			break;
-		case "blogTableBlock":
-			@await Html.PartialAsync("~/Views/Partials/blog/blocks/_Table.cshtml", block)
-			break;
-		case "blogAuthorBlock":
-			@await Html.PartialAsync("~/Views/Partials/blog/blocks/_Author.cshtml", block)
-			break;
-		case "blogTocBlock":
-			@await Html.PartialAsync("~/Views/Partials/blog/blocks/_Toc.cshtml", block)
-			break;
-		case "blogStaffingCalculatorBlock":
-			@await Html.PartialAsync("~/Views/Partials/blog/blocks/_StaffingCalculator.cshtml", block)
-			break;
-		case "blogHtmlBlock":
-			@await Html.PartialAsync("~/Views/Partials/blog/blocks/_Html.cshtml", block)
-			break;
+		@await Html.PartialAsync("~/Views/Partials/blog/blocks/_Html.cshtml", block)
 	}
 }
