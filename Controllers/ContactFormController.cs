@@ -6,14 +6,20 @@ namespace Centrocdx.Controllers;
 
 public class ContactFormController : Controller
 {
+    private static readonly TimeSpan RateLimitWindow = TimeSpan.FromHours(1);
+    private const int RateLimitMaxAttempts = 3;
+
     private readonly IContactSubmissionService _contactSubmissionService;
+    private readonly IFormSubmissionRateLimiter _rateLimiter;
     private readonly ILogger<ContactFormController> _logger;
 
     public ContactFormController(
         IContactSubmissionService contactSubmissionService,
+        IFormSubmissionRateLimiter rateLimiter,
         ILogger<ContactFormController> logger)
     {
         _contactSubmissionService = contactSubmissionService;
+        _rateLimiter = rateLimiter;
         _logger = logger;
     }
 
@@ -36,6 +42,21 @@ public class ContactFormController : Controller
             return Json(new { success = false, message = "Please fill in all required fields correctly." });
         }
 
+        var clientKey = GetClientKey();
+        if (!_rateLimiter.IsAllowed(
+                "contact",
+                clientKey,
+                RateLimitMaxAttempts,
+                RateLimitWindow,
+                out var rateLimitMessage))
+        {
+            return Json(new
+            {
+                success = false,
+                message = rateLimitMessage ?? "Too many submissions. Please try again later."
+            });
+        }
+
         try
         {
             var result = await _contactSubmissionService.SaveAsync(
@@ -55,6 +76,8 @@ public class ContactFormController : Controller
                 return Json(new { success = false, message = result.ErrorMessage ?? "Could not send your message." });
             }
 
+            _rateLimiter.Record("contact", clientKey, RateLimitWindow);
+
             return Json(new { success = true, message = "Thank you! Your message has been sent successfully." });
         }
         catch (Exception ex)
@@ -63,6 +86,24 @@ public class ContactFormController : Controller
             Response.StatusCode = StatusCodes.Status500InternalServerError;
             return Json(new { success = false, message = "Something went wrong. Please try again later." });
         }
+    }
+
+    private string GetClientKey()
+    {
+        var forwarded = Request.Headers["X-Forwarded-For"].FirstOrDefault();
+        if (!string.IsNullOrWhiteSpace(forwarded))
+        {
+            var first = forwarded.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+                .FirstOrDefault();
+            if (!string.IsNullOrWhiteSpace(first))
+            {
+                return first;
+            }
+        }
+
+        return HttpContext.Connection.RemoteIpAddress?.ToString()
+            ?? HttpContext.Connection.Id
+            ?? "unknown";
     }
 
     private static string BuildDisplayName(ContactFormModel model)

@@ -114,6 +114,8 @@ public class CentroServicesComposer : IComposer
         builder.Services.AddScoped<IContactSubmissionService, ContactSubmissionService>();
         builder.Services.AddScoped<ICareerViewService, CareerViewService>();
         builder.Services.AddScoped<ICareerApplicationService, CareerApplicationService>();
+        builder.Services.AddSingleton<IFormSubmissionRateLimiter, FormSubmissionRateLimiter>();
+        builder.Services.AddMemoryCache();
         builder.UrlProviders().InsertBefore<NewDefaultUrlProvider, HomePageUrlProvider>();
         builder.UrlProviders().InsertBefore<NewDefaultUrlProvider, SolutionsFolderUrlProvider>();
         builder.UrlProviders().InsertBefore<NewDefaultUrlProvider, CareersFolderUrlProvider>();

@@ -101,6 +101,13 @@ public class CareerApplicationService : ICareerApplicationService
         var phone = request.Phone?.Trim();
         var message = request.Message?.Trim();
 
+        if (EmailAlreadyApplied(email))
+        {
+            return new CareerApplicationResult(
+                false,
+                "An application with this email address has already been submitted.");
+        }
+
         Guid? mediaKey;
         try
         {
@@ -149,6 +156,89 @@ public class CareerApplicationService : ICareerApplicationService
         }
 
         return new CareerApplicationResult(true);
+    }
+
+    private bool EmailAlreadyApplied(string email)
+    {
+        var normalized = email.Trim().ToLowerInvariant();
+        if (string.IsNullOrWhiteSpace(normalized))
+        {
+            return false;
+        }
+
+        var careers = _umbracoHelper.ContentAtRoot()
+            .SelectMany(x => x.DescendantsOrSelfOfType("careersPage"))
+            .FirstOrDefault();
+
+        if (careers == null)
+        {
+            return false;
+        }
+
+        var careersNode = _contentService.GetById(careers.Key);
+        if (careersNode == null)
+        {
+            return false;
+        }
+
+        const int pageSize = 100;
+        long jobTotal;
+        var jobPage = 0;
+        do
+        {
+            var jobs = _contentService.GetPagedChildren(
+                careersNode.Id,
+                jobPage,
+                pageSize,
+                out jobTotal);
+
+            foreach (var job in jobs)
+            {
+                if (!job.ContentType.Alias.Equals("careerDetailPage", StringComparison.OrdinalIgnoreCase))
+                {
+                    continue;
+                }
+
+                long appTotal;
+                var appPage = 0;
+                do
+                {
+                    var applications = _contentService.GetPagedChildren(
+                        job.Id,
+                        appPage,
+                        pageSize,
+                        out appTotal);
+
+                    foreach (var application in applications)
+                    {
+                        if (!application.ContentType.Alias.Equals(
+                                "careerApplication",
+                                StringComparison.OrdinalIgnoreCase))
+                        {
+                            continue;
+                        }
+
+                        var existingEmail = application.GetValue<string>("email")?.Trim();
+                        if (!string.IsNullOrWhiteSpace(existingEmail)
+                            && string.Equals(
+                                existingEmail,
+                                normalized,
+                                StringComparison.OrdinalIgnoreCase))
+                        {
+                            return true;
+                        }
+                    }
+
+                    appPage++;
+                }
+                while (appPage * pageSize < appTotal);
+            }
+
+            jobPage++;
+        }
+        while (jobPage * pageSize < jobTotal);
+
+        return false;
     }
 
     private async Task<Guid> SaveCvMediaAsync(IFormFile file, CancellationToken cancellationToken)

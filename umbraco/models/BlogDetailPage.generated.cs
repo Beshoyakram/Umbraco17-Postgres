@@ -66,14 +66,6 @@ namespace Umbraco.Cms.Web.Common.PublishedModels
 		public virtual string BannerTitle => this.Value<string>(_publishedValueFallback, "bannerTitle");
 
 		///<summary>
-		/// Body (legacy): Fallback only when Content Blocks is empty. Prefer Content Blocks.
-		///</summary>
-		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
-		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
-		[ImplementPropertyType("body")]
-		public virtual string Body => this.Value<string>(_publishedValueFallback, "body");
-
-		///<summary>
 		/// Category: e.g. BPO
 		///</summary>
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
@@ -82,7 +74,7 @@ namespace Umbraco.Cms.Web.Common.PublishedModels
 		public virtual string Category => this.Value<string>(_publishedValueFallback, "category");
 
 		///<summary>
-		/// Content Blocks: Build the post from optional blocks: Rich Text, Heading, Section, Image, Callout, FAQ, CTA, Quote. Use Advanced HTML only for rare interactive widgets.
+		/// Content Blocks: Add one Advanced HTML block and paste the full article HTML (same approach as WordPress Custom HTML).
 		///</summary>
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
 		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
@@ -126,6 +118,28 @@ namespace Umbraco.Cms.Web.Common.PublishedModels
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
 		[ImplementPropertyType("viewCount")]
 		public virtual int ViewCount => this.Value<int>(_publishedValueFallback, "viewCount");
+
+		///<summary>
+		/// Canonical URL Override: Optional. Leave empty unless this page must point to a different canonical URL.
+		///</summary>
+		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
+		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
+		[ImplementPropertyType("canonicalOverride")]
+		public virtual string CanonicalOverride => global::Umbraco.Cms.Web.Common.PublishedModels.SEosettings.GetCanonicalOverride(this, _publishedValueFallback);
+
+		///<summary>
+		/// Exclude From Sitemap: Removes this page from sitemap.xml without changing its index directive.
+		///</summary>
+		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
+		[ImplementPropertyType("excludeFromSitemap")]
+		public virtual bool ExcludeFromSitemap => global::Umbraco.Cms.Web.Common.PublishedModels.SEosettings.GetExcludeFromSitemap(this, _publishedValueFallback);
+
+		///<summary>
+		/// Hide From Search Engines: Adds noindex while allowing crawlers to follow links on this page.
+		///</summary>
+		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
+		[ImplementPropertyType("noIndex")]
+		public virtual bool NoIndex => global::Umbraco.Cms.Web.Common.PublishedModels.SEosettings.GetNoIndex(this, _publishedValueFallback);
 
 		///<summary>
 		/// OG Image: Social/share image (Open Graph / Twitter).

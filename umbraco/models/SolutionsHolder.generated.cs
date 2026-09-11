@@ -20,7 +20,7 @@ namespace Umbraco.Cms.Web.Common.PublishedModels
 {
 	/// <summary>Solutions</summary>
 	[PublishedModel("solutionsHolder")]
-	public partial class SolutionsHolder : PublishedContentModel
+	public partial class SolutionsHolder : PublishedContentModel, INavigationSettings
 	{
 		// helpers
 #pragma warning disable 0109 // new is redundant
@@ -48,5 +48,13 @@ namespace Umbraco.Cms.Web.Common.PublishedModels
 		}
 
 		// properties
+
+		///<summary>
+		/// Navbar Title: Label shown in the website navbar. Leave empty to use the document name.
+		///</summary>
+		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
+		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
+		[ImplementPropertyType("navbarTitle")]
+		public virtual string NavbarTitle => global::Umbraco.Cms.Web.Common.PublishedModels.NavigationSettings.GetNavbarTitle(this, _publishedValueFallback);
 	}
 }

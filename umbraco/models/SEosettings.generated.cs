@@ -22,6 +22,19 @@ namespace Umbraco.Cms.Web.Common.PublishedModels
 	/// <summary>SEO Settings</summary>
 	public partial interface ISEosettings : IPublishedElement
 	{
+		/// <summary>Canonical URL Override</summary>
+		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
+		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
+		string CanonicalOverride { get; }
+
+		/// <summary>Exclude From Sitemap</summary>
+		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
+		bool ExcludeFromSitemap { get; }
+
+		/// <summary>Hide From Search Engines</summary>
+		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
+		bool NoIndex { get; }
+
 		/// <summary>OG Image</summary>
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
 		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
@@ -73,6 +86,41 @@ namespace Umbraco.Cms.Web.Common.PublishedModels
 		}
 
 		// properties
+
+		///<summary>
+		/// Canonical URL Override: Optional. Leave empty unless this page must point to a different canonical URL.
+		///</summary>
+		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
+		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
+		[ImplementPropertyType("canonicalOverride")]
+		public virtual string CanonicalOverride => GetCanonicalOverride(this, _publishedValueFallback);
+
+		/// <summary>Static getter for Canonical URL Override</summary>
+		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
+		[return: global::System.Diagnostics.CodeAnalysis.MaybeNull]
+		public static string GetCanonicalOverride(ISEosettings that, IPublishedValueFallback publishedValueFallback) => that.Value<string>(publishedValueFallback, "canonicalOverride");
+
+		///<summary>
+		/// Exclude From Sitemap: Removes this page from sitemap.xml without changing its index directive.
+		///</summary>
+		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
+		[ImplementPropertyType("excludeFromSitemap")]
+		public virtual bool ExcludeFromSitemap => GetExcludeFromSitemap(this, _publishedValueFallback);
+
+		/// <summary>Static getter for Exclude From Sitemap</summary>
+		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
+		public static bool GetExcludeFromSitemap(ISEosettings that, IPublishedValueFallback publishedValueFallback) => that.Value<bool>(publishedValueFallback, "excludeFromSitemap");
+
+		///<summary>
+		/// Hide From Search Engines: Adds noindex while allowing crawlers to follow links on this page.
+		///</summary>
+		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
+		[ImplementPropertyType("noIndex")]
+		public virtual bool NoIndex => GetNoIndex(this, _publishedValueFallback);
+
+		/// <summary>Static getter for Hide From Search Engines</summary>
+		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
+		public static bool GetNoIndex(ISEosettings that, IPublishedValueFallback publishedValueFallback) => that.Value<bool>(publishedValueFallback, "noIndex");
 
 		///<summary>
 		/// OG Image: Social/share image (Open Graph / Twitter).
