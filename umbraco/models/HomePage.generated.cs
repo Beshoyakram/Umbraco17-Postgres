@@ -20,7 +20,7 @@ namespace Umbraco.Cms.Web.Common.PublishedModels
 {
 	/// <summary>Home-Page</summary>
 	[PublishedModel("homePage")]
-	public partial class HomePage : PublishedContentModel, ISEosettings
+	public partial class HomePage : PublishedContentModel, INavigationSettings, ISEosettings
 	{
 		// helpers
 #pragma warning disable 0109 // new is redundant
@@ -256,6 +256,36 @@ namespace Umbraco.Cms.Web.Common.PublishedModels
 		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
 		[ImplementPropertyType("testimonialsBackground")]
 		public virtual global::Umbraco.Cms.Core.Models.MediaWithCrops TestimonialsBackground => this.Value<global::Umbraco.Cms.Core.Models.MediaWithCrops>(_publishedValueFallback, "testimonialsBackground");
+
+		///<summary>
+		/// Navbar Title: Label shown in the website navbar. Leave empty to use the document name.
+		///</summary>
+		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
+		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
+		[ImplementPropertyType("navbarTitle")]
+		public virtual string NavbarTitle => global::Umbraco.Cms.Web.Common.PublishedModels.NavigationSettings.GetNavbarTitle(this, _publishedValueFallback);
+
+		///<summary>
+		/// Canonical URL Override: Optional. Leave empty unless this page must point to a different canonical URL.
+		///</summary>
+		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
+		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
+		[ImplementPropertyType("canonicalOverride")]
+		public virtual string CanonicalOverride => global::Umbraco.Cms.Web.Common.PublishedModels.SEosettings.GetCanonicalOverride(this, _publishedValueFallback);
+
+		///<summary>
+		/// Exclude From Sitemap: Removes this page from sitemap.xml without changing its index directive.
+		///</summary>
+		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
+		[ImplementPropertyType("excludeFromSitemap")]
+		public virtual bool ExcludeFromSitemap => global::Umbraco.Cms.Web.Common.PublishedModels.SEosettings.GetExcludeFromSitemap(this, _publishedValueFallback);
+
+		///<summary>
+		/// Hide From Search Engines: Adds noindex while allowing crawlers to follow links on this page.
+		///</summary>
+		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
+		[ImplementPropertyType("noIndex")]
+		public virtual bool NoIndex => global::Umbraco.Cms.Web.Common.PublishedModels.SEosettings.GetNoIndex(this, _publishedValueFallback);
 
 		///<summary>
 		/// OG Image: Social/share image (Open Graph / Twitter).

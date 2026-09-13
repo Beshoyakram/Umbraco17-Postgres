@@ -14,9 +14,14 @@
   top: 1rem;
 }
 
+header,
 .header-area {
   position: relative;
-  z-index: 20;
+  z-index: 99999;
+}
+
+#sticky-header {
+  z-index: 99999;
 }
 
 .footer .social_links__icon {

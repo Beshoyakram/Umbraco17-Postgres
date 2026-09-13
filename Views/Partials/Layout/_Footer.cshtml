@@ -139,8 +139,10 @@
                                             else
                                             {
                                                 var aboutUrl = SiteInfo.GetAboutPage()?.Url() ?? "/aboutus";
+                                                var privacyUrl = SiteInfo.GetPrivacyPolicyPage()?.Url() ?? "/privacy-policy";
                                                 <li><a href="@homeUrl">Home</a></li>
                                                 <li><a href="@aboutUrl">About</a></li>
+                                                <li><a href="@privacyUrl">Privacy &amp; Policy</a></li>
                                             }
                                         </ul>
                                     </div>

@@ -110,15 +110,24 @@ public class CentroServicesComposer : IComposer
     public void Compose(IUmbracoBuilder builder)
     {
         builder.Services.AddScoped<ISiteInfoService, SiteInfoService>();
+        builder.Services.AddScoped<ISeoMetadataService, SeoMetadataService>();
         builder.Services.AddScoped<IContactSubmissionService, ContactSubmissionService>();
         builder.Services.AddScoped<ICareerViewService, CareerViewService>();
         builder.Services.AddScoped<ICareerApplicationService, CareerApplicationService>();
+        builder.Services.AddSingleton<IFormSubmissionRateLimiter, FormSubmissionRateLimiter>();
+        builder.Services.AddMemoryCache();
+        builder.UrlProviders().InsertBefore<NewDefaultUrlProvider, HomePageUrlProvider>();
         builder.UrlProviders().InsertBefore<NewDefaultUrlProvider, SolutionsFolderUrlProvider>();
         builder.UrlProviders().InsertBefore<NewDefaultUrlProvider, CareersFolderUrlProvider>();
-        // Inbound companion to CareersFolderUrlProvider (flat /job-slug → nested careerDetailPage).
+        builder.UrlProviders().InsertBefore<NewDefaultUrlProvider, BlogFolderUrlProvider>();
+        builder.ContentFinders().InsertBefore<ContentFinderByUrlNew, HomePageContentFinder>();
+        builder.ContentFinders().InsertBefore<ContentFinderByUrlNew, SolutionsFolderContentFinder>();
         builder.ContentFinders().InsertBefore<ContentFinderByUrlNew, CareersFolderContentFinder>();
+        builder.ContentFinders().InsertBefore<ContentFinderByUrlNew, BlogFolderContentFinder>();
         builder.AddNotificationAsyncHandler<UmbracoApplicationStartedNotification, HeroVideoMediaRepairHandler>();
         builder.AddNotificationAsyncHandler<UmbracoApplicationStartedNotification, SolutionMediaSeedHandler>();
         builder.AddNotificationAsyncHandler<UmbracoApplicationStartedNotification, CareerMediaSeedHandler>();
+        builder.AddNotificationAsyncHandler<UmbracoApplicationStartedNotification, BlogMediaSeedHandler>();
+        builder.AddNotificationAsyncHandler<UmbracoApplicationStartedNotification, PrivacyMediaSeedHandler>();
     }
 }

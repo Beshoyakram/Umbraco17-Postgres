@@ -1,9 +1,9 @@
 ﻿@using System.Globalization
-@using System.Text.Json
 @using Umbraco.Cms.Core.Models.PublishedContent
 @using Centrocdx.Services
 @inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
 @inject ISiteInfoService SiteInfo
+@inject ISeoMetadataService Seo
 @{
     Layout = null;
 
@@ -12,94 +12,9 @@
     var langAttr = culture.Length >= 2 ? culture[..2] : "en";
 
     var siteMain = SiteInfo.GetSiteMainInformation();
-    var siteName = siteMain?.Value<string>("siteTitle") ?? string.Empty;
-    var pageName = Model.Name ?? siteName;
     var favIconUrl = SiteInfo.GetMediaUrl(siteMain?.Value<IPublishedContent>("favIcon"));
-
-    var pageTitle = FirstNonEmpty(
-        Model.Value<string>("sEOTitle"),
-        Model.Value<string>("title"),
-        Model.Value<string>("bannerTitle"),
-        pageName);
-
-    var seoTitle = pageTitle.Contains(siteName ?? string.Empty, StringComparison.OrdinalIgnoreCase)
-        ? pageTitle
-        : string.IsNullOrWhiteSpace(siteName) ? pageTitle : $"{pageTitle} | {siteName}";
-
-    var seoDescription = FirstNonEmpty(
-        Model.Value<string>("sEODescription"),
-        Model.Value<string>("brief"),
-        Model.Value<string>("sectionDescription"),
-        string.Empty);
-
-    var seoKeywords = FirstNonEmpty(
-        Model.Value<string>("sEOKeywords"),
-        Model.Value<string>("keyWords"),
-        string.Empty);
-
-    var canonicalUrl = Model.Url(mode: UrlMode.Absolute);
-    if (string.IsNullOrWhiteSpace(canonicalUrl))
-    {
-        var request = Context.Request;
-        canonicalUrl = $"{request.Scheme}://{request.Host}{request.Path}";
-    }
-
-    var ogImage = ResolveImageUrl("ogImage")
-        ?? ResolveImageUrl("mainImage")
-        ?? ResolveImageUrl("coverImage")
-        ?? SiteInfo.GetMediaUrl(siteMain?.Value<IPublishedContent>("siteLogo"));
-
-    var jsonLd = JsonSerializer.Serialize(new Dictionary<string, object?>
-    {
-        ["@context"] = "https://schema.org",
-        ["@type"] = Model.ContentType.Alias.Equals("homePage", StringComparison.OrdinalIgnoreCase)
-            ? "WebSite"
-            : "WebPage",
-        ["name"] = seoTitle,
-        ["description"] = seoDescription,
-        ["url"] = canonicalUrl,
-        ["inLanguage"] = culture,
-        ["isPartOf"] = new Dictionary<string, object?>
-        {
-            ["@type"] = "WebSite",
-            ["name"] = siteName,
-            ["url"] = $"{Context.Request.Scheme}://{Context.Request.Host}/"
-        }
-    });
-
+    var metadata = Seo.Build(Model);
     var theme = Url.Content("~/theme/centrotheme");
-}
-
-@functions {
-    private static string FirstNonEmpty(params string?[] values)
-    {
-        foreach (var value in values)
-        {
-            if (!string.IsNullOrWhiteSpace(value))
-            {
-                return value.Trim();
-            }
-        }
-
-        return string.Empty;
-    }
-
-    private string? ResolveImageUrl(string alias)
-    {
-        if (!Model.HasProperty(alias) || !Model.HasValue(alias))
-        {
-            return null;
-        }
-
-        var media = Model.Value<IPublishedContent>(alias);
-        if (media == null)
-        {
-            return null;
-        }
-
-        var url = media.Url(mode: UrlMode.Absolute);
-        return string.IsNullOrWhiteSpace(url) ? null : url;
-    }
 }
 <!DOCTYPE html>
 <html lang="@langAttr" dir="@direction" class="no-js">
@@ -107,42 +22,42 @@
     <meta charset="utf-8" />
     <meta http-equiv="x-ua-compatible" content="ie=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>@seoTitle</title>
+    <title>@metadata.Title</title>
 
-    @if (!string.IsNullOrWhiteSpace(seoDescription))
+    @if (!string.IsNullOrWhiteSpace(metadata.Description))
     {
-        <meta name="description" content="@seoDescription" />
+        <meta name="description" content="@metadata.Description" />
     }
-    @if (!string.IsNullOrWhiteSpace(seoKeywords))
+    @if (!string.IsNullOrWhiteSpace(metadata.Keywords))
     {
-        <meta name="keywords" content="@seoKeywords" />
+        <meta name="keywords" content="@metadata.Keywords" />
     }
-    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
-    <link rel="canonical" href="@canonicalUrl" />
+    <meta name="robots" content="@metadata.Robots" />
+    <link rel="canonical" href="@metadata.CanonicalUrl" />
 
-    <meta property="og:site_name" content="@(string.IsNullOrWhiteSpace(siteName) ? seoTitle : siteName)" />
-    <meta property="og:title" content="@seoTitle" />
-    @if (!string.IsNullOrWhiteSpace(seoDescription))
+    <meta property="og:site_name" content="@(siteMain?.Value<string>("siteTitle") ?? "Centro")" />
+    <meta property="og:title" content="@metadata.Title" />
+    @if (!string.IsNullOrWhiteSpace(metadata.Description))
     {
-        <meta property="og:description" content="@seoDescription" />
+        <meta property="og:description" content="@metadata.Description" />
     }
-    <meta property="og:url" content="@canonicalUrl" />
-    <meta property="og:type" content="website" />
-    @if (!string.IsNullOrWhiteSpace(ogImage))
+    <meta property="og:url" content="@metadata.CanonicalUrl" />
+    <meta property="og:type" content="@metadata.OpenGraphType" />
+    @if (!string.IsNullOrWhiteSpace(metadata.ImageUrl))
     {
-        <meta property="og:image" content="@ogImage" />
+        <meta property="og:image" content="@metadata.ImageUrl" />
     }
     <meta property="og:locale" content="@culture.Replace('-', '_')" />
 
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="@seoTitle" />
-    @if (!string.IsNullOrWhiteSpace(seoDescription))
+    <meta name="twitter:title" content="@metadata.Title" />
+    @if (!string.IsNullOrWhiteSpace(metadata.Description))
     {
-        <meta name="twitter:description" content="@seoDescription" />
+        <meta name="twitter:description" content="@metadata.Description" />
     }
-    @if (!string.IsNullOrWhiteSpace(ogImage))
+    @if (!string.IsNullOrWhiteSpace(metadata.ImageUrl))
     {
-        <meta name="twitter:image" content="@ogImage" />
+        <meta name="twitter:image" content="@metadata.ImageUrl" />
     }
 
     @if (!string.IsNullOrWhiteSpace(favIconUrl))
@@ -163,7 +78,7 @@
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
     <link rel="stylesheet" href="~/css/layout/site.css" asp-append-version="true" />
 
-    <script type="application/ld+json">@Html.Raw(jsonLd)</script>
+    <script type="application/ld+json">@Html.Raw(metadata.JsonLd)</script>
     @RenderSection("Head", required: false)
 </head>
 <body>

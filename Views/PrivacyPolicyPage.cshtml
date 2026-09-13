@@ -1,0 +1,74 @@
+﻿@using Umbraco.Cms.Core.Models
+@using Umbraco.Cms.Core.Models.PublishedContent
+@using Centrocdx.Services
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
+@inject ISiteInfoService SiteInfo
+@{
+	Layout = "Layout.cshtml";
+
+	string? ResolveMediaUrl(object? mediaValue)
+	{
+		if (mediaValue == null) return null;
+		try
+		{
+			if (mediaValue is MediaWithCrops mwc)
+			{
+				return SiteInfo.GetMediaUrl(mwc.Content) ?? SiteInfo.GetMediaUrl(mwc);
+			}
+			if (mediaValue is IPublishedContent ipc)
+			{
+				return SiteInfo.GetMediaUrl(ipc);
+			}
+			if (mediaValue is IEnumerable<MediaWithCrops> manyCrops)
+			{
+				var first = manyCrops.FirstOrDefault();
+				return first == null ? null : SiteInfo.GetMediaUrl(first.Content) ?? SiteInfo.GetMediaUrl(first);
+			}
+			if (mediaValue is IEnumerable<IPublishedContent> many)
+			{
+				return SiteInfo.GetMediaUrl(many.FirstOrDefault());
+			}
+		}
+		catch (Exception)
+		{
+			return null;
+		}
+		return null;
+	}
+
+	string? MediaUrl(string alias)
+	{
+		if (!Model.HasProperty(alias) || !Model.HasValue(alias)) return null;
+		try { return ResolveMediaUrl(Model.Value(alias)); }
+		catch (Exception) { return null; }
+	}
+
+	string? Text(string alias)
+		=> Model.HasValue(alias) ? Model.Value<string>(alias) : null;
+
+	var bannerTitle = Text("bannerTitle") ?? "Privacy Policy";
+	var bannerImageUrl = MediaUrl("bannerImage");
+	var bodyHtml = Text("body") ?? string.Empty;
+}
+
+@section Head {
+	<link rel="stylesheet" href="~/css/pages/privacy-policy.css" asp-append-version="true" />
+}
+
+<div class="bg14" style="@(string.IsNullOrWhiteSpace(bannerImageUrl) ? null : $"--privacy-banner-bg: url('{bannerImageUrl}');")">
+	<div class="breadcam_area bradcam_bg overlay2">
+		<div class="bradcam_text">
+			<h3>@bannerTitle</h3>
+		</div>
+	</div>
+</div>
+
+<div class="container privacy-policy-page">
+	<div class="row bg15">
+		<div class="col-lg-10 offset-1">
+			<div class="section_title">
+				@Html.Raw(bodyHtml)
+			</div>
+		</div>
+	</div>
+</div>

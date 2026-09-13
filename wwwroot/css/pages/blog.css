@@ -1,0 +1,149 @@
+/* Blog listing + detail — chrome only.
+   Article body styling for mirrored production posts comes from each post's own <style> embed. */
+
+.bg4[style*="--blog-banner-bg"] .breadcam_area {
+  background-image: var(--blog-banner-bg);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+}
+
+.blog-listing .blog_item {
+  margin-bottom: 40px;
+}
+
+.blog-listing .blog_item_img {
+  position: relative;
+  overflow: visible;
+}
+
+.blog-listing .blog_item_img img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.blog-detail .post-views {
+  color: #8a8a8a;
+  font-weight: 400;
+}
+
+.blog-detail .post-views .fa,
+.blog-detail .post-views .fa-solid {
+  margin-right: 4px;
+}
+
+.blog-detail .feature-img {
+  margin-bottom: 24px;
+  overflow: hidden;
+}
+
+.blog-detail .feature-img img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.blog-detail .blog_details > h2 {
+  margin-bottom: 0;
+}
+
+.blog-detail .excert {
+  margin-bottom: 18px;
+}
+
+.blog-detail .blog-full-body {
+  overflow-x: clip;
+  max-width: 100%;
+}
+
+/* Advanced HTML embeds own their layout (e.g. .rcm-shell).
+   Never force an outer rail grid around .blog-html-embed. */
+.blog-detail .blog-full-body:has(.blog-html-embed) {
+  display: block !important;
+}
+
+/* Production HTML embeds — do not restyle custom internals */
+.blog-detail .blog-html-embed {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: clip;
+}
+
+.blog-detail .blog-html-embed img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Plain WordPress prose posts (no custom <style>) */
+.blog-detail .blog-html-embed > p,
+.blog-detail .blog-html-embed .wp-block-paragraph {
+  margin: 0 0 16px;
+}
+
+.blog-detail .blog-html-embed > h2,
+.blog-detail .blog-html-embed > h3,
+.blog-detail .blog-html-embed .wp-block-heading {
+  margin: 24px 0 12px;
+}
+
+.blog-detail .blog_right_sidebar {
+  position: sticky;
+  top: 100px;
+}
+
+.blog-detail .popular_post_widget .post_item,
+.blog-listing .popular_post_widget .post_item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.blog-detail .popular_post_widget .post_item img,
+.blog-listing .popular_post_widget .post_item img {
+  width: 80px;
+  min-width: 80px;
+  height: 80px;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.blog-detail .popular_post_widget .media-body,
+.blog-listing .popular_post_widget .media-body {
+  min-width: 0;
+}
+
+.blog-sidebar-empty {
+  margin: 0;
+  color: #8a8a8a;
+  font-family: system-ui, sans-serif;
+}
+
+.blog-search-summary {
+  margin-bottom: 24px;
+  font-family: system-ui, sans-serif;
+}
+
+.blog-search-summary a {
+  margin-left: 8px;
+  color: #025376;
+  text-decoration: underline;
+}
+
+.blog-empty {
+  margin: 24px 0 40px;
+  font-family: system-ui, sans-serif;
+}
+
+.blog-listing .blog-pagination {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+@media (max-width: 991px) {
+  .blog-detail .blog_right_sidebar {
+    position: static;
+    margin-top: 40px;
+  }
+}

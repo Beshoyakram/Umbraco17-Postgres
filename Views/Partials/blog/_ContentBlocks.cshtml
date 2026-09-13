@@ -1,0 +1,15 @@
+@using Umbraco.Cms.Core.Models.Blocks
+@model IEnumerable<BlockListItem>?
+
+@if (Model == null || !Model.Any())
+{
+	return;
+}
+
+@foreach (var block in Model)
+{
+	if (block.Content.ContentType.Alias == "blogHtmlBlock")
+	{
+		@await Html.PartialAsync("~/Views/Partials/blog/blocks/_Html.cshtml", block)
+	}
+}

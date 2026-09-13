@@ -1,0 +1,11 @@
+@using Umbraco.Cms.Core.Models.Blocks
+@using Centrocdx.Services
+@model BlockListItem
+@{
+	var data = Model.Content;
+	var html = data.Value<string>("html");
+}
+@if (!string.IsNullOrWhiteSpace(html))
+{
+	@BlogHtmlHelper.ToHtml(html)
+}

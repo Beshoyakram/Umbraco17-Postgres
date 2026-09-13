@@ -1,5 +1,12 @@
 
+using Centrocdx.Services;
+
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
+
+builder.Configuration.AddJsonFile(
+    "seo/legacy-redirects.json",
+    optional: false,
+    reloadOnChange: true);
 
 builder.CreateUmbracoBuilder()
     .AddBackOffice()
@@ -13,6 +20,7 @@ WebApplication app = builder.Build();
 await app.BootUmbracoAsync();
 
 app.UseHttpsRedirection();
+app.UseMiddleware<LegacyRedirectMiddleware>();
 
 app.UseUmbraco()
     .WithMiddleware(u =>
@@ -22,12 +30,6 @@ app.UseUmbraco()
     })
     .WithEndpoints(u =>
     {
-        u.EndpointRouteBuilder.MapGet("/", context =>
-        {
-            context.Response.Redirect("/home", permanent: false);
-            return Task.CompletedTask;
-        });
-
         u.UseBackOfficeEndpoints();
         u.UseWebsiteEndpoints();
     });

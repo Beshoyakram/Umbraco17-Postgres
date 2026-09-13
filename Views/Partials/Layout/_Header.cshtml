@@ -5,14 +5,7 @@
 @{
     var home = SiteInfo.GetHomePage() ?? Model.Root()?.DescendantsOrSelfOfType("homePage").FirstOrDefault() ?? Model;
     var homeUrl = home?.Url() ?? "/";
-    var about = SiteInfo.GetAboutPage();
-    var aboutUrl = about?.Url() ?? "/aboutus";
     var getInTouchUrl = SiteInfo.GetGetInTouchPage()?.Url() ?? "/get-in-touch";
-    var careersUrl = SiteInfo.GetCareersPage()?.Url() ?? "/careers";
-    var solutions = SiteInfo.GetSolutionPages().ToList();
-    var bpoUrl = SiteInfo.GetSolutionPage("bpo")?.Url() ?? "/bpo";
-    var healthUrl = SiteInfo.GetSolutionPage("health")?.Url() ?? "/health";
-    var digitalUrl = SiteInfo.GetSolutionPage("digital")?.Url() ?? "/digital";
     var site = SiteInfo.GetSiteMainInformation();
     var siteTitle = site?.Value<string>("siteTitle");
     var logoUrl = SiteInfo.GetMediaUrl(site?.Value<Umbraco.Cms.Core.Models.PublishedContent.IPublishedContent>("siteLogo"));
@@ -33,11 +26,48 @@
         ctaLabel = "Free Consultation";
     }
 
-    var isAbout = Model.ContentType.Alias.Equals("aboutPage", StringComparison.OrdinalIgnoreCase);
-    var isHome = Model.ContentType.Alias.Equals("homePage", StringComparison.OrdinalIgnoreCase);
-    var isSolution = Model.ContentType.Alias.Equals("solutionPage", StringComparison.OrdinalIgnoreCase);
-    var isCareers = Model.ContentType.Alias.Equals("careersPage", StringComparison.OrdinalIgnoreCase)
-        || Model.ContentType.Alias.Equals("careerDetailPage", StringComparison.OrdinalIgnoreCase);
+    string? RoutableUrl(Umbraco.Cms.Core.Models.PublishedContent.IPublishedContent item)
+    {
+        try
+        {
+            var url = item.Url();
+            return string.IsNullOrWhiteSpace(url) || url == "#" ? null : url;
+        }
+        catch (InvalidOperationException)
+        {
+            return null;
+        }
+        catch (ArgumentException)
+        {
+            return null;
+        }
+    }
+
+    string NavTitle(Umbraco.Cms.Core.Models.PublishedContent.IPublishedContent item)
+    {
+        var title = item.HasProperty("navbarTitle") ? item.Value<string>("navbarTitle") : null;
+        return string.IsNullOrWhiteSpace(title) ? item.Name : title.Trim();
+    }
+
+    var navigationRoot = Model
+        .AncestorsOrSelf()
+        .FirstOrDefault(x => x.ContentType.Alias.Equals("contentTreeRoot", StringComparison.OrdinalIgnoreCase))
+        ?? home?.AncestorsOrSelf()
+            .FirstOrDefault(x => x.ContentType.Alias.Equals("contentTreeRoot", StringComparison.OrdinalIgnoreCase));
+
+    // Contact is rendered as the header CTA and privacy remains in the footer.
+    var excludedAliases = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+    {
+        "getInTouchPage",
+        "privacyPolicyPage"
+    };
+
+    var navigationItems = navigationRoot?
+        .Children()
+        .Where(x => x.IsPublished() && !excludedAliases.Contains(x.ContentType.Alias))
+        .OrderBy(x => x.SortOrder)
+        .ToList()
+        ?? [];
 }
 <header>
     <div class="header-area">
@@ -62,18 +92,47 @@
                         <div class="main-menu d-none d-lg-block">
                             <nav>
                                 <ul id="navigation">
-                                    <li><a class="@(isHome ? "active" : null)" href="@homeUrl">home</a></li>
-                                    <li><a class="@(isAbout ? "active" : null)" href="@aboutUrl">About</a></li>
-                                    <li>
-                                        <a class="@(isSolution ? "active" : null)" href="@(solutions.FirstOrDefault()?.Url() ?? bpoUrl)">solutions <i class="ti-angle-down"></i></a>
-                                        <ul class="submenu">
-                                            <li><a href="@bpoUrl">Business outsourcing</a></li>
-                                            <li><a href="@healthUrl">Healthcare solutions</a></li>
-                                            <li><a href="@digitalUrl">Digital Transformation</a></li>
-                                        </ul>
-                                    </li>
-                                    <li><a class="@(isCareers ? "active" : null)" href="@careersUrl">careers</a></li>
-                                    <li><a href="@(homeUrl.TrimEnd('/'))#contact">Blog</a></li>
+                                    @foreach (var navigationItem in navigationItems)
+                                    {
+                                        var itemUrl = RoutableUrl(navigationItem);
+                                        var dropdownItems = navigationItem
+                                            .Children()
+                                            .Where(x => x.IsPublished())
+                                            .OrderBy(x => x.SortOrder)
+                                            .Select(x => new { Content = x, Url = RoutableUrl(x) })
+                                            .Where(x => x.Url != null)
+                                            .ToList();
+                                        var hasTemplate = navigationItem.TemplateId > 0;
+                                        var showDropdown = !hasTemplate && dropdownItems.Count > 0;
+                                        var isActive = Model.AncestorsOrSelf().Any(x => x.Key == navigationItem.Key);
+                                        var itemTitle = NavTitle(navigationItem);
+
+                                        if ((hasTemplate && !string.IsNullOrWhiteSpace(itemUrl)) || showDropdown)
+                                        {
+                                            <li>
+                                                @if (showDropdown)
+                                                {
+                                                    <a class="@(isActive ? "active" : null)" aria-haspopup="true">
+                                                        @itemTitle
+                                                        <i class="ti-angle-down"></i>
+                                                    </a>
+                                                }
+                                                else
+                                                {
+                                                    <a class="@(isActive ? "active" : null)" href="@itemUrl">@itemTitle</a>
+                                                }
+                                                @if (showDropdown)
+                                                {
+                                                    <ul class="submenu">
+                                                        @foreach (var dropdownItem in dropdownItems)
+                                                        {
+                                                            <li><a href="@dropdownItem.Url">@NavTitle(dropdownItem.Content)</a></li>
+                                                        }
+                                                    </ul>
+                                                }
+                                            </li>
+                                        }
+                                    }
                                 </ul>
                             </nav>
                         </div>
