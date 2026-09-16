@@ -66,7 +66,7 @@ public class ContactFormController : Controller
                     model.Phone.Trim(),
                     model.Message.Trim(),
                     model.FormKey,
-                    model.Occupation,
+                    string.IsNullOrWhiteSpace(model.Subject) ? model.Occupation : model.Subject.Trim(),
                     model.Company,
                     model.SourcePage),
                 cancellationToken);
@@ -140,6 +140,9 @@ public class ContactFormController : Controller
 
         [StringLength(255)]
         public string? Occupation { get; set; }
+
+        [StringLength(255)]
+        public string? Subject { get; set; }
 
         [StringLength(255)]
         public string? Company { get; set; }

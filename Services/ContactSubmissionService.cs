@@ -28,14 +28,19 @@ public class ContactSubmissionService : IContactSubmissionService
 
     private readonly IContentService _contentService;
     private readonly UmbracoHelper _umbracoHelper;
+    private readonly IFormEmailNotificationService _emailNotificationService;
 
-    public ContactSubmissionService(IContentService contentService, UmbracoHelper umbracoHelper)
+    public ContactSubmissionService(
+        IContentService contentService,
+        UmbracoHelper umbracoHelper,
+        IFormEmailNotificationService emailNotificationService)
     {
         _contentService = contentService;
         _umbracoHelper = umbracoHelper;
+        _emailNotificationService = emailNotificationService;
     }
 
-    public Task<ContactSubmissionResult> SaveAsync(ContactSubmissionRequest request, CancellationToken cancellationToken = default)
+    public async Task<ContactSubmissionResult> SaveAsync(ContactSubmissionRequest request, CancellationToken cancellationToken = default)
     {
         var formKey = string.IsNullOrWhiteSpace(request.FormKey) ? DefaultFormKey : request.FormKey.Trim();
         var inbox = FindInboxByFormKey(formKey)
@@ -46,13 +51,16 @@ public class ContactSubmissionService : IContactSubmissionService
 
         if (inbox == null)
         {
-            return Task.FromResult(new ContactSubmissionResult(false, "Contact inbox is not configured."));
+            return new ContactSubmissionResult(false, "Contact inbox is not configured.");
         }
 
         var name = request.Name.Trim();
         var email = request.Email.Trim();
         var phone = request.Phone.Trim();
         var message = request.Message.Trim();
+        var occupation = request.Occupation?.Trim();
+        var company = request.Company?.Trim();
+        var sourcePage = request.SourcePage?.Trim();
 
         var nodeName = $"{name} — {DateTime.Now:yyyy-MM-dd HH:mm}";
         var submission = _contentService.Create(nodeName, inbox.Id, "contactUsSubmission");
@@ -62,28 +70,55 @@ public class ContactSubmissionService : IContactSubmissionService
         submission.SetValue("phone", phone);
         submission.SetValue("message", message);
 
-        if (!string.IsNullOrWhiteSpace(request.Occupation))
+        if (!string.IsNullOrWhiteSpace(occupation))
         {
-            submission.SetValue("occupation", request.Occupation.Trim());
+            submission.SetValue("occupation", occupation);
         }
 
-        if (!string.IsNullOrWhiteSpace(request.Company))
+        if (!string.IsNullOrWhiteSpace(company))
         {
-            submission.SetValue("company", request.Company.Trim());
+            submission.SetValue("company", company);
         }
 
-        if (!string.IsNullOrWhiteSpace(request.SourcePage))
+        if (!string.IsNullOrWhiteSpace(sourcePage))
         {
-            submission.SetValue("sourcePage", request.SourcePage.Trim());
+            submission.SetValue("sourcePage", sourcePage);
         }
 
         var saveResult = _contentService.Save(submission);
         if (!saveResult.Success)
         {
-            return Task.FromResult(new ContactSubmissionResult(false, "Could not save your message. Please try again."));
+            return new ContactSubmissionResult(false, "Could not save your message. Please try again.");
         }
 
-        return Task.FromResult(new ContactSubmissionResult(true));
+        var fields = new Dictionary<string, string?>
+        {
+            ["Name"] = name,
+            ["Email"] = email,
+            ["Phone"] = phone,
+            ["Company"] = company,
+            ["Source page"] = sourcePage,
+            ["Form key"] = formKey,
+            ["Message"] = message
+        };
+
+        if (!string.IsNullOrWhiteSpace(occupation))
+        {
+            var subjectOrOccupationLabel = formKey.Equals("getInTouch", StringComparison.OrdinalIgnoreCase)
+                ? "Occupation"
+                : "Subject";
+            fields[subjectOrOccupationLabel] = occupation;
+        }
+
+        await _emailNotificationService.SendAsync(
+            new FormEmailNotification(
+                "Contact form",
+                $"New contact form submission from {name}",
+                fields,
+                email),
+            cancellationToken);
+
+        return new ContactSubmissionResult(true);
     }
 
     private IContent? FindInboxByFormKey(string formKey)

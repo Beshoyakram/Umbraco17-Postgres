@@ -3,13 +3,112 @@
     <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <UserSecretsId>centrocdx-umbraco-dev</UserSecretsId>
     <CompressionEnabled>false</CompressionEnabled> <!-- Disable compression. E.g. for umbraco backoffice files. These files should be precompressed by node and not let dotnet handle it -->
   </PropertyGroup>
+  <ItemGroup>
+    <Content Include="wwwroot\media\1gwdnz2r\9.png" />
+    <Content Include="wwwroot\media\3jhkioyp\10.png" />
+    <Content Include="wwwroot\media\45fjgg43\consultation.png" />
+    <Content Include="wwwroot\media\4donw04i\bpo.png" />
+    <Content Include="wwwroot\media\aboutpage\banner\about-banner.png" />
+    <Content Include="wwwroot\media\aboutpage\certs\ccpa.png" />
+    <Content Include="wwwroot\media\aboutpage\certs\g100.png" />
+    <Content Include="wwwroot\media\aboutpage\certs\gdpr.png" />
+    <Content Include="wwwroot\media\aboutpage\certs\hipaa.png" />
+    <Content Include="wwwroot\media\aboutpage\certs\iso-9001.png" />
+    <Content Include="wwwroot\media\aboutpage\certs\oa500.png" />
+    <Content Include="wwwroot\media\aboutpage\chairman\chairman.png" />
+    <Content Include="wwwroot\media\as0nwkt3\logo.png" />
+    <Content Include="wwwroot\media\blog\2026-contact-center-trends-what-to-watch-this-year.png" />
+    <Content Include="wwwroot\media\blog\banner.png" />
+    <Content Include="wwwroot\media\blog\bilingual-excellence-at-scale-how-we-became-a-top-insurance-brokerages-most-trusted-partner.png" />
+    <Content Include="wwwroot\media\blog\bpo-in-2025-what-the-next-decade-holds-for-business-process-outsourcing.png" />
+    <Content Include="wwwroot\media\blog\centro-forge-forging-influence-driving-growth.png" />
+    <Content Include="wwwroot\media\blog\centro-named-iaop-global-outsourcing-100.png" />
+    <Content Include="wwwroot\media\blog\centro-places-in-top-500-global-outsourcing-firm-index.png" />
+    <Content Include="wwwroot\media\blog\centro-receives-official-ntra-license-a-major-milestone-in-our-growth-journey.jpg" />
+    <Content Include="wwwroot\media\blog\centrocdx-com-prior-authorization-automation-2027.png" />
+    <Content Include="wwwroot\media\blog\cms-0057-f-prior-authorization-2026.png" />
+    <Content Include="wwwroot\media\blog\contact-center-staffing-calculator.png" />
+    <Content Include="wwwroot\media\blog\corporate-responsibility-in-action-centros-emergency-response-initiative.png" />
+    <Content Include="wwwroot\media\blog\empowering-our-communities-g-i-v-e-and-the-egyptian-food-bank-collaboration.png" />
+    <Content Include="wwwroot\media\blog\from-inception-to-a-global-leader-the-journey-of-centro-cdx.jpg" />
+    <Content Include="wwwroot\media\blog\growing-careers-while-scaling-businesses.jpeg" />
+    <Content Include="wwwroot\media\blog\growing-careers-while-scaling-businesses.jpg" />
+    <Content Include="wwwroot\media\blog\healthcare-revenue-cycle-management-trends-in-2026-denials-staffing-and-the-ai-roi-gap.png" />
+    <Content Include="wwwroot\media\blog\how-outsourcing-improves-first-call-resolution-by-strategy.png" />
+    <Content Include="wwwroot\media\blog\how-to-design-a-consistent-student-experience.png" />
+    <Content Include="wwwroot\media\blog\maximize-revenue-minimize-delays-why-centros-rcm-solutions-matter.jpg" />
+    <Content Include="wwwroot\media\blog\predictive-customer-experience-using-data-to-prevent-problems-before-they-happen.png" />
+    <Content Include="wwwroot\media\blog\quality-assurance-in-contact-center-outsourcing-how-centro-maintains-a-91-satisfaction-rate.png" />
+    <Content Include="wwwroot\media\blog\reducing-wait-times-increasing-loyalty-the-cx-impact-of-contact-center-outsourcing.png" />
+    <Content Include="wwwroot\media\blog\supporting-hope-centro-visits-childrens-cancer-hospital-egypt-57357-on-world-humanitarian-day.png" />
+    <Content Include="wwwroot\media\blog\the-4-layers-of-consistent-customer-experience.png" />
+    <Content Include="wwwroot\media\blog\the-centro-effect-in-action-scaling-a-startup-from-potential-to-performance.png" />
+    <Content Include="wwwroot\media\blog\the-hidden-risk-of-inconsistent-customer-responses-across-channels.png" />
+    <Content Include="wwwroot\media\blog\the-power-of-our-core-values-displayed-in-our-everyday-work.png" />
+    <Content Include="wwwroot\media\blog\under-the-hood-of-consumer-first-brands-how-bpo-powers-growth-with-invisible-strength.png" />
+    <Content Include="wwwroot\media\blog\what-buyers-should-ask-before-outsourcing-cx.png" />
+    <Content Include="wwwroot\media\blog\what-happens-after-the-call-the-overlooked-half-of-customer-experience.png" />
+    <Content Include="wwwroot\media\blog\what-happens-after-you-choose-an-offshore-customer-support-partner.png" />
+    <Content Include="wwwroot\media\blog\what-most-sla-reports-dont-tell-you.png" />
+    <Content Include="wwwroot\media\blog\what-we-heard-at-ccw-las-vegas-2026-the-future-of-cx-is-built-on-better-operations.png" />
+    <Content Include="wwwroot\media\blog\why-outsourcing-education-services-is-critical-during-peak-academic-cycles.png" />
+    <Content Include="wwwroot\media\blog\why-strong-offshore-operations-still-deliver-high-quality-customer-support-outsourcing.png" />
+    <Content Include="wwwroot\media\blog\why-technology-cant-replace-great-digital-customer-experience.png" />
+    <Content Include="wwwroot\media\bz3fmp3q\about.png" />
+    <Content Include="wwwroot\media\c0ed255s\testimonial-bg.png" />
+    <Content Include="wwwroot\media\careers\banner.png" />
+    <Content Include="wwwroot\media\deifk33d\7.png" />
+    <Content Include="wwwroot\media\etobq2rn\4.png" />
+    <Content Include="wwwroot\media\fibns2zu\8.png" />
+    <Content Include="wwwroot\media\hpodvf2e\6.png" />
+    <Content Include="wwwroot\media\ijrjqhzp\hero.mp4" />
+    <Content Include="wwwroot\media\kimhjovl\digital.png" />
+    <Content Include="wwwroot\media\mqhg4r4q\footer-bg.png" />
+    <Content Include="wwwroot\media\ozanyfpz\homebg.jpeg" />
+    <Content Include="wwwroot\media\ozanyfpz\homebg.png" />
+    <Content Include="wwwroot\media\pjtk1ccs\3.png" />
+    <Content Include="wwwroot\media\privacy\banner.png" />
+    <Content Include="wwwroot\media\ql4bs1my\footer-logo.png" />
+    <Content Include="wwwroot\media\qo3nigke\2.png" />
+    <Content Include="wwwroot\media\qrehyo3u\icon.jpg" />
+    <Content Include="wwwroot\media\solutions\bpo\back-office.png" />
+    <Content Include="wwwroot\media\solutions\bpo\banner.png" />
+    <Content Include="wwwroot\media\solutions\bpo\contact-center.png" />
+    <Content Include="wwwroot\media\solutions\bpo\hr-payroll.png" />
+    <Content Include="wwwroot\media\solutions\bpo\intro.png" />
+    <Content Include="wwwroot\media\solutions\bpo\it.png" />
+    <Content Include="wwwroot\media\solutions\digital\banner.png" />
+    <Content Include="wwwroot\media\solutions\digital\end-to-end-support.png" />
+    <Content Include="wwwroot\media\solutions\digital\future-ready.png" />
+    <Content Include="wwwroot\media\solutions\digital\intro.png" />
+    <Content Include="wwwroot\media\solutions\digital\operational.png" />
+    <Content Include="wwwroot\media\solutions\digital\proven-expertise.png" />
+    <Content Include="wwwroot\media\solutions\digital\revenue-growth.png" />
+    <Content Include="wwwroot\media\solutions\digital\tailored-strategies.png" />
+    <Content Include="wwwroot\media\solutions\health\banner.png" />
+    <Content Include="wwwroot\media\solutions\health\compliance.png" />
+    <Content Include="wwwroot\media\solutions\health\cost-effective.png" />
+    <Content Include="wwwroot\media\solutions\health\fifteen-years.png" />
+    <Content Include="wwwroot\media\solutions\health\intro.png" />
+    <Content Include="wwwroot\media\solutions\health\patient-care.png" />
+    <Content Include="wwwroot\media\t1nfov1y\andrew-treanor.png" />
+    <Content Include="wwwroot\media\t1nfov1y\matthew-antonishak.png" />
+    <Content Include="wwwroot\media\t1nfov1y\nevena-trainor.png" />
+    <Content Include="wwwroot\media\t1nfov1y\sara-cruz.png" />
+    <Content Include="wwwroot\media\vyygx2t1\ai-bg.png" />
+    <Content Include="wwwroot\media\x20bzb4j\1.png" />
+    <Content Include="wwwroot\media\z1rpeizz\healthcare.png" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Umbraco.Cms" />
     <PackageReference Include="Our.Umbraco.PostgreSql" />
     <PackageReference Include="uSync" />
+    <PackageReference Include="Azure.Identity" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" />
   </ItemGroup>
 
   <PropertyGroup>
@@ -36,6 +135,15 @@
 
   <ItemGroup>
     <Folder Include="DB\" />
+    <Folder Include="wwwroot\media\solutions\shared\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\media\career-cvs\a7010005111141118111111111111102\8469aa4c70394d2ea243a1a961c7edcf-file-sample_150kB.pdf" />
+    <None Include="wwwroot\media\pnagr1mn\file-sample_150kb.pdf" />
+    <None Include="wwwroot\media\social\facebook.svg" />
+    <None Include="wwwroot\media\social\instagram.svg" />
+    <None Include="wwwroot\media\social\linkedin.svg" />
   </ItemGroup>
 
 

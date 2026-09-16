@@ -1,4 +1,5 @@
 using System.Text.Json;
+using Centrocdx.Options;
 using Microsoft.Extensions.Logging;
 using Umbraco.Cms.Core;
 using Umbraco.Cms.Core.Composing;
@@ -109,6 +110,10 @@ public class CentroServicesComposer : IComposer
 {
     public void Compose(IUmbracoBuilder builder)
     {
+        builder.Services.Configure<AzureAdOptions>(builder.Config.GetSection(AzureAdOptions.SectionName));
+        builder.Services.Configure<MailOptions>(builder.Config.GetSection(MailOptions.SectionName));
+        builder.Services.AddHttpClient(nameof(FormEmailNotificationService));
+        builder.Services.AddScoped<IFormEmailNotificationService, FormEmailNotificationService>();
         builder.Services.AddScoped<ISiteInfoService, SiteInfoService>();
         builder.Services.AddScoped<ISeoMetadataService, SeoMetadataService>();
         builder.Services.AddScoped<IContactSubmissionService, ContactSubmissionService>();
@@ -120,10 +125,12 @@ public class CentroServicesComposer : IComposer
         builder.UrlProviders().InsertBefore<NewDefaultUrlProvider, SolutionsFolderUrlProvider>();
         builder.UrlProviders().InsertBefore<NewDefaultUrlProvider, CareersFolderUrlProvider>();
         builder.UrlProviders().InsertBefore<NewDefaultUrlProvider, BlogFolderUrlProvider>();
+        builder.UrlProviders().InsertBefore<NewDefaultUrlProvider, ContactUsUrlProvider>();
         builder.ContentFinders().InsertBefore<ContentFinderByUrlNew, HomePageContentFinder>();
         builder.ContentFinders().InsertBefore<ContentFinderByUrlNew, SolutionsFolderContentFinder>();
         builder.ContentFinders().InsertBefore<ContentFinderByUrlNew, CareersFolderContentFinder>();
         builder.ContentFinders().InsertBefore<ContentFinderByUrlNew, BlogFolderContentFinder>();
+        builder.ContentFinders().InsertBefore<ContentFinderByUrlNew, ContactUsContentFinder>();
         builder.AddNotificationAsyncHandler<UmbracoApplicationStartedNotification, HeroVideoMediaRepairHandler>();
         builder.AddNotificationAsyncHandler<UmbracoApplicationStartedNotification, SolutionMediaSeedHandler>();
         builder.AddNotificationAsyncHandler<UmbracoApplicationStartedNotification, CareerMediaSeedHandler>();

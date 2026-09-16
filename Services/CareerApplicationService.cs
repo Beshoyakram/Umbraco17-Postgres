@@ -42,6 +42,7 @@ public class CareerApplicationService : ICareerApplicationService
     private readonly IShortStringHelper _shortStringHelper;
     private readonly IContentTypeBaseServiceProvider _contentTypeBaseServiceProvider;
     private readonly UmbracoHelper _umbracoHelper;
+    private readonly IFormEmailNotificationService _emailNotificationService;
     private readonly ILogger<CareerApplicationService> _logger;
 
     public CareerApplicationService(
@@ -52,6 +53,7 @@ public class CareerApplicationService : ICareerApplicationService
         IShortStringHelper shortStringHelper,
         IContentTypeBaseServiceProvider contentTypeBaseServiceProvider,
         UmbracoHelper umbracoHelper,
+        IFormEmailNotificationService emailNotificationService,
         ILogger<CareerApplicationService> logger)
     {
         _contentService = contentService;
@@ -61,6 +63,7 @@ public class CareerApplicationService : ICareerApplicationService
         _shortStringHelper = shortStringHelper;
         _contentTypeBaseServiceProvider = contentTypeBaseServiceProvider;
         _umbracoHelper = umbracoHelper;
+        _emailNotificationService = emailNotificationService;
         _logger = logger;
     }
 
@@ -108,10 +111,24 @@ public class CareerApplicationService : ICareerApplicationService
                 "An application with this email address has already been submitted.");
         }
 
+        byte[] cvBytes;
+        try
+        {
+            await using var cvStream = request.Cv.OpenReadStream();
+            await using var memory = new MemoryStream();
+            await cvStream.CopyToAsync(memory, cancellationToken);
+            cvBytes = memory.ToArray();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Failed to read CV upload for job {JobKey}.", request.JobKey);
+            return new CareerApplicationResult(false, "Could not upload your CV. Please try again.");
+        }
+
         Guid? mediaKey;
         try
         {
-            mediaKey = await SaveCvMediaAsync(request.Cv, cancellationToken);
+            mediaKey = await SaveCvMediaAsync(cvBytes, request.Cv.FileName);
         }
         catch (Exception ex)
         {
@@ -154,6 +171,31 @@ public class CareerApplicationService : ICareerApplicationService
         {
             return new CareerApplicationResult(false, "Could not save your application. Please try again.");
         }
+
+        var jobTitle = publishedJob.Name ?? job.Name;
+        var fields = new Dictionary<string, string?>
+        {
+            ["Applicant name"] = name,
+            ["Email"] = email,
+            ["Phone"] = phone,
+            ["Job"] = jobTitle,
+            ["Message"] = message,
+            ["CV file"] = request.Cv.FileName
+        };
+
+        await _emailNotificationService.SendAsync(
+            new FormEmailNotification(
+                "Career application",
+                $"New career application from {name} — {jobTitle}",
+                fields,
+                email,
+                new FormEmailAttachment(
+                    SanitizeFileName(request.Cv.FileName),
+                    string.IsNullOrWhiteSpace(request.Cv.ContentType)
+                        ? "application/octet-stream"
+                        : request.Cv.ContentType,
+                    cvBytes)),
+            cancellationToken);
 
         return new CareerApplicationResult(true);
     }
@@ -241,10 +283,10 @@ public class CareerApplicationService : ICareerApplicationService
         return false;
     }
 
-    private async Task<Guid> SaveCvMediaAsync(IFormFile file, CancellationToken cancellationToken)
+    private Task<Guid> SaveCvMediaAsync(byte[] fileBytes, string originalFileName)
     {
         var folder = EnsureCvsFolder();
-        var safeName = SanitizeFileName(file.FileName);
+        var safeName = SanitizeFileName(originalFileName);
         var mediaName = Path.GetFileNameWithoutExtension(safeName);
         if (string.IsNullOrWhiteSpace(mediaName))
         {
@@ -253,12 +295,7 @@ public class CareerApplicationService : ICareerApplicationService
 
         var media = _mediaService.CreateMedia(mediaName, folder.Id, Constants.Conventions.MediaTypes.File);
 
-        await using var stream = file.OpenReadStream();
-        // Copy to a seekable stream — MediaFileManager may need Length/Position.
-        await using var memory = new MemoryStream();
-        await stream.CopyToAsync(memory, cancellationToken);
-        memory.Position = 0;
-
+        using var memory = new MemoryStream(fileBytes);
         media.SetValue(
             _mediaFileManager,
             _mediaUrlGenerators,
@@ -274,7 +311,7 @@ public class CareerApplicationService : ICareerApplicationService
             throw new InvalidOperationException("MediaService.Save failed for CV upload.");
         }
 
-        return media.Key;
+        return Task.FromResult(media.Key);
     }
 
     private IMedia EnsureCvsFolder()

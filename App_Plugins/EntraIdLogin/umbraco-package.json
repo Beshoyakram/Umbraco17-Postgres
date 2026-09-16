@@ -1,0 +1,25 @@
+{
+  "$schema": "../../umbraco-package-schema.json",
+  "name": "Centro CDX Entra ID Login",
+  "allowPublicAccess": true,
+  "extensions": [
+    {
+      "type": "authProvider",
+      "alias": "Centrocdx.AuthProvider.EntraId",
+      "name": "Microsoft Entra ID",
+      "forProviderName": "Umbraco.OpenIdConnect",
+      "meta": {
+        "label": "Sign in with Microsoft",
+        "defaultView": {
+          "icon": "icon-cloud"
+        },
+        "behavior": {
+          "autoRedirect": false
+        },
+        "linking": {
+          "allowManualLinking": true
+        }
+      }
+    }
+  ]
+}

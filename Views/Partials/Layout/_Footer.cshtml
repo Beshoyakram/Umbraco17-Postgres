@@ -6,7 +6,7 @@
 @inject ISiteInfoService SiteInfo
 @{
     var homeUrl = SiteInfo.GetHomePage()?.Url() ?? "/";
-    var getInTouchUrl = SiteInfo.GetGetInTouchPage()?.Url() ?? "/get-in-touch";
+    var getInTouchUrl = SiteInfo.GetGetInTouchPage()?.Url() ?? "/contactus/";
     var footer = SiteInfo.GetFooter();
     var logoUrl = SiteInfo.GetMediaUrl(footer?.Value<IPublishedContent>("footerLogo"));
     var ctaTitle = footer?.Value<string>("ctaTitle");

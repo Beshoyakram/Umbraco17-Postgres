@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{{Subject}}</title>
+</head>
+<body style="margin:0;padding:0;background:#f4f7f9;font-family:Segoe UI,Arial,sans-serif;color:#333;">
+  <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background:#f4f7f9;padding:24px 12px;">
+    <tr>
+      <td align="center">
+        <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="max-width:640px;background:#ffffff;border-radius:8px;overflow:hidden;border:1px solid #d9e4ea;">
+          <tr>
+            <td style="background:#025376;padding:28px 32px;">
+              <div style="font-size:22px;font-weight:700;color:#ffffff;letter-spacing:0.3px;">Centro CDX</div>
+              <div style="margin-top:6px;font-size:14px;color:#d4e7f0;">Website form notification</div>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:28px 32px 8px 32px;">
+              <h1 style="margin:0 0 8px 0;font-size:20px;line-height:1.35;color:#025376;">{{Subject}}</h1>
+              <p style="margin:0 0 20px 0;font-size:14px;line-height:1.5;color:#5a6b73;">
+                A new <strong style="color:#025376;">{{FormType}}</strong> submission was received on {{SubmittedAt}}.
+              </p>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:0 32px 28px 32px;">
+              <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="border:1px solid #e8eef2;border-radius:6px;overflow:hidden;">
+                <thead>
+                  <tr>
+                    <th align="left" style="padding:10px 12px;background:#f0f6f9;color:#025376;font-size:13px;border-bottom:1px solid #e8eef2;">Field</th>
+                    <th align="left" style="padding:10px 12px;background:#f0f6f9;color:#025376;font-size:13px;border-bottom:1px solid #e8eef2;">Value</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {{FieldRows}}
+                </tbody>
+              </table>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:16px 32px 24px 32px;border-top:1px solid #e8eef2;background:#fafcfd;">
+              <p style="margin:0;font-size:12px;line-height:1.5;color:#7a8a92;">
+                This message was sent automatically from the Centro CDX website. Reply to this email to contact the submitter when a reply-to address is available.
+              </p>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>

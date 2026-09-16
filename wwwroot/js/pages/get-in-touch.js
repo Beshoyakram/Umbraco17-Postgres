@@ -4,13 +4,26 @@
 
   var submitBtn = document.getElementById('get-in-touch-submit-btn');
   var responseMsg = document.getElementById('form-response-message');
+  var consent = document.getElementById('smsConsent');
 
   form.addEventListener('submit', async function (e) {
     e.preventDefault();
     if (!submitBtn || !responseMsg) return;
 
     responseMsg.classList.remove('is-visible', 'is-success', 'is-error');
-    submitBtn.innerText = 'Sending...';
+
+    if (consent && !consent.checked) {
+      responseMsg.classList.add('is-visible', 'is-error');
+      responseMsg.innerText = 'Please accept the SMS consent and privacy terms to continue.';
+      return;
+    }
+
+    if (!form.checkValidity()) {
+      form.reportValidity();
+      return;
+    }
+
+    submitBtn.innerText = 'SENDING...';
     submitBtn.disabled = true;
 
     try {
@@ -32,7 +45,7 @@
       responseMsg.classList.add('is-visible', 'is-error');
       responseMsg.innerText = 'Something went wrong. Please try again later.';
     } finally {
-      submitBtn.innerText = 'Send';
+      submitBtn.innerText = 'SEND';
       submitBtn.disabled = false;
     }
   });

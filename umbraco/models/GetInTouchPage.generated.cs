@@ -50,7 +50,23 @@ namespace Umbraco.Cms.Web.Common.PublishedModels
 		// properties
 
 		///<summary>
-		/// Banner Image: Optional. When set, overrides the theme class background.
+		/// Address Line 1: e.g. 21515 Ridgetop Circle, Suite 120
+		///</summary>
+		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
+		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
+		[ImplementPropertyType("addressLine1")]
+		public virtual string AddressLine1 => this.Value<string>(_publishedValueFallback, "addressLine1");
+
+		///<summary>
+		/// Address Line 2: e.g. Sterling, VA, 20166
+		///</summary>
+		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
+		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
+		[ImplementPropertyType("addressLine2")]
+		public virtual string AddressLine2 => this.Value<string>(_publishedValueFallback, "addressLine2");
+
+		///<summary>
+		/// Banner Image: Banner background image managed from the media library.
 		///</summary>
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
 		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
@@ -58,15 +74,7 @@ namespace Umbraco.Cms.Web.Common.PublishedModels
 		public virtual global::Umbraco.Cms.Core.Models.MediaWithCrops BannerImage => this.Value<global::Umbraco.Cms.Core.Models.MediaWithCrops>(_publishedValueFallback, "bannerImage");
 
 		///<summary>
-		/// Banner Theme Class: Default theme wrapper: bg7 (Free Consultation banner).
-		///</summary>
-		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
-		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
-		[ImplementPropertyType("bannerThemeClass")]
-		public virtual string BannerThemeClass => this.Value<string>(_publishedValueFallback, "bannerThemeClass");
-
-		///<summary>
-		/// Banner Title: Banner heading, e.g. Free Consultation
+		/// Banner Title: Banner heading, e.g. CONTACT US
 		///</summary>
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
 		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
@@ -74,7 +82,55 @@ namespace Umbraco.Cms.Web.Common.PublishedModels
 		public virtual string BannerTitle => this.Value<string>(_publishedValueFallback, "bannerTitle");
 
 		///<summary>
-		/// Form Key: Routes submissions to Contact Forms inbox. Default: getInTouch
+		/// Consent Help Text: Second line under consent. Use {email} to insert the Location email as a mailto link.
+		///</summary>
+		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
+		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
+		[ImplementPropertyType("consentHelpText")]
+		public virtual string ConsentHelpText => this.Value<string>(_publishedValueFallback, "consentHelpText");
+
+		///<summary>
+		/// Consent Text: Main SMS consent paragraph shown next to the checkbox.
+		///</summary>
+		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
+		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
+		[ImplementPropertyType("consentText")]
+		public virtual string ConsentText => this.Value<string>(_publishedValueFallback, "consentText");
+
+		///<summary>
+		/// Email: Contact email for sidebar and consent help text.
+		///</summary>
+		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
+		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
+		[ImplementPropertyType("contactEmail")]
+		public virtual string ContactEmail => this.Value<string>(_publishedValueFallback, "contactEmail");
+
+		///<summary>
+		/// Email Note: e.g. Send us your query anytime!
+		///</summary>
+		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
+		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
+		[ImplementPropertyType("contactEmailNote")]
+		public virtual string ContactEmailNote => this.Value<string>(_publishedValueFallback, "contactEmailNote");
+
+		///<summary>
+		/// Phone: Displayed phone number
+		///</summary>
+		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
+		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
+		[ImplementPropertyType("contactPhone")]
+		public virtual string ContactPhone => this.Value<string>(_publishedValueFallback, "contactPhone");
+
+		///<summary>
+		/// Phone Hours: e.g. Mon to Fri 9am to 6pm
+		///</summary>
+		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
+		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
+		[ImplementPropertyType("contactPhoneHours")]
+		public virtual string ContactPhoneHours => this.Value<string>(_publishedValueFallback, "contactPhoneHours");
+
+		///<summary>
+		/// Form Key: Routes submissions to Contact Forms inbox. Default: home
 		///</summary>
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
 		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
@@ -82,12 +138,36 @@ namespace Umbraco.Cms.Web.Common.PublishedModels
 		public virtual string FormKey => this.Value<string>(_publishedValueFallback, "formKey");
 
 		///<summary>
-		/// Form Title: Form heading above the fields. Default: Get In Touch
+		/// Form Title: Form heading. Default: Get in Touch
 		///</summary>
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
 		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
 		[ImplementPropertyType("formTitle")]
 		public virtual string FormTitle => this.Value<string>(_publishedValueFallback, "formTitle");
+
+		///<summary>
+		/// Map Embed URL: Google Maps embed src URL only (not the full iframe HTML).
+		///</summary>
+		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
+		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
+		[ImplementPropertyType("mapEmbedUrl")]
+		public virtual string MapEmbedUrl => this.Value<string>(_publishedValueFallback, "mapEmbedUrl");
+
+		///<summary>
+		/// Privacy CTA Label: Link text to the privacy document, e.g. View our Privacy Policy and Terms & Conditions.
+		///</summary>
+		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
+		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
+		[ImplementPropertyType("privacyCtaLabel")]
+		public virtual string PrivacyCtaLabel => this.Value<string>(_publishedValueFallback, "privacyCtaLabel");
+
+		///<summary>
+		/// Privacy CTA URL: Optional. Leave empty to use the site Privacy Policy page automatically.
+		///</summary>
+		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "17.6.2+7415e8c")]
+		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
+		[ImplementPropertyType("privacyCtaUrl")]
+		public virtual string PrivacyCtaUrl => this.Value<string>(_publishedValueFallback, "privacyCtaUrl");
 
 		///<summary>
 		/// Canonical URL Override: Optional. Leave empty unless this page must point to a different canonical URL.

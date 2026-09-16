@@ -5,7 +5,7 @@
 @{
     var home = SiteInfo.GetHomePage() ?? Model.Root()?.DescendantsOrSelfOfType("homePage").FirstOrDefault() ?? Model;
     var homeUrl = home?.Url() ?? "/";
-    var getInTouchUrl = SiteInfo.GetGetInTouchPage()?.Url() ?? "/get-in-touch";
+    var getInTouchUrl = SiteInfo.GetGetInTouchPage()?.Url() ?? "/contactus/";
     var site = SiteInfo.GetSiteMainInformation();
     var siteTitle = site?.Value<string>("siteTitle");
     var logoUrl = SiteInfo.GetMediaUrl(site?.Value<Umbraco.Cms.Core.Models.PublishedContent.IPublishedContent>("siteLogo"));

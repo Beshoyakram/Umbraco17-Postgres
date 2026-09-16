@@ -1,4 +1,6 @@
 
+using Centrocdx.Auth;
+using Centrocdx.Data;
 using Centrocdx.Services;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
@@ -12,7 +14,10 @@ builder.CreateUmbracoBuilder()
     .AddBackOffice()
     .AddWebsite()
     .AddComposers()
+    .AddEntraBackOfficeAuthentication()
     .Build();
+
+PostgresManagedIdentityBootstrap.Register(builder);
 
 WebApplication app = builder.Build();
 
